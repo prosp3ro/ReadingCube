@@ -1,15 +1,25 @@
 <?php
 
-use Src\Controller\UserController;
+declare(strict_types = 1);
 
-const ROOT = __DIR__ . "/..";
+use Src\Model\DB;
+
+define('ROOT', __DIR__ . "/..");
 
 function isProductionEnvironment()
 {
     return false;
 }
 
-require(ROOT . "/vendor/autoload.php");
+require_once(ROOT . "/utils/development.php");
+// require_once(ROOT . "/utils/production.php");
+require_once(ROOT . "/vendor/autoload.php");
 
-$user = new UserController();
-$user->sayHi();
+$db = new DB();
+
+$sql = "SELECT * FROM users";
+$statement = $db->prepare($sql);
+$statement->execute();
+$results = $statement->fetchAll();
+
+dd($results);
