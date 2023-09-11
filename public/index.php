@@ -24,7 +24,7 @@ $statement->execute();
 $results = $statement->fetchAll();
 
 // dd($results);
-// dd($_SERVER);
+dd($_SERVER);
 
-$router = new Router();
-$router->get("/", "index.view.php");
+// $router = new Router();
+// $router->get("/", "index.view.php");

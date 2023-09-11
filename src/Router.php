@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Src;
 
 class Router
@@ -46,11 +48,6 @@ class Router
         $this->route($route, $pathToInclude);
     }
 
-    public function out($text): void
-    {
-        echo htmlspecialchars($text);
-    }
-
     public function setCSRF(): void
     {
         session_start();
@@ -92,17 +89,17 @@ class Router
             exit();
         }
 
-        $request_url = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-        $request_url = rtrim($request_url, '/');
-        $request_url = strtok($request_url, '?');
+        $requestUrl = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+        $requestUrl = rtrim($requestUrl, '/');
+        $requestUrl = strtok($requestUrl, '?');
 
-        $route_parts = explode('/', $route);
-        array_shift($route_parts);
+        $routeParts = explode('/', $route);
+        array_shift($routeParts);
 
-        $request_url_parts = explode('/', $request_url);
-        array_shift($request_url_parts);
+        $requestUrlParts = explode('/', $requestUrl);
+        array_shift($requestUrlParts);
 
-        if ($route_parts[0] == '' && count($request_url_parts) == 0) {
+        if ($routeParts[0] == '' && count($requestUrlParts) == 0) {
             if (is_callable($callback)) {
                 call_user_func_array($callback, []);
                 exit();
@@ -112,20 +109,20 @@ class Router
             exit();
         }
 
-        if (count($route_parts) != count($request_url_parts)) {
+        if (count($routeParts) != count($requestUrlParts)) {
             return;
         }
 
         $parameters = [];
 
-        for ($__i__ = 0; $__i__ < count($route_parts); $__i__++) {
-            $route_part = $route_parts[$__i__];
+        for ($__i__ = 0; $__i__ < count($routeParts); $__i__++) {
+            $routePart = $routeParts[$__i__];
 
-            if (preg_match("/^[$]/", $route_part)) {
-                $route_part = ltrim($route_part, '$');
-                array_push($parameters, $request_url_parts[$__i__]);
-                $$route_part = $request_url_parts[$__i__];
-            } else if ($route_parts[$__i__] != $request_url_parts[$__i__]) {
+            if (preg_match("/^[$]/", $routePart)) {
+                $routePart = ltrim($routePart, '$');
+                array_push($parameters, $requestUrlParts[$__i__]);
+                $routePart = $requestUrlParts[$__i__];
+            } else if ($routeParts[$__i__] != $requestUrlParts[$__i__]) {
                 return;
             }
         }
