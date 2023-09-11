@@ -40,7 +40,7 @@ class DB extends PDO
             throw new ConfigurationException("Config error");
             error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine());
 
-            if (isProductionEnvironment() === true) {
+            if (APP_ENVIRONMENT === "production") {
                 echo "An error occurred. Please try again later.";
             } else {
                 echo "An error occurred: " . $exception->getMessage() . "<br>";

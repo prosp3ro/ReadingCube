@@ -2,17 +2,17 @@
 
 declare(strict_types = 1);
 
+define('ROOT', __DIR__ . "/..");
+define('APP_ENVIRONMENT', "development");
+
 use Src\Model\DB;
 
-define('ROOT', __DIR__ . "/..");
-
-function isProductionEnvironment()
-{
-    return false;
+if (APP_ENVIRONMENT === "production") {
+    require_once(ROOT . "/utils/production.php");
+} else if (APP_ENVIRONMENT === "development") {
+    require_once(ROOT . "/utils/development.php");
 }
 
-require_once(ROOT . "/utils/development.php");
-// require_once(ROOT . "/utils/production.php");
 require_once(ROOT . "/vendor/autoload.php");
 
 $db = new DB();
