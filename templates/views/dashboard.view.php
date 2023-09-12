@@ -25,7 +25,7 @@
     </div>
 
     <div class="container">
-        <h1>index</h1>
+        <h1>dashboard</h1>
     </div>
 
     <div class="footer">

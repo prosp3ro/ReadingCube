@@ -6,7 +6,12 @@ namespace Src;
 
 class Router
 {
-    private string $viewsPath = ROOT . "/templates/views";
+    private string $viewsPath;
+
+    public function __construct()
+    {
+        $this->viewsPath = ROOT . "/templates/views";
+    }
 
     public function get(string $route, string|callable $pathToInclude): void
     {
@@ -74,7 +79,7 @@ class Router
         return true;
     }
 
-    private function route($route, $pathToInclude): void
+    private function route(string $route, string|callable $pathToInclude): void
     {
         $callback = $pathToInclude;
 
@@ -85,18 +90,23 @@ class Router
         }
 
         if ($route == "/404") {
-            include_once ROOT . "/$pathToInclude";
+            include_once $this->viewsPath . "/$pathToInclude";
             exit();
         }
 
         $requestUrl = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
         $requestUrl = rtrim($requestUrl, '/');
-        $requestUrl = strtok($requestUrl, '?');
+        $requestUrl = (string) strtok($requestUrl, '?');
 
         $routeParts = explode('/', $route);
         array_shift($routeParts);
 
-        $requestUrlParts = explode('/', $requestUrl);
+        if (str_contains($requestUrl, "/")) {
+            $requestUrlParts = explode('/', $requestUrl);
+        } else {
+            $requestUrlParts = explode(' ', $requestUrl);
+        }
+
         array_shift($requestUrlParts);
 
         if ($routeParts[0] == '' && count($requestUrlParts) == 0) {

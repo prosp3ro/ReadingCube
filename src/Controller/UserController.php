@@ -6,5 +6,8 @@ namespace Src\Controller;
 
 class UserController
 {
-
+    public function test()
+    {
+        echo "hi";
+    }
 }
