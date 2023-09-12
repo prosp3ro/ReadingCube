@@ -26,6 +26,7 @@
 
     <div class="container">
         <h1>dashboard</h1>
+        <br><h1><?= $id ?></h1>
     </div>
 
     <div class="footer">

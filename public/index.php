@@ -30,8 +30,8 @@ require_once(ROOT . "/vendor/autoload.php");
 try {
     $router = new Router();
     $router->get("/", "index");
-    $router->get("/dashboard", "dashboard");
-    $router->any("/404", "404");
+    $router->get('/dashboard/$id', 'dashboard');
+    $router->any('/404', '404');
 } catch (Throwable $exception) {
     dd($exception);
 }

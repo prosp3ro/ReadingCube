@@ -89,6 +89,8 @@ class Router
             }
         }
 
+        // dd($route);
+        // die();
         if ($route == "/404") {
             include_once $this->viewsPath . "/$pathToInclude";
             exit();
@@ -109,9 +111,9 @@ class Router
 
         array_shift($requestUrlParts);
 
-        if ($routeParts[0] == '' && count($requestUrlParts) == 0) {
+        if ($routeParts[0] == "" && count($requestUrlParts) == 0) {
             if (is_callable($callback)) {
-                call_user_func_array($callback, []);
+                call_user_func($callback);
                 exit();
             }
 
@@ -125,14 +127,12 @@ class Router
 
         $parameters = [];
 
-        for ($__i__ = 0; $__i__ < count($routeParts); $__i__++) {
-            $routePart = $routeParts[$__i__];
-
+        foreach ($routeParts as $index => $routePart) {
             if (preg_match("/^[$]/", $routePart)) {
-                $routePart = ltrim($routePart, '$');
-                array_push($parameters, $requestUrlParts[$__i__]);
-                $routePart = $requestUrlParts[$__i__];
-            } else if ($routeParts[$__i__] != $requestUrlParts[$__i__]) {
+                $parameterName = ltrim($routePart, '$');
+                $parameters[] = $requestUrlParts[$index];
+                ${$parameterName} = $requestUrlParts[$index];
+            } elseif ($routePart != $requestUrlParts[$index]) {
                 return;
             }
         }
