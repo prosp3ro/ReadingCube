@@ -41,3 +41,4 @@
 <!-- /.content-wrapper -->
 
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
+<?php require_once(PARTIALS . "/pageend.view.php"); ?>

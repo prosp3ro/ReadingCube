@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 define('ROOT', __DIR__ . "/..");
-define('VIEWS', ROOT . "/templates/views");
 define('PARTIALS', ROOT . "/templates/partials");
 define('APP_ENVIRONMENT', "development");
 define('APP_DEFAULT_HEADER', "BookCRM");
@@ -19,6 +18,5 @@ require_once(ROOT . "/vendor/autoload.php");
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
-    dd($e);
-    die();
+    showException($exception);
 }

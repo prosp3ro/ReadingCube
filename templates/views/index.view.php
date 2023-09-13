@@ -1,3 +1,7 @@
+<?php
+
+use Src\Model\DB; ?>
+
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 
 <!-- Navbar -->
@@ -5,6 +9,14 @@
 
 <!-- Main Sidebar Container -->
 <?php require_once(PARTIALS . "/sidebar.view.php"); ?>
+
+<?php
+$db = new DB();
+$sql = "SELECT * FROM books";
+$statement = $db->prepare($sql);
+$statement->execute();
+$results = $statement->fetchAll();
+?>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -25,7 +37,32 @@
         <div class="container-fluid">
             <!-- Main row -->
             <div class="row">
-                <!-- /.col -->
+                <table id="booksDatatable">
+                    <thead>
+                        <td>id</td>
+                        <td>book name</td>
+                        <td>book author</td>
+                        <td>book year</td>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($results as $book) : ?>
+                            <tr>
+                                <td>
+                                    <?= $book['id']; ?>
+                                </td>
+                                <td>
+                                    <?= $book['book_name']; ?>
+                                </td>
+                                <td>
+                                    <?= $book['book_author']; ?>
+                                </td>
+                                <td>
+                                    <?= $book['book_year']; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
             </div>
             <!-- /.row -->
         </div><!--/. container-fluid -->
@@ -35,3 +72,11 @@
 <!-- /.content-wrapper -->
 
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
+
+<script>
+    jQuery(document).ready(function($) {
+        $(`#bookDatable`).DataTable();
+    });
+</script>
+
+<?php require_once(PARTIALS . "/pageend.view.php"); ?>

@@ -34,6 +34,5 @@
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 
-</body>
-
-</html>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/v/dt/dt-1.13.6/datatables.min.js"></script>
