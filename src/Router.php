@@ -6,44 +6,37 @@ namespace Src;
 
 class Router
 {
-    private string $viewsPath;
-
-    public function __construct()
-    {
-        $this->viewsPath = ROOT . "/templates/views";
-    }
-
     public function get(string $route, callable $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] === "GET") {
             $this->route($route, $callback);
         }
     }
 
     public function post(string $route, callable $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $this->route($route, $callback);
         }
     }
 
     public function put(string $route, callable $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+        if ($_SERVER['REQUEST_METHOD'] === "PUT") {
             $this->route($route, $callback);
         }
     }
 
     public function patch(string $route, callable $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
+        if ($_SERVER['REQUEST_METHOD'] === "PATCH") {
             $this->route($route, $callback);
         }
     }
 
     public function delete(string $route, callable $callback): void
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+        if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
             $this->route($route, $callback);
         }
     }
@@ -88,7 +81,7 @@ class Router
 
     private function route(string $route, callable $callback): void
     {
-        if ($route == "/404") {
+        if ($route === "/404") {
             call_user_func($callback);
             exit();
         }
@@ -106,7 +99,7 @@ class Router
 
         array_shift($requestUrlParts);
 
-        if ($routeParts[0] == "" && count($requestUrlParts) == 0) {
+        if ($routeParts[0] === "" && count($requestUrlParts) === 0) {
             call_user_func($callback);
             exit();
         }
