@@ -13,44 +13,44 @@ class Router
         $this->viewsPath = ROOT . "/templates/views";
     }
 
-    public function get(string $route, string|callable $pathToInclude): void
+    public function get(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $this->route($route, $pathToInclude);
+            $this->route($route, $callback);
         }
     }
 
-    public function post(string $route, string|callable $pathToInclude): void
+    public function post(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->route($route, $pathToInclude);
+            $this->route($route, $callback);
         }
     }
 
-    public function put(string $route, string|callable $pathToInclude): void
+    public function put(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-            $this->route($route, $pathToInclude);
+            $this->route($route, $callback);
         }
     }
 
-    public function patch(string $route, string|callable $pathToInclude): void
+    public function patch(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
-            $this->route($route, $pathToInclude);
+            $this->route($route, $callback);
         }
     }
 
-    public function delete(string $route, string|callable $pathToInclude): void
+    public function delete(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-            $this->route($route, $pathToInclude);
+            $this->route($route, $callback);
         }
     }
 
-    public function any(string $route, string|callable $pathToInclude): void
+    public function any(string $route, callable $callback): void
     {
-        $this->route($route, $pathToInclude);
+        $this->route($route, $callback);
     }
 
     public function setCSRF(): void
@@ -86,18 +86,10 @@ class Router
         return (string) strtok($url, '?');
     }
 
-    private function route(string $route, string|callable $pathToInclude): void
+    private function route(string $route, callable $callback): void
     {
-        $callback = $pathToInclude;
-
-        if (!is_callable($callback)) {
-            if (!strpos($pathToInclude, '.view.php')) {
-                $pathToInclude .= '.view.php';
-            }
-        }
-
         if ($route == "/404") {
-            include_once $this->viewsPath . "/$pathToInclude";
+            call_user_func($callback);
             exit();
         }
 
@@ -114,13 +106,8 @@ class Router
 
         array_shift($requestUrlParts);
 
-        if (count($routeParts) == 0 && count($requestUrlParts) == 0) {
-            if (is_callable($callback)) {
-                call_user_func($callback);
-                exit();
-            }
-
-            include_once $this->viewsPath . "/$pathToInclude";
+        if ($routeParts[0] == "" && count($requestUrlParts) == 0) {
+            call_user_func($callback);
             exit();
         }
 
@@ -140,12 +127,7 @@ class Router
             }
         }
 
-        if (is_callable($callback)) {
-            call_user_func_array($callback, $parameters);
-            exit();
-        }
-
-        include_once $this->viewsPath . "/$pathToInclude";
+        call_user_func_array($callback, $parameters);
         exit();
     }
 }

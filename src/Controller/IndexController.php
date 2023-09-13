@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Src\Controller;
 
-use App\View;
+use Src\View;
 
 class IndexController
 {

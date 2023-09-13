@@ -28,13 +28,15 @@ require_once(ROOT . "/vendor/autoload.php");
 // dd($_SERVER);
 
 $view = new View();
-$view->render("index");
-
-$user = new IndexController();
+$index = new IndexController();
 $router = new Router();
 
-$router->get("/", function () use ($user) {
-    $user->index();
+$router->get("/", function () use ($index) {
+    $index->index();
+});
+
+$router->any("/404", function () use ($view) {
+    $view->render("404");
 });
 
 try {
