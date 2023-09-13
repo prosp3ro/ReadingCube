@@ -8,10 +8,15 @@ use Src\View;
 
 class IndexController
 {
+    private View $view;
+
+    public function __construct()
+    {
+        $this->view = new View();
+    }
+
     public function index()
     {
-        $view = new View();
-
-        return $view->render("index");
+        return $this->view->render("index");
     }
 }

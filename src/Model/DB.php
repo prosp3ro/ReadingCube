@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Src\Model;
 
@@ -38,18 +38,11 @@ class DB extends PDO
             ]);
         } catch (Throwable $exception) {
             throw new ConfigurationException("Config error");
-            error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine());
 
             if (APP_ENVIRONMENT === "production") {
-                echo "An error occurred. Please try again later.";
-            } else {
-                echo "An error occurred: " . $exception->getMessage() . "<br>";
-                echo "File: " . $exception->getFile() . "<br>";
-                echo "Line: " . $exception->getLine() . "<br>";
-                echo "<pre>";
-                echo "Stack Trace:<br>";
-                echo $exception->getTraceAsString();
-                echo "</pre>";
+                echo "<h1>An error occurred. Please try again later.</h1>";
+            } else if (APP_ENVIRONMENT === "development") {
+                showException($exception);
             }
         }
     }

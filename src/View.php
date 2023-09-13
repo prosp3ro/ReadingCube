@@ -29,6 +29,10 @@ class View
 
             $path = $this->getPath($this->viewsPath . $page);
 
+            if (!array_key_exists("header", $args)) {
+                $args["header"] = APP_DEFAULT_HEADER;
+            }
+
             if (!empty($args)) {
                 extract($args);
             }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 define('ROOT', __DIR__ . "/..");
 define('PARTIALS', ROOT . "/templates/partials");
 define('APP_ENVIRONMENT', "development");
+define('APP_DEFAULT_HEADER', "BookCRM");
 
 if (APP_ENVIRONMENT === "production") {
     require_once(ROOT . "/utils/production.php");
