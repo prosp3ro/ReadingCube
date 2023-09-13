@@ -9,5 +9,6 @@
     <meta name="description" content="Example Description">
     <meta name="author" content="prospero">
 
-    <link href="/public/style.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+    <script src="/script.js"></script>
 </head>

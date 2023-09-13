@@ -1,7 +1,7 @@
-<?php require_once(ROOT . "/templates/partials/head.view.php"); ?>
+<?php require_once(PARTIALS . "/head.view.php"); ?>
 
 <body>
     <h1>404</h1>
 </body>
 
-<?php require_once(ROOT . "/templates/partials/footer.view.php"); ?>
+<?php require_once(PARTIALS . "/footer.view.php"); ?>
