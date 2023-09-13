@@ -5,10 +5,6 @@ declare(strict_types=1);
 define('ROOT', __DIR__ . "/..");
 define('APP_ENVIRONMENT', "development");
 
-use Src\View;
-use Src\Controller\IndexController;
-use Src\Router;
-
 if (APP_ENVIRONMENT === "production") {
     require_once(ROOT . "/utils/production.php");
 } elseif (APP_ENVIRONMENT === "development") {
@@ -17,29 +13,9 @@ if (APP_ENVIRONMENT === "production") {
 
 require_once(ROOT . "/vendor/autoload.php");
 
-// $db = new DB();
-
-// $sql = "SELECT * FROM users";
-// $statement = $db->prepare($sql);
-// $statement->execute();
-// $results = $statement->fetchAll();
-
-// dd($results);
-// dd($_SERVER);
-
-$view = new View();
-$index = new IndexController();
-$router = new Router();
-
-$router->get("/", function () use ($index) {
-    $index->index();
-});
-
-$router->any("/404", function () use ($view) {
-    $view->render("404");
-});
-
 try {
+    require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
-    dd($exception);
+    dd($e);
+    die();
 }
