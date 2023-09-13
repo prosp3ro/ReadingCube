@@ -12,14 +12,8 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col">
                     <h1>404 Error Page</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">404 Error Page</li>
-                    </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -35,20 +29,8 @@
 
                 <p>
                     We could not find the page you were looking for.
-                    Meanwhile, you may <a href="../../index.html">return to dashboard</a> or try using the search form.
+                    Meanwhile, you may <a href="/">return to index page</a>.
                 </p>
-
-                <form class="search-form">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search">
-
-                        <div class="input-group-append">
-                            <button type="submit" name="submit" class="btn btn-warning"><i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- /.input-group -->
-                </form>
             </div>
             <!-- /.error-content -->
         </div>
