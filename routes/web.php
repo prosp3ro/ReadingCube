@@ -13,5 +13,7 @@ $router->get("/", function () use ($index) {
 });
 
 $router->any("/404", function () use ($view) {
-    $view->render("404");
+    $view->render("404", [
+        "header" => "404",
+    ]);
 });

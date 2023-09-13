@@ -20,7 +20,7 @@ class View
         return str_replace('\\', '/', $str);
     }
 
-    public function render($page): void
+    public function render(string $page, array $args = []): void
     {
         try {
             if (!strpos($page, '.view.php')) {
@@ -28,9 +28,15 @@ class View
             }
 
             $path = $this->getPath($this->viewsPath . $page);
+
+            if (!empty($args)) {
+                extract($args);
+            }
+
             require_once($path);
         } catch (Throwable $exception) {
             dd($exception);
+            die();
         }
     }
 }
