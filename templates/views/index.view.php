@@ -1,6 +1,8 @@
 <?php
 
-use Src\Model\DB; ?>
+use Src\Model\DB;
+
+?>
 
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 
