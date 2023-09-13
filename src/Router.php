@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Src;
 
@@ -79,6 +79,13 @@ class Router
         return true;
     }
 
+    private function sanitizeRequestUrl($url): string
+    {
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = rtrim($url, '/');
+        return (string) strtok($url, '?');
+    }
+
     private function route(string $route, string|callable $pathToInclude): void
     {
         $callback = $pathToInclude;
@@ -89,16 +96,12 @@ class Router
             }
         }
 
-        // dd($route);
-        // die();
         if ($route == "/404") {
             include_once $this->viewsPath . "/$pathToInclude";
             exit();
         }
 
-        $requestUrl = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-        $requestUrl = rtrim($requestUrl, '/');
-        $requestUrl = (string) strtok($requestUrl, '?');
+        $requestUrl = $this->sanitizeRequestUrl($_SERVER['REQUEST_URI']);
 
         $routeParts = explode('/', $route);
         array_shift($routeParts);
@@ -111,7 +114,7 @@ class Router
 
         array_shift($requestUrlParts);
 
-        if ($routeParts[0] == "" && count($requestUrlParts) == 0) {
+        if (count($routeParts) == 0 && count($requestUrlParts) == 0) {
             if (is_callable($callback)) {
                 call_user_func($callback);
                 exit();

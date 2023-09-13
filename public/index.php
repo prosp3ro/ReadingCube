@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 define('ROOT', __DIR__ . "/..");
 define('APP_ENVIRONMENT', "development");
 
-use Src\Controller\UserController;
-use Src\Model\DB;
+use Src\View;
+use Src\Controller\IndexController;
 use Src\Router;
 
 if (APP_ENVIRONMENT === "production") {
     require_once(ROOT . "/utils/production.php");
-} else if (APP_ENVIRONMENT === "development") {
+} elseif (APP_ENVIRONMENT === "development") {
     require_once(ROOT . "/utils/development.php");
 }
 
@@ -27,11 +27,17 @@ require_once(ROOT . "/vendor/autoload.php");
 // dd($results);
 // dd($_SERVER);
 
+$view = new View();
+$view->render("index");
+
+$user = new IndexController();
+$router = new Router();
+
+$router->get("/", function () use ($user) {
+    $user->index();
+});
+
 try {
-    $router = new Router();
-    $router->get("/", "index");
-    $router->get('/dashboard/$id', 'dashboard');
-    $router->any('/404', '404');
 } catch (Throwable $exception) {
     dd($exception);
 }
