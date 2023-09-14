@@ -2,7 +2,13 @@
 
 namespace Src\Exception;
 
-class ConfigurationException extends AppException
+use Exception;
+use Throwable;
+
+class ConfigurationException extends Exception
 {
-    
+    public function __construct($message = "Problem with configuration occured.", $code = 0, Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }

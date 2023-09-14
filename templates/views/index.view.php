@@ -37,7 +37,6 @@
 
 <script>
     new DataTable('#booksDatatable', {
-
     });
 </script>
 

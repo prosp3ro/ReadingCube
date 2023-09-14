@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controller;
 
+use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\View;
 use Throwable;
@@ -31,11 +32,7 @@ class IndexController
                 "books" => $results
             ]);
         } catch (Throwable $exception) {
-            if (APP_ENVIRONMENT === "production") {
-                echo "<h1>An error occurred. Please try again later.</h1>";
-            } else if (APP_ENVIRONMENT === "development") {
-                showException($exception);
-            }
+            throw new DatabaseQueryException("An error occurred while executing the database query.", 0, $exception);
         }
     }
 }

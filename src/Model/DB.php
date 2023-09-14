@@ -6,17 +6,23 @@ namespace Src\Model;
 
 use PDO;
 use Src\Exception\ConfigurationException;
+use Src\Exception\DatabaseConnectionException;
 use Throwable;
 
 class DB extends PDO
 {
-    public function __construct(string $file = ROOT . "/config/config.ini")
+    public function __construct(string $file = __DIR__ . "/../../config/config.ini")
     {
         $file = str_replace('\\', '/', $file);
+
+        if (!file_exists($file)) {
+            throw new ConfigurationException("Configuration file <strong>{$file}</strong> does not exist.");
+        }
+
         $connection = parse_ini_file($file, true);
 
         if (!$connection) {
-            throw new ConfigurationException("Unable to open {$file}.");
+            throw new ConfigurationException("Unable to parse <strong>{$file}</strong>.");
         }
 
         $database = $connection['database'];
@@ -37,11 +43,7 @@ class DB extends PDO
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]);
         } catch (Throwable $exception) {
-            if (APP_ENVIRONMENT === "production") {
-                echo "<h1>An error occurred. Please try again later.</h1>";
-            } else if (APP_ENVIRONMENT === "development") {
-                showException($exception);
-            }
+            throw new DatabaseConnectionException("Connection to the database failed.", 0, $exception);
         }
     }
 }

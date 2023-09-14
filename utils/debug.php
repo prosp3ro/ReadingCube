@@ -21,6 +21,8 @@ function showException(Throwable $exception)
 {
     error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine());
 
+    echo "<br/>";
+    echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: lightgray;">';
     echo "An error occurred: " . $exception->getMessage() . "<br>";
     echo "File: " . $exception->getFile() . "<br>";
     echo "Line: " . $exception->getLine() . "<br>";
@@ -28,4 +30,6 @@ function showException(Throwable $exception)
     echo "Stack Trace:<br>";
     echo $exception->getTraceAsString();
     echo "</pre>";
+    echo "</div>";
+    echo "<br/>";
 }

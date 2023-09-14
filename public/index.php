@@ -2,13 +2,19 @@
 
 declare(strict_types=1);
 
-// TODO move to /.env
-require_once(__DIR__ . "/../utils/constants.php");
+define('ROOT', __DIR__ . "/..");
 
-if (APP_ENVIRONMENT === "production") {
+$config = parse_ini_file(ROOT . "/config/config.ini", true);
+define('APP_NAME', $config['app']['name'] ?? "App");
+
+define('PARTIALS', ROOT . "/templates/partials");
+
+if ($config['app']['debug']) {
+    require_once(ROOT . "/utils/debug.php");
+}
+
+if ($config['app']['env'] == "production") {
     require_once(ROOT . "/utils/production.php");
-} elseif (APP_ENVIRONMENT === "development") {
-    require_once(ROOT . "/utils/development.php");
 }
 
 require_once(ROOT . "/vendor/autoload.php");
@@ -16,5 +22,9 @@ require_once(ROOT . "/vendor/autoload.php");
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
-    showException($exception);
+    if (function_exists("showException")) {
+        showException($exception);
+    } else {
+        echo "<h1>Error occured. Please try again later.</h1>";
+    }
 }
