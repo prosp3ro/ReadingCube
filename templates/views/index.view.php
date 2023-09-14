@@ -39,7 +39,7 @@ $results = $statement->fetchAll();
         <div class="container-fluid">
             <!-- Main row -->
             <div class="row">
-                <table id="booksDatatable">
+                <table class="table table-dark table-striped table-hover" id="booksDatatable">
                     <thead>
                         <td>id</td>
                         <td>book name</td>
@@ -76,9 +76,7 @@ $results = $statement->fetchAll();
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
 
 <script>
-    jQuery(document).ready(function($) {
-        $(`#bookDatable`).DataTable();
-    });
+new DataTable('#booksDatatable');
 </script>
 
 <?php require_once(PARTIALS . "/pageend.view.php"); ?>
