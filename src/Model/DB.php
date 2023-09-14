@@ -37,8 +37,6 @@ class DB extends PDO
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]);
         } catch (Throwable $exception) {
-            throw new ConfigurationException("Config error");
-
             if (APP_ENVIRONMENT === "production") {
                 echo "<h1>An error occurred. Please try again later.</h1>";
             } else if (APP_ENVIRONMENT === "development") {

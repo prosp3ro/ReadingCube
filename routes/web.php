@@ -14,6 +14,6 @@ $router->get("/", function () use ($index) {
 
 $router->any("/404", function () use ($view) {
     $view->render("404", [
-        "header" => "BookCRM | 404 Page not found",
+        "header" => APP_DEFAULT_HEADER . " | 404 Page not found",
     ]);
 });
