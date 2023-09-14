@@ -12,5 +12,7 @@
             "name": "prospero"
         }
     ],
-    "require": {}
+    "require": {
+        "tebazil/db-seeder": "^1.0"
+    }
 }
