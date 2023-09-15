@@ -4,89 +4,89 @@ declare(strict_types=1);
 
 namespace Src;
 
-class Router
+class Route
 {
-    public function get(string $route, callable $callback): void
+    public static function get(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
-            $this->route($route, $callback);
+            self::route($route, $callback);
         }
     }
 
-    public function post(string $route, callable $callback): void
+    public static function post(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            $this->route($route, $callback);
+            self::route($route, $callback);
         }
     }
 
-    public function put(string $route, callable $callback): void
+    public static function put(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-            $this->route($route, $callback);
+            self::route($route, $callback);
         }
     }
 
-    public function patch(string $route, callable $callback): void
+    public static function patch(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PATCH") {
-            $this->route($route, $callback);
+            self::route($route, $callback);
         }
     }
 
-    public function delete(string $route, callable $callback): void
+    public static function delete(string $route, callable $callback): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
-            $this->route($route, $callback);
+            self::route($route, $callback);
         }
     }
 
-    public function any(string $route, callable $callback): void
+    public static function any(string $route, callable $callback): void
     {
-        $this->route($route, $callback);
+        self::route($route, $callback);
     }
 
-    public function setCSRF(): void
-    {
-        session_start();
+    // public static function setCSRF(): void
+    // {
+    //     session_start();
 
-        if (!isset($_SESSION["csrf"])) {
-            $_SESSION["csrf"] = bin2hex(random_bytes(50));
-        }
+    //     if (!isset($_SESSION["csrf"])) {
+    //         $_SESSION["csrf"] = bin2hex(random_bytes(50));
+    //     }
 
-        echo '<input type="hidden" name="csrf" value="' . $_SESSION["csrf"] . '">';
-    }
+    //     echo '<input type="hidden" name="csrf" value="' . $_SESSION["csrf"] . '">';
+    // }
 
-    public function isCSRFValid(): bool
-    {
-        session_start();
+    // public static function isCSRFValid(): bool
+    // {
+    //     session_start();
 
-        if (!isset($_SESSION['csrf']) || !isset($_POST['csrf'])) {
-            return false;
-        }
+    //     if (!isset($_SESSION['csrf']) || !isset($_POST['csrf'])) {
+    //         return false;
+    //     }
 
-        if ($_SESSION['csrf'] != $_POST['csrf']) {
-            return false;
-        }
+    //     if ($_SESSION['csrf'] != $_POST['csrf']) {
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
-    private function sanitizeRequestUrl($url): string
+    private static function sanitizeRequestUrl($url): string
     {
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = rtrim($url, '/');
         return (string) strtok($url, '?');
     }
 
-    private function route(string $route, callable $callback): void
+    private static function route(string $route, callable $callback): void
     {
         if ($route === "/404") {
             call_user_func($callback);
             exit();
         }
 
-        $requestUrl = $this->sanitizeRequestUrl($_SERVER['REQUEST_URI']);
+        $requestUrl = self::sanitizeRequestUrl($_SERVER['REQUEST_URI']);
 
         $routeParts = explode('/', $route);
         array_shift($routeParts);
