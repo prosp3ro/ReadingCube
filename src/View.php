@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Src;
 
+use Exception;
+use Src\Exception\AppException;
 use Throwable;
 
 class View
@@ -39,8 +41,7 @@ class View
 
             require_once($path);
         } catch (Throwable $exception) {
-            dd($exception);
-            die();
+            throw new AppException("Template can't be rendered.", 0, $exception);
         }
     }
 }
