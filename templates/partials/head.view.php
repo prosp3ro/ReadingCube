@@ -11,7 +11,6 @@
 
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <link href="/style.css" rel="stylesheet">
-    <script src="/script.js"></script>
 </head>
 
 <!DOCTYPE html>
