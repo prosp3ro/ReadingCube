@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Src\Controller\Auth;
 
+use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\View;
+use Throwable;
 
 class RegisterController
 {
@@ -57,9 +59,18 @@ class RegisterController
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $sql = "INSERT INTO (email, password)
-                VALUES (?, ?)";
+        try {
+            $sql = "INSERT INTO users(email, password)
+                    VALUES (?, ?)";
 
-        header("Location: /login");
+            $statement = $this->db->prepare($sql);
+            $statement->execute([$email, $hashedPassword]);
+            echo "Registration successful";
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException("An error occurred while executing the database query.", 0, $exception);
+            exit("Something went wrong");
+        }
+
+        // header("Location: /login");
     }
 }

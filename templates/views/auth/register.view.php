@@ -1,7 +1,7 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
-<div class="container mt-5 text-white">
+<div class="container mt-5">
     <h1 class="mb-4">Register</h1>
 
     <div class="w-25">
@@ -9,7 +9,7 @@
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="email">
-                <div class="form-text text-secondary">We'll never share your email with anyone else.</div>
+                <div class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

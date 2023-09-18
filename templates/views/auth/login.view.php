@@ -1,7 +1,7 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
-<div class="container mt-5 text-white">
+<div class="container mt-5">
     <h1 class="mb-4">Login</h1>
 
     <div class="w-25">

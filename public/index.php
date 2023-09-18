@@ -25,6 +25,6 @@ try {
     if (function_exists("showException")) {
         showException($exception);
     } else {
-        echo "<h1>Error occured. Please try again later.</h1>";
+        echo "Error occured. Please try again later.";
     }
 }

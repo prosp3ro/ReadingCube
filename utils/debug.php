@@ -23,11 +23,11 @@ function showException(Throwable $exception)
 
     echo "<br/>";
     echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: lightgray;">';
-    echo "An error occurred: <strong><b>" . $exception->getMessage() . "</strong></b><br>";
-    echo "File: " . $exception->getFile() . "<br>";
-    echo "Line: " . $exception->getLine() . "<br>";
+    echo "<b>" . $exception->getMessage() . "</b><br>";
+    echo "<b>File:</b> " . $exception->getFile() . "<br>";
+    echo "<b>Line:</b> " . $exception->getLine() . "<br>";
     echo "<pre>";
-    echo "Stack Trace:<br>";
+    echo "<b>Stack Trace:</b><br>";
     echo $exception->getTraceAsString();
     echo "</pre>";
     echo "</div>";
