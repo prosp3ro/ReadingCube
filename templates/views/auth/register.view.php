@@ -1,8 +1,10 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Register</h1>
+<div class="container">
+    <div class="mt-5 mb-4">
+        <h1>Register</h1>
+    </div>
 
     <div class="w-25">
         <form action="/register" method="post">
@@ -19,7 +21,7 @@
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>

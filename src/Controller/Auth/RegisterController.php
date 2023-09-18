@@ -28,6 +28,13 @@ class RegisterController
         ]);
     }
 
+    public function registerSuccess()
+    {
+        return $this->view->render("auth/register-success", [
+            "header" => "Registration successful | " . APP_NAME
+        ]);
+    }
+
     public function register()
     {
         $email = $_POST['email'];
@@ -67,9 +74,9 @@ class RegisterController
 
         try {
             $statement->execute([$email, $hashedPassword]);
-            echo "Registration successful";
+            header("Location: /register-success");
         } catch (Throwable $exception) {
-            if ($exception->getCode() == '23000' && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
+            if ($exception->getCode() == "23000" && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
                 echo "Email already in use";
             } else {
                 throw new DatabaseQueryException($exception->getMessage());

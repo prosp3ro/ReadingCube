@@ -19,6 +19,10 @@ Route::get("/register", function () use ($RegisterController) {
     $RegisterController->index();
 });
 
+Route::get("/register-success", function () use ($RegisterController) {
+    $RegisterController->registerSuccess();
+});
+
 Route::get("/login", function () use ($LoginController) {
     $LoginController->index();
 });

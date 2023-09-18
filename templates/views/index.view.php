@@ -4,7 +4,7 @@
 <div class="container">
     <div class="mt-5 mb-5">
         <table class="table table-light table-hover table-bordered" id="booksDatatable">
-            <thead class="table-dark">
+            <thead class="table-success">
                 <td>ID</td>
                 <td>Book</td>
                 <td>Author</td>
