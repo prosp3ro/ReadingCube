@@ -27,16 +27,16 @@ class RegisterController
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if (!isset($email) || !isset($password)) {
-            return $this->view->render404();
+        if (empty($email) || empty($password)) {
+            header("Location: /register");
         }
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+            header("Location: /login");
         } else {
-            echo "Please enter a valid email address.";
+            header("Location: /register");
         }
-
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     }
 }
