@@ -19,6 +19,10 @@ Route::get("/register", function () use ($RegisterController) {
     $RegisterController->index();
 });
 
+Route::post("/register", function () use ($RegisterController) {
+    $RegisterController->register();
+});
+
 Route::get("/register-success", function () use ($RegisterController) {
     $RegisterController->registerSuccess();
 });
@@ -27,8 +31,8 @@ Route::get("/login", function () use ($LoginController) {
     $LoginController->index();
 });
 
-Route::post("/register", function () use ($RegisterController) {
-    $RegisterController->register();
+Route::post("/login", function () use ($LoginController) {
+    $LoginController->login();
 });
 
 Route::any("/404", function () use ($view) {

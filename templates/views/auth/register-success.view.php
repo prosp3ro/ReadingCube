@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="mt-5 mb-5">
-        <p class="fs-3">Registration successful. You can login now.</p>
+        <p class="fs-5">Registration successful. You can now <a href="/login">log in.</a></p>
     </div>
 </div>
 
