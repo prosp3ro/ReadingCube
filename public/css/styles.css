@@ -1,4 +1,4 @@
-body {
+/*body {
     background-color: #131516;
     color: #d8d4cf;
 }
@@ -7,3 +7,7 @@ body {
     background-color: #004daa;
     color: #e8e6e3;
 }
+
+.navbar .nav-item {
+    font-size: 15px;
+}*/
