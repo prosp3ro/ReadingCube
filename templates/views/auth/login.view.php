@@ -6,11 +6,17 @@
         <h1>Login</h1>
     </div>
 
+    <?php if ($errorMessage) : ?>
+        <div class="pb-2">
+            <em class="text-danger"><?= $errorMessage ?></em>
+        </div>
+    <?php endif ?>
+
     <div class="w-25">
         <form action="/login" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email" id="email">
+                <input type="email" class="form-control" name="email" id="email" value="<?= htmlspecialchars($_POST["email"] ?? "") ?>">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

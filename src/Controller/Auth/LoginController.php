@@ -19,33 +19,39 @@ class LoginController
         $this->db = new DB();
     }
 
-    public function index()
+    public function index(string $errorMessage = null)
     {
         return $this->view->render("auth/login", [
-            "header" => "Login | " . APP_NAME
+            "header" => "Login | " . APP_NAME,
+            "errorMessage" => $errorMessage
         ]);
     }
 
     public function login()
     {
         $email = $_POST['email'];
-        $email = $this->db->quote($email);
 
         $password = $_POST['password'];
 
         if (empty($email) || empty($password)) {
-            exit("Email and password are required");
+            return $this->index("Email and password are required");
         }
 
-        $sql = sprintf("SELECT * FROM users WHERE email = %s", $email);
-
+        $sql = "SELECT * FROM users WHERE email = ?";
         $statement = $this->db->prepare($sql);
+        $statement->execute([$email]);
+        $user = $statement->fetch();
+
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                dd("password matches");
+                die();
+            }
+        }
+
+        return $this->index("Invalid login");
 
         try {
-            $statement->execute();
-            $user = $statement->fetch();
-            dd($user);
-            die();
             header("Location: /");
         } catch (Throwable $exception) {
             dd($exception);
