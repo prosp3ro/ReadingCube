@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controller\Auth;
 
+use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\View;
 use Throwable;
@@ -39,8 +40,14 @@ class LoginController
 
         $sql = "SELECT * FROM users WHERE email = ?";
         $statement = $this->db->prepare($sql);
-        $statement->execute([$email]);
-        $user = $statement->fetch();
+
+        try {
+            $statement->execute([$email]);
+            $user = $statement->fetch();
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+            exit();
+        }
 
         if ($user) {
             if (password_verify($password, $user['password'])) {
@@ -50,12 +57,5 @@ class LoginController
         }
 
         return $this->index("Invalid login");
-
-        try {
-            header("Location: /");
-        } catch (Throwable $exception) {
-            dd($exception);
-            die();
-        }
     }
 }
