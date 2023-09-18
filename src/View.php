@@ -44,4 +44,17 @@ class View
             throw new AppException("Template can't be rendered.", 0, $exception);
         }
     }
+
+    public function render404(): void
+    {
+        try {
+            $page = "404.view.php";
+            $path = $this->getPath($this->viewsPath . $page);
+            $header = "Page Not Found | " . APP_NAME;
+
+            require_once($path);
+        } catch (Throwable $exception) {
+            throw new AppException("Template can't be rendered.", 0, $exception);
+        }
+    }
 }

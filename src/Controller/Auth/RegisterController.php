@@ -21,4 +21,14 @@ class RegisterController
             "header" => "Register | " . APP_NAME
         ]);
     }
+
+    public function register()
+    {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        if (!isset($email) || !isset($password)) {
+            return $this->view->render404();
+        }
+    }
 }

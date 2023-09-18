@@ -25,14 +25,12 @@ try {
         $LoginController->index();
     });
 
-    // Route::post("/login", function () use ($LoginController) {
-    //     $LoginController->login();
-    // });
+    Route::post("/register", function () use ($RegisterController) {
+        $RegisterController->register();
+    });
 
     Route::any("/404", function () use ($view) {
-        $view->render("404", [
-            "header" => "Page Not Found | " . APP_NAME
-        ]);
+        $view->render404();
     });
 } catch (Throwable $exception) {
     throw new AppException("Routing error.", 0, $exception);
