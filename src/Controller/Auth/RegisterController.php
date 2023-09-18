@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controller\Auth;
 
+use PDOException;
 use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\View;
@@ -59,16 +60,22 @@ class RegisterController
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        try {
-            $sql = "INSERT INTO users(email, password)
+        $sql = "INSERT INTO users(email, password)
                     VALUES (?, ?)";
 
-            $statement = $this->db->prepare($sql);
+        $statement = $this->db->prepare($sql);
+
+        try {
             $statement->execute([$email, $hashedPassword]);
             echo "Registration successful";
         } catch (Throwable $exception) {
-            throw new DatabaseQueryException("An error occurred while executing the database query.", 0, $exception);
-            exit("Something went wrong");
+            if ($exception->getCode() == '23000' && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
+                echo "Email already in use";
+            } else {
+                throw new DatabaseQueryException($exception->getMessage());
+            }
+
+            exit;
         }
 
         // header("Location: /login");
