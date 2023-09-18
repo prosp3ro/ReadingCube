@@ -4,25 +4,6 @@
 <div class="container">
     <p class="mt-5 h1 font-monospace text-success text-center">Hey there</p>
 
-    <div class="mt-5">
-        <form action="/login" method="post">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email" id="email">
-                <div class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" name="remember" id="remember">
-                <label class="form-check-label" for="remember">Remember me</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-
     <div class="mt-5 mb-5">
         <table class="table" id="booksDatatable">
             <thead>
