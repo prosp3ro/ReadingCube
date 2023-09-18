@@ -1,17 +1,23 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
-<div class="container">
-    <div class="mt-5">
+<div class="container mt-5 text-white">
+    <h1 class="mb-4">Register</h1>
+
+    <div class="w-25">
         <form action="/register" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="email">
-                <div class="form-text">We'll never share your email with anyone else.</div>
+                <div class="form-text text-secondary">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>

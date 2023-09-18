@@ -30,5 +30,13 @@ class RegisterController
         if (!isset($email) || !isset($password)) {
             return $this->view->render404();
         }
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        } else {
+            echo "Please enter a valid email address.";
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     }
 }

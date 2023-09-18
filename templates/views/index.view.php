@@ -2,10 +2,8 @@
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
 <div class="container">
-    <p class="mt-5 h1 font-monospace text-success text-center">Hey there</p>
-
     <div class="mt-5 mb-5">
-        <table class="table" id="booksDatatable">
+        <table class="table table-dark" id="booksDatatable">
             <thead>
                 <td>ID</td>
                 <td>Book</td>
