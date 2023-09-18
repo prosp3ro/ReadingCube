@@ -17,7 +17,7 @@ class RegisterController
 
     public function index()
     {
-        return $this->view->render("auth/login", [
+        return $this->view->render("auth/register", [
             "header" => "Register | " . APP_NAME
         ]);
     }
