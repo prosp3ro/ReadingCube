@@ -5,6 +5,8 @@
     <div class="mt-4 mb-4">
         <h1>Your Profile</h1>
     </div>
+
+    Email: <?= $userData["email"] ?>
 </div>
 
 
