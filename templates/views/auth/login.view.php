@@ -27,7 +27,6 @@
     </div>
 </div>
 
-
 <?php require_once(PARTIALS . "/scripts.view.php"); ?>
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
 <?php require_once(PARTIALS . "/pageend.view.php"); ?>
