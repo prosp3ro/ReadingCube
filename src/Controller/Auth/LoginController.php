@@ -24,6 +24,7 @@ class LoginController
     {
         if (isset($_SESSION['user_id'])) {
             header("Location: /");
+            exit();
         }
 
         return $this->view->render("auth/login", [
@@ -36,6 +37,7 @@ class LoginController
     {
         session_destroy();
         header("Location: /login");
+        exit();
     }
 
     public function login()

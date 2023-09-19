@@ -75,6 +75,7 @@ class RegisterController
         try {
             $statement->execute([$email, $hashedPassword]);
             header("Location: /register-success");
+            exit();
         } catch (Throwable $exception) {
             if ($exception->getCode() == "23000" && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
                 echo "Email already in use";

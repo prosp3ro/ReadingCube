@@ -4,10 +4,25 @@ declare(strict_types=1);
 
 namespace Src\Controller;
 
+use Src\Model\DB;
+use Src\View;
+
 class UserController
 {
-    public function login(): void
+    private View $view;
+
+    public function __construct()
     {
-        dd($_POST);
+        $this->view = new View();
+    }
+
+    public function showProfile()
+    {
+        if (isset($_SESSION['user_id'])) {
+            return $this->view->render("user-profile");
+        }
+
+        header("Location: /login");
+        exit();
     }
 }

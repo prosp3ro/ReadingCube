@@ -2,8 +2,8 @@
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <div class="container">
-    <div class="mt-4 mb-5">
-        <p class="fs-5">Registration successful. You can now <a href="/login">log in.</a></p>
+    <div class="mt-4 mb-4">
+        <h1>Your Profile</h1>
     </div>
 </div>
 

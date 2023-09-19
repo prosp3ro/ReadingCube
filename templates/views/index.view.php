@@ -1,19 +1,15 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
-<?php require_once(PARTIALS . "/navbar.view.php"); ?>
+<?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <?php
 ?>
 
 <div class="container">
-    <div class="mt-5 mb-4">
-        <h1>Home</h1>
-    </div>
+    <!-- <?php if (isset($_SESSION['user_id'])) : ?> -->
+    <!--     <p class="text-success">You are logged in.</p> -->
+    <!-- <?php endif; ?> -->
 
-    <?php if (isset($_SESSION['user_id'])) : ?>
-        <p class="text-success">You are logged in.</p>
-    <?php endif; ?>
-
-    <div class="mt-5 mb-5">
+    <div class="mt-4 mb-5">
         <table class="table table-light table-hover table-bordered" id="booksDatatable">
             <thead class="table-success">
                 <td>ID</td>
