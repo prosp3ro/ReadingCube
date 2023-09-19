@@ -11,3 +11,15 @@
 .bg-dark-purple {
     background-color: #21081a;
 }
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
