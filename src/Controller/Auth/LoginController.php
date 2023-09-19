@@ -35,6 +35,7 @@ class LoginController
 
     public function logout(): void
     {
+        session_unset();
         session_destroy();
         header("Location: /login");
         exit();

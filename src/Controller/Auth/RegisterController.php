@@ -21,10 +21,11 @@ class RegisterController
         $this->db = new DB();
     }
 
-    public function index()
+    public function index(bool $emailAlreadyUsed = false)
     {
         return $this->view->render("auth/register", [
-            "header" => "Register | " . APP_NAME
+            "header" => "Register | " . APP_NAME,
+            "emailAlreadyUsed" => $emailAlreadyUsed
         ]);
     }
 
@@ -78,7 +79,9 @@ class RegisterController
             exit();
         } catch (Throwable $exception) {
             if ($exception->getCode() == "23000" && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
-                echo "Email already in use";
+                // echo "Email already in use";
+
+                $this->index(true);
             } else {
                 throw new DatabaseQueryException($exception->getMessage());
             }

@@ -6,11 +6,17 @@
         <h1>Register</h1>
     </div>
 
+    <?php if ($emailAlreadyUsed) : ?>
+        <div class="pb-2">
+            <em class="text-danger">Email is already in use</em>
+        </div>
+    <?php endif ?>
+
     <div class="w-25">
         <form action="/register" method="post">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email" id="email">
+                <input type="email" class="form-control" name="email" id="email" required>
                 <div class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
