@@ -17,16 +17,8 @@ if ($config['app']['env'] == "production") {
     require_once(ROOT . "/utils/production.php");
 }
 
+require_once(ROOT . "/utils/functions.php");
 require_once(ROOT . "/vendor/autoload.php");
-
-function urlIs(string $url)
-{
-    if ($_SERVER["REQUEST_URI"] == $url) {
-        return "text-secondary";
-    } else {
-        return "text-white";
-    }
-}
 
 try {
     session_start();

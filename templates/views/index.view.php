@@ -48,7 +48,7 @@
             [10, 25, 50],
             [10, 25, 50]
         ],
-        "pageLength": 25,
+        "pageLength": 10,
         responsive: {
             breakpoints: [{
                     name: 'bigdesktop',
