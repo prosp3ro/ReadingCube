@@ -9,9 +9,9 @@
         <h1>Home</h1>
     </div>
 
-    <?php if ($_SESSION['user_id']) : ?>
-        <p class="text-success">You are logged in.</em>
-    <?php endif ?>
+    <?php if (isset($_SESSION['user_id'])) : ?>
+        <p class="text-success">You are logged in.</p>
+    <?php endif; ?>
 
     <div class="mt-5 mb-5">
         <table class="table table-light table-hover table-bordered" id="booksDatatable">

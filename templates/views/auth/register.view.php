@@ -1,10 +1,6 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
-<?php
-dd($_SESSION);
-?>
-
 <div class="container">
     <div class="mt-5 mb-4">
         <h1>Register</h1>

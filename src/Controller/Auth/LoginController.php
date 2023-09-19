@@ -22,7 +22,7 @@ class LoginController
 
     public function index(string $errorMessage = null)
     {
-        if ($_SESSION['user_id']) {
+        if (isset($_SESSION['user_id'])) {
             header("Location: /");
         }
 
@@ -30,6 +30,12 @@ class LoginController
             "header" => "Login | " . APP_NAME,
             "errorMessage" => $errorMessage
         ]);
+    }
+
+    public function logout(): void
+    {
+        session_destroy();
+        header("Location: /login");
     }
 
     public function login()

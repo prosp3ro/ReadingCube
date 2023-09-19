@@ -35,6 +35,10 @@ Route::post("/login", function () use ($LoginController) {
     $LoginController->login();
 });
 
+Route::get("/logout", function () use ($LoginController) {
+    $LoginController->logout();
+});
+
 Route::any("/404", function () use ($view) {
     $view->render404();
 });
