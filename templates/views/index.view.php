@@ -1,7 +1,18 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/navbar.view.php"); ?>
 
+<?php
+?>
+
 <div class="container">
+    <div class="mt-5 mb-4">
+        <h1>Home</h1>
+    </div>
+
+    <?php if ($_SESSION['user_id']) : ?>
+        <p class="text-success">You are logged in.</em>
+    <?php endif ?>
+
     <div class="mt-5 mb-5">
         <table class="table table-light table-hover table-bordered" id="booksDatatable">
             <thead class="table-success">

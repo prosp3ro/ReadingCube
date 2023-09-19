@@ -32,7 +32,7 @@ class IndexController
                 "books" => $results
             ]);
         } catch (Throwable $exception) {
-            throw new DatabaseQueryException("An error occurred while executing the database query.", 0, $exception);
+            throw new DatabaseQueryException($exception->getMessage(), 0, $exception);
         }
     }
 }

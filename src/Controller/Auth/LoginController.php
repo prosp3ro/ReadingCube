@@ -22,6 +22,10 @@ class LoginController
 
     public function index(string $errorMessage = null)
     {
+        if ($_SESSION['user_id']) {
+            header("Location: /");
+        }
+
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
             "errorMessage" => $errorMessage
@@ -45,14 +49,18 @@ class LoginController
             $statement->execute([$email]);
             $user = $statement->fetch();
         } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
+            throw new DatabaseQueryException();
+            // throw new DatabaseQueryException($exception->getMessage());
             exit();
         }
 
         if ($user) {
             if (password_verify($password, $user['password'])) {
-                dd("password matches");
-                die();
+                session_start();
+                $_SESSION["user_id"] = $user["id"];
+
+                header("Location: /");
+                exit();
             }
         }
 

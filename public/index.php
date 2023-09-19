@@ -20,6 +20,7 @@ if ($config['app']['env'] == "production") {
 require_once(ROOT . "/vendor/autoload.php");
 
 try {
+    session_start();
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
     if (function_exists("showException")) {
