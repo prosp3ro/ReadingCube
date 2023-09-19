@@ -21,7 +21,7 @@
 
             <?php if (isset($_SESSION['user_id'])) : ?>
                 <div class="dropdown text-end">
-                    <a href="#" class="d-block link-dark text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
@@ -34,8 +34,12 @@
                     </ul>
                 </div>
             <?php else : ?>
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+                <form action="/login" method="get">
+                    <button type="submit" class="btn btn-outline-light me-2" id="loginButton">Login</button>
+                </form>
+                <form action="/register" method="get">
+                    <button type="submit" class="btn btn-warning">Register</button>
+                </form>
             <?php endif; ?>
         </div>
     </div>

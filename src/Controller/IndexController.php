@@ -22,17 +22,22 @@ class IndexController
 
     public function index()
     {
-        try {
-            $sql = "SELECT * FROM books";
-            $statement = $this->db->prepare($sql);
-            $statement->execute();
-            $results = $statement->fetchAll();
+        if (isset($_SESSION['user_id'])) {
+            try {
+                $sql = "SELECT * FROM books";
+                $statement = $this->db->prepare($sql);
+                $statement->execute();
+                $results = $statement->fetchAll();
 
-            return $this->view->render("index", [
-                "books" => $results
-            ]);
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage(), 0, $exception);
+                return $this->view->render("index", [
+                    "books" => $results
+                ]);
+            } catch (Throwable $exception) {
+                throw new DatabaseQueryException($exception->getMessage(), 0, $exception);
+            }
         }
+
+        header("Location: /login");
+        exit();
     }
 }

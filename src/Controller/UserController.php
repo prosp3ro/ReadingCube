@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Controller;
 
-use Src\Model\DB;
 use Src\View;
 
 class UserController
