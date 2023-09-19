@@ -6,7 +6,7 @@
         <h1>Your Profile</h1>
     </div>
 
-    Email: <?= $userData["email"] ?>
+    Email: <?= htmlspecialchars($userData["email"]) ?>
 </div>
 
 
