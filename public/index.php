@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Src\View;
+
 define('ROOT', __DIR__ . "/..");
 
 $config = parse_ini_file(ROOT . "/config/config.ini", true);
@@ -45,12 +47,14 @@ if (!isset($_SESSION["last_regeneration"])) {
     }
 }
 
+
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
     if (function_exists("showException")) {
         showException($exception);
     } else {
-        echo "Error occured. Please try again later.";
+        $view = new View();
+        $view->render("error-page");
     }
 }
