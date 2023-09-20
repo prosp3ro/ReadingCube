@@ -47,7 +47,6 @@ if (!isset($_SESSION["last_regeneration"])) {
     }
 }
 
-
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {

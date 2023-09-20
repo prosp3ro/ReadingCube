@@ -9,20 +9,21 @@
     <!--     <p class="text-success">You are logged in.</p> -->
     <!-- <?php endif; ?> -->
 
+    <div class="mt-5">
+        <h2>List of available books</h2>
+    </div>
+
     <div class="mt-4 mb-5">
         <table class="table table-light table-hover table-bordered" id="booksDatatable">
             <thead class="table-success">
-                <td>ID</td>
                 <td>Book</td>
                 <td>Author</td>
                 <td>Year</td>
+                <td class="text-center">Book details</td>
             </thead>
             <tbody>
                 <?php foreach ($books as $book) : ?>
                     <tr>
-                        <td>
-                            <?= $book['id']; ?>
-                        </td>
                         <td>
                             <?= $book['book_name']; ?>
                         </td>
@@ -31,6 +32,9 @@
                         </td>
                         <td>
                             <?= $book['book_year']; ?>
+                        </td>
+                        <td class="text-center">
+                            <a href="">Show information</a>
                         </td>
                     </tr>
                 <?php endforeach ?>
@@ -48,7 +52,7 @@
             [10, 25, 50],
             [10, 25, 50]
         ],
-        "pageLength": 10,
+        "pageLength": 25,
         responsive: {
             breakpoints: [{
                     name: 'bigdesktop',
