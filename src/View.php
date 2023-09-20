@@ -45,7 +45,7 @@ class View
         }
     }
 
-    public function render404(): void
+    public function pageNotFound(): void
     {
         try {
             $page = "404.view.php";

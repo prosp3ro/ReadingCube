@@ -81,7 +81,7 @@ class Route
 
     private static function route(string $route, callable $callback): void
     {
-        if ($route === "/404") {
+        if ($route === "/not-found") {
             call_user_func($callback);
             exit();
         }

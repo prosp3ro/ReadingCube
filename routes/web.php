@@ -45,6 +45,6 @@ Route::get("/user-profile", function () use ($UserController) {
     $UserController->showProfile();
 });
 
-Route::any("/404", function () use ($view) {
-    $view->render404();
+Route::any("/not-found", function () use ($view) {
+    $view->pageNotFound();
 });

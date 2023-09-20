@@ -26,7 +26,7 @@ ini_set('session.use_only_cookies', 1);
 ini_set('session.use_strict_mode', 1);
 
 session_set_cookie_params([
-    "lifetime" => 1800, // 30 minutes
+    "lifetime" => 86400 * 7,
     "domain" => $config["app"]["domain"] ?? "localhost",
     "path" => "/",
     "secure" => true,
@@ -39,7 +39,7 @@ if (!isset($_SESSION["last_regeneration"])) {
     session_regenerate_id(true);
     $_SESSION["last_regeneration"] = time();
 } else {
-    $interval = 60 * 30; // 30 minutes
+    $interval = 60 * 30;
 
     if (time() - $_SESSION["last_regeneration"] >= $interval) {
         session_regenerate_id(true);
@@ -50,6 +50,8 @@ if (!isset($_SESSION["last_regeneration"])) {
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
+    error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine(), 3, ROOT . "/logs/error.log");
+
     if (function_exists("showException")) {
         showException($exception);
     } else {

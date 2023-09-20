@@ -19,8 +19,6 @@ function dd($data)
 
 function showException(Throwable $exception)
 {
-    error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine());
-
     echo "<br/>";
     echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: lightgray;">';
     echo "<b>" . $exception->getMessage() . "</b><br>";

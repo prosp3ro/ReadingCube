@@ -66,7 +66,11 @@ class RegisterController
             exit("Passwords must match");
         }
 
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $passwordOptions = [
+            "cost" => 12
+        ];
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $passwordOptions);
 
         $sql = "INSERT INTO users(email, password)
                     VALUES (?, ?)";
