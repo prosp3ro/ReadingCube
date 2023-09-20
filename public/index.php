@@ -20,8 +20,11 @@ if ($config['app']['env'] == "production") {
 require_once(ROOT . "/utils/functions.php");
 require_once(ROOT . "/vendor/autoload.php");
 
+ini_set('session.use_only_cookies', 1);
+ini_set('session.use_strict_mode', 1);
+session_start();
+
 try {
-    session_start();
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
     if (function_exists("showException")) {
