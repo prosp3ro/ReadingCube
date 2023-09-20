@@ -2,6 +2,7 @@
 name = App
 env = local
 debug = true
+domain = "localhost"
 
 [database]
 driver = mysql
