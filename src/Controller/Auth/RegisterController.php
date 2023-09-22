@@ -6,25 +6,26 @@ namespace Src\Controller\Auth;
 
 use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
+use Src\Model\User;
+use Src\Model\UserRepository;
 use Src\View;
 use Throwable;
 
 class RegisterController
 {
     private View $view;
-    private DB $db;
+    private UserRepository $userRepository;
 
-    public function __construct()
+    public function __construct(View $view, UserRepository $userRepository)
     {
-        $this->view = new View();
-        $this->db = new DB();
+        $this->view = $view;
+        $this->userRepository = $userRepository;
     }
 
-    public function index(bool $emailAlreadyUsed = false)
+    public function index()
     {
         return $this->view->render("auth/register", [
-            "header" => "Register | " . APP_NAME,
-            "emailAlreadyUsed" => $emailAlreadyUsed
+            "header" => "Register | " . APP_NAME
         ]);
     }
 
@@ -43,7 +44,7 @@ class RegisterController
         $passwordConfirmation = $_POST['password_confirmation'];
 
         if (empty($email) || empty($password) || empty($username)) {
-            exit("");
+            exit("Username, email and password fields are required.");
         }
 
         if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $username)) {
@@ -51,52 +52,32 @@ class RegisterController
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            exit("Valid email is required!");
+            exit("Email has invalid format");
         }
 
         if (!preg_match("/^(?=.*[a-z])(?=.*[0-9]).{8,}$/i", $password)) {
-            exit("Password must be at least 8 characters and contain at least one letter and one number");
+            exit("Password must be at least 8 characters and contain at least one letter and one number.");
         }
-
-        // if (strlen($password) < 8) {
-        //     exit("Password must be at least 8 characters");
-        // }
-
-        // if (!preg_match("/[a-z]/i", $password)) {
-        //     exit("Password must contain at least one letter");
-        // }
-
-        // if (!preg_match("/[0-9]/", $password)) {
-        //     exit("Password must contain at least one number");
-        // }
 
         if ($password !== $passwordConfirmation) {
-            exit("Passwords must match");
+            exit("Passwords must match.");
         }
 
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT, [
-            "cost" => 12
-        ]);
+        $user = new User($username, $email, $password);
 
-        $sql = "INSERT INTO users(username, email, password)
-                    VALUES (?, ?, ?)";
+        if ($this->userRepository->isUsernameUnique($username)) {
+            exit("Username is already taken.");
+        }
 
-        $statement = $this->db->prepare($sql);
+        if ($this->userRepository->isEmailUnique($email)) {
+            exit("Email is already taken.");
+        }
 
-        try {
-            $statement->execute([$username, $email, $hashedPassword]);
+        if ($this->userRepository->createUser($user)) {
             header("Location: /register-success");
             exit();
-        } catch (Throwable $exception) {
-            if ($exception->getCode() == "23000" && strpos($exception->getMessage(), 'Duplicate entry') !== false) {
-                echo "Username or email already in use";
-
-                // $this->index(true);
-            } else {
-                throw new DatabaseQueryException($exception->getMessage());
-            }
-
-            exit();
+        } else {
+            exit("Registration failed.");
         }
     }
 }
