@@ -6,12 +6,6 @@
         <h1>Login</h1>
     </div>
 
-    <?php if ($errorMessage) : ?>
-        <div class="pb-2">
-            <em class="text-danger"><?= $errorMessage ?></em>
-        </div>
-    <?php endif ?>
-
     <div class="w-25">
         <form action="/login" method="post">
             <div class="mb-3">

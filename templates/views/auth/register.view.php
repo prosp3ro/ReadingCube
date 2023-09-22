@@ -6,12 +6,6 @@
         <h1>Register</h1>
     </div>
 
-    <?php if ($emailAlreadyUsed) : ?>
-        <div class="pb-2">
-            <em class="text-danger">Email is already in use</em>
-        </div>
-    <?php endif ?>
-
     <div class="w-25">
         <form action="/register" method="post" id="register">
             <div class="mb-3">

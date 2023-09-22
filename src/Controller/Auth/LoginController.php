@@ -14,13 +14,13 @@ class LoginController
     private View $view;
     private DB $db;
 
-    public function __construct()
+    public function __construct(View $view, DB $db)
     {
-        $this->view = new View();
-        $this->db = new DB();
+        $this->view = $view;
+        $this->db = $db;
     }
 
-    public function index(string $errorMessage = null)
+    public function index()
     {
         if (isset($_SESSION['user_id'])) {
             header("Location: /");
@@ -29,7 +29,6 @@ class LoginController
 
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
-            "errorMessage" => $errorMessage
         ]);
     }
 
@@ -48,7 +47,7 @@ class LoginController
         $password = $_POST['password'];
 
         if (empty($email) || empty($password)) {
-            return $this->index("Email and password are required");
+            exit("Email and password are required.");
         }
 
         $sql = "SELECT * FROM users WHERE email = ?";
@@ -74,6 +73,6 @@ class LoginController
             }
         }
 
-        return $this->index("Invalid login");
+        exit("Login failed.");
     }
 }

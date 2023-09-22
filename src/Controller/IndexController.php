@@ -14,10 +14,10 @@ class IndexController
     private View $view;
     private DB $db;
 
-    public function __construct()
+    public function __construct(View $view, DB $db)
     {
-        $this->view = new View();
-        $this->db = new DB();
+        $this->view = $view;
+        $this->db = $db;
     }
 
     public function index()

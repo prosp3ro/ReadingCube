@@ -11,10 +11,10 @@ use Src\View;
 $db = new DB();
 $view = new View();
 
-$IndexController = new IndexController();
+$IndexController = new IndexController($view, $db);
 
 $RegisterController = new RegisterController($view, $db);
-$LoginController = new LoginController();
+$LoginController = new LoginController($view, $db);
 
 $UserController = new UserController();
 
