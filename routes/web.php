@@ -5,20 +5,18 @@ use Src\Controller\Auth\RegisterController;
 use Src\Controller\IndexController;
 use Src\Controller\UserController;
 use Src\Model\DB;
-use Src\Model\User;
-use Src\Model\UserRepository;
 use Src\Route;
 use Src\View;
 
 $db = new DB();
 $view = new View();
-$UserRepository = new UserRepository($db);
 
 $IndexController = new IndexController();
-$RegisterController = new RegisterController($view, $UserRepository);
-$LoginController = new LoginController();
-$UserController = new UserController();
 
+$RegisterController = new RegisterController($view, $db);
+$LoginController = new LoginController();
+
+$UserController = new UserController();
 
 Route::get("/", function () use ($IndexController) {
     $IndexController->index();
