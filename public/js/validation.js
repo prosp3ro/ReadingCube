@@ -1,5 +1,3 @@
-console.log("hi");
-
 const validation = new JustValidate("#register");
 
 validation
@@ -10,7 +8,7 @@ validation
         {
             rule: 'customRegexp',
             value: /^[a-zA-Z0-9]{5,}$/,
-            errorMessage: "Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long",
+            errorMessage: "Invalid username format. Please use only letters and numbers, and ensure it's at least five characters long",
         },
     ])
     .addField("#email", [
@@ -29,4 +27,22 @@ validation
             rule: "password"
         }
     ])
+    .addField('#password_confirmation', [
+        {
+            rule: 'required',
+        },
+        {
+            validator: (value, fields) => {
+                if (fields['#password'] && fields['#password'].elem) {
+                    const repeatPasswordValue = fields['#password'].elem.value;
+                    return value === repeatPasswordValue;
+                }
 
+                return true;
+            },
+            errorMessage: 'Passwords should be the same',
+        },
+    ])
+    .onSuccess((event) => {
+        document.getElementById("register").submit();
+    })
