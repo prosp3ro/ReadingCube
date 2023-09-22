@@ -8,6 +8,7 @@ use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\Model\User;
 use Src\View;
+use Throwable;
 
 class RegisterController
 {
@@ -44,7 +45,7 @@ class RegisterController
             $statement = $this->db->prepare($sql);
             $statement->execute([$email]);
             return (int)$statement->fetchColumn() > 0;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
     }
@@ -57,7 +58,7 @@ class RegisterController
             $statement = $this->db->prepare($sql);
             $statement->execute([$username]);
             return (int)$statement->fetchColumn() > 0;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
     }
@@ -69,14 +70,14 @@ class RegisterController
         ]);
     }
 
-    public function registerSuccess()
-    {
-        return $this->view->render("auth/register-success", [
-            "header" => "Registration successful | " . APP_NAME
-        ]);
-    }
+    // public function registerSuccess()
+    // {
+    //     return $this->view->render("auth/register-success", [
+    //         "header" => "Registration successful | " . APP_NAME
+    //     ]);
+    // }
 
-    public function register()
+    public function register(): void
     {
         $username = $_POST['username'];
         $email = $_POST['email'];

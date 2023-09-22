@@ -42,9 +42,9 @@ Route::post("/register", function () use ($RegisterController) {
     $RegisterController->register();
 });
 
-Route::get("/register-success", function () use ($RegisterController) {
-    $RegisterController->registerSuccess();
-});
+// Route::get("/register-success", function () use ($RegisterController) {
+//     $RegisterController->registerSuccess();
+// });
 
 Route::get("/login", function () use ($LoginController) {
     $LoginController->index();
