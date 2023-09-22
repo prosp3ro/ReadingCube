@@ -40,4 +40,25 @@ class IndexController
         header("Location: /login");
         exit();
     }
+
+    public function showAboutUsPage()
+    {
+        return $this->view->render("about-us", [
+            "header" => "About Us | " . APP_NAME,
+        ]);
+    }
+
+    public function showContactPage()
+    {
+        return $this->view->render("contact", [
+            "header" => "Contact | " . APP_NAME,
+        ]);
+    }
+
+    public function showFAQPage()
+    {
+        return $this->view->render("faq", [
+            "header" => "FAQ | " . APP_NAME,
+        ]);
+    }
 }

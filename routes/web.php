@@ -17,6 +17,18 @@ Route::get("/", function () use ($IndexController) {
     $IndexController->index();
 });
 
+Route::get("/about-us", function () use ($IndexController) {
+    $IndexController->showAboutUsPage();
+});
+
+Route::get("/contact", function () use ($IndexController) {
+    $IndexController->showContactPage();
+});
+
+Route::get("/faq", function () use ($IndexController) {
+    $IndexController->showFAQPage();
+});
+
 Route::get("/register", function () use ($RegisterController) {
     $RegisterController->index();
 });
