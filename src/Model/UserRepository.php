@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Src\Model;
 
@@ -18,12 +18,12 @@ class UserRepository
     public function createUser(User $user): bool
     {
         $sql = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
-        
+
         try {
             $statement = $this->db->prepare($sql);
-            $hashedPassword = password_hash($user->getPassword(), PASSWORD_BCRYPT,
-                ["cost" => 12]
-            );
+            $hashedPassword = password_hash($user->getPassword(), PASSWORD_BCRYPT, [
+                "cost" => 12
+            ]);
 
             return $statement->execute([$user->getUsername(), $user->getEmail(), $hashedPassword]);
         } catch (\Throwable $exception) {
@@ -34,7 +34,7 @@ class UserRepository
     public function isEmailUnique(string $email): bool
     {
         $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
-        
+
         try {
             $statement = $this->db->prepare($sql);
             $statement->execute([$email]);
@@ -47,7 +47,7 @@ class UserRepository
     public function isUsernameUnique(string $username): bool
     {
         $sql = "SELECT COUNT(*) FROM users WHERE username = ?";
-        
+
         try {
             $statement = $this->db->prepare($sql);
             $statement->execute([$username]);

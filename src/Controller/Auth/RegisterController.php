@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Src\Controller\Auth;
 
-use Src\Exception\DatabaseQueryException;
-use Src\Model\DB;
 use Src\Model\User;
 use Src\Model\UserRepository;
 use Src\View;
-use Throwable;
 
 class RegisterController
 {
