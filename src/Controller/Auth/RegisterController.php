@@ -37,13 +37,13 @@ class RegisterController
         }
     }
 
-    public function validate(string $type, string $email)
+    private function validate(string $type, string $data)
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE ? = ?";
+        $sql = "SELECT COUNT(*) FROM users WHERE {$type} = ?";
 
         try {
             $statement = $this->db->prepare($sql);
-            $statement->execute([$type, $email]);
+            $statement->execute([$data]);
 
             header("Content-Type: application/json");
 
@@ -58,16 +58,23 @@ class RegisterController
         }
     }
 
-    private function isUsernameUnique(string $username): bool
+    private function validateEmail(string $email)
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        $json = $this->validate("email", $email);
+        $jsonArray = json_decode($json, true);
 
-        try {
-            $statement = $this->db->prepare($sql);
-            $statement->execute([$username]);
-            return (int)$statement->fetchColumn() == 0;
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
+        if ($jsonArray["available"] == false) {
+            exit("Email is already taken.");
+        }
+    }
+
+    private function validateUsername(string $username)
+    {
+        $json = $this->validate("username", $username);
+        $jsonArray = json_decode($json, true);
+
+        if ($jsonArray["available"] == false) {
+            exit("Username is already taken.");
         }
     }
 
@@ -88,13 +95,6 @@ class RegisterController
             "header" => "Register | " . APP_NAME
         ]);
     }
-
-    // public function registerSuccess()
-    // {
-    //     return $this->view->render("auth/register-success", [
-    //         "header" => "Registration successful | " . APP_NAME
-    //     ]);
-    // }
 
     public function register(): void
     {
@@ -125,19 +125,8 @@ class RegisterController
 
         $user = new User($username, $email, $password);
 
-        $json = $this->validate("email", $email);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Email is already taken.");
-        }
-
-        $json = $this->validate("username", $username);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Username is already taken.");
-        }
+        $this->validateEmail($email);
+        $this->validateUsername($username);
 
         if ($this->createUser($user)) {
             header("Location: /login?register=success");
