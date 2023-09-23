@@ -90,7 +90,8 @@ class RegisterController
 
         if (!empty($email)) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->validateEmail($email);
+                echo $this->validateEmail($email);
+                exit();
             } else {
                 exit("Email has invalid format");
             }
@@ -139,7 +140,10 @@ class RegisterController
 
         $json = $this->validateEmail($email);
         $jsonArray = json_decode($json, true);
-        die();
+
+        if ($jsonArray["available"] == false) {
+            exit("Email is already taken.");
+        }
 
         // if (!$this->isUsernameUnique($username)) {
         //     exit("Username is already taken.");
