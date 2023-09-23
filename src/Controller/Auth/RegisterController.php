@@ -37,14 +37,35 @@ class RegisterController
         }
     }
 
-    private function isEmailUnique(string $email): bool
+    public function validateEmail(string $email)
     {
         $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
 
         try {
             $statement = $this->db->prepare($sql);
             $statement->execute([$email]);
-            return (int)$statement->fetchColumn() > 0;
+
+            header("Content-Type: application/json");
+
+            $jsonData = json_encode([
+                "available" => (int) $statement->fetchColumn() == 0
+            ]);
+
+            return $jsonData;
+            exit();
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+    }
+
+    private function isEmailUnique(string $email) //: bool
+    {
+        $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+
+        try {
+            $statement = $this->db->prepare($sql);
+            $statement->execute([$email]);
+            return (int) $statement->fetchColumn() == 0;
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
@@ -57,7 +78,7 @@ class RegisterController
         try {
             $statement = $this->db->prepare($sql);
             $statement->execute([$username]);
-            return (int)$statement->fetchColumn() > 0;
+            return (int)$statement->fetchColumn() == 0;
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
@@ -65,6 +86,16 @@ class RegisterController
 
     public function index()
     {
+        $email = $_GET["email"] ?? "";
+
+        if (!empty($email)) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->validateEmail($email);
+            } else {
+                exit("Email has invalid format");
+            }
+        }
+
         return $this->view->render("auth/register", [
             "header" => "Register | " . APP_NAME
         ]);
@@ -106,13 +137,17 @@ class RegisterController
 
         $user = new User($username, $email, $password);
 
-        if ($this->isUsernameUnique($username)) {
-            exit("Username is already taken.");
-        }
+        $json = $this->validateEmail($email);
+        $jsonArray = json_decode($json, true);
+        die();
 
-        if ($this->isEmailUnique($email)) {
-            exit("Email is already taken.");
-        }
+        // if (!$this->isUsernameUnique($username)) {
+        //     exit("Username is already taken.");
+        // }
+
+        // if (!$this->isEmailUnique($email)) {
+        //     exit("Email is already taken.");
+        // }
 
         if ($this->createUser($user)) {
             header("Location: /login?register=success");

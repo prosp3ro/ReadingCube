@@ -119,7 +119,7 @@ class Route
                 return;
             }
         }
-
+        
         call_user_func_array($callback, $parameters);
         exit();
     }

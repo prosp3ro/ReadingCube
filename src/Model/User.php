@@ -9,7 +9,7 @@ class User
     private string $username;
     private string $email;
     private string $password;
-    private string $isAdmin;
+    private int $isAdmin;
 
     public function __construct(string $username, string $email, string $password, int $isAdmin = 0)
     {
