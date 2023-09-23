@@ -17,6 +17,18 @@ validation
         },
         {
             rule: "email"
+        },
+        {
+            validator: (value) => () => {
+                return fetch("http://127.0.0.3/register?email=" + encodeURIComponent(value))
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(json) {
+                        return json.available;
+                    })
+            },
+            errorMessage: "Email is already taken"
         }
     ])
     .addField("#password", [
