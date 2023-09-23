@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controller\Auth;
 
+use SimpleCaptcha\Builder;
 use Src\Exception\DatabaseQueryException;
 use Src\Model\DB;
 use Src\View;
@@ -27,8 +28,12 @@ class LoginController
             exit();
         }
 
+        $captcha = new Builder();
+        $captcha->build();
+
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
+            "captcha" => $captcha
         ]);
     }
 
@@ -57,7 +62,7 @@ class LoginController
             $statement->execute([$email]);
             $user = $statement->fetch();
         } catch (Throwable $exception) {
-            throw new DatabaseQueryException();
+            throw new DatabaseQueryException($exception->getMessage());
             // throw new DatabaseQueryException($exception->getMessage());
             exit();
         }

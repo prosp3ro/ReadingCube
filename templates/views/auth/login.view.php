@@ -16,6 +16,10 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" required>
             </div>
+            <div class="mb-3">
+                <img class="ms-2" src="<?= $captcha->inline() ?>" />
+                <input type="text" class="form-control mt-2" name="captcha" id="captcha" placeholder="Enter captcha value" required>
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
