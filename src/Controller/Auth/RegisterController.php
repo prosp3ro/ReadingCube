@@ -37,13 +37,13 @@ class RegisterController
         }
     }
 
-    public function validateEmail(string $email)
+    public function validate(string $type, string $email)
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        $sql = "SELECT COUNT(*) FROM users WHERE ? = ?";
 
         try {
             $statement = $this->db->prepare($sql);
-            $statement->execute([$email]);
+            $statement->execute([$type, $email]);
 
             header("Content-Type: application/json");
 
@@ -53,19 +53,6 @@ class RegisterController
 
             return $jsonData;
             exit();
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
-    }
-
-    private function isEmailUnique(string $email) //: bool
-    {
-        $sql = "SELECT COUNT(*) FROM users WHERE email = ?";
-
-        try {
-            $statement = $this->db->prepare($sql);
-            $statement->execute([$email]);
-            return (int) $statement->fetchColumn() == 0;
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
@@ -90,7 +77,7 @@ class RegisterController
 
         if (!empty($email)) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo $this->validateEmail($email);
+                echo $this->validate("email", $email);
                 exit();
             } else {
                 exit("Email has invalid format");
@@ -138,20 +125,19 @@ class RegisterController
 
         $user = new User($username, $email, $password);
 
-        $json = $this->validateEmail($email);
+        $json = $this->validate("email", $email);
         $jsonArray = json_decode($json, true);
 
         if ($jsonArray["available"] == false) {
             exit("Email is already taken.");
         }
 
-        // if (!$this->isUsernameUnique($username)) {
-        //     exit("Username is already taken.");
-        // }
+        $json = $this->validate("username", $username);
+        $jsonArray = json_decode($json, true);
 
-        // if (!$this->isEmailUnique($email)) {
-        //     exit("Email is already taken.");
-        // }
+        if ($jsonArray["available"] == false) {
+            exit("Username is already taken.");
+        }
 
         if ($this->createUser($user)) {
             header("Location: /login?register=success");
