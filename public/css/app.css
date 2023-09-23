@@ -12,6 +12,11 @@
     background-color: #21081a;
 }
 
+.bg-dark-gray {
+    background-color: #131516;
+    color: #d8d4cf;
+}
+
 body {
     margin: 0;
     padding: 0;

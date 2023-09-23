@@ -29,7 +29,10 @@ class LoginController
         }
 
         $captcha = new Builder();
-        $captcha->build();
+        $captcha->build(300, 100);
+        $captcha->bgColor = "#131313";
+        $captcha->distort = false;
+        $captcha->applyEffects = false;
 
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
