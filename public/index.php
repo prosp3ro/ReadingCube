@@ -19,7 +19,6 @@ if ($config['app']['env'] == "production") {
     require_once(ROOT . "/utils/production.php");
 }
 
-require_once(ROOT . "/utils/functions.php");
 require_once(ROOT . "/vendor/autoload.php");
 
 ini_set('session.use_only_cookies', 1);
