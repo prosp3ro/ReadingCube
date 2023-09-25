@@ -41,7 +41,7 @@ class LoginController
         exit();
     }
 
-    public function login()
+    public function login(object $captcha)
     {
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
@@ -51,7 +51,6 @@ class LoginController
             exit("Email and password are required.");
         }
 
-        $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
         $validationResult = $captcha->validateCaptcha($captchaResponseKey);
 
         if (!is_object($validationResult) || !property_exists($validationResult, 'success') || !$validationResult->success) {

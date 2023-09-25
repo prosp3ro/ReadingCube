@@ -4,12 +4,14 @@ use Src\Controllers\Auth\LoginController;
 use Src\Controllers\Auth\RegisterController;
 use Src\Controllers\IndexController;
 use Src\Controllers\UserController;
+use Src\Helpers\Captcha;
 use Src\Models\DB;
 use Src\Route;
 use Src\View;
 
 $db = new DB();
 $view = new View();
+$captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
 
 $IndexController = new IndexController($view, $db);
 
@@ -46,8 +48,8 @@ Route::get('/login', function () use ($LoginController) {
     $LoginController->index();
 });
 
-Route::post('/login', function () use ($LoginController) {
-    $LoginController->login();
+Route::post('/login', function () use ($LoginController, $captcha) {
+    $LoginController->login($captcha);
 });
 
 Route::get('/logout', function () use ($LoginController) {
