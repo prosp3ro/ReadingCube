@@ -43,4 +43,9 @@ class UserController
         header("Location: /login");
         exit();
     }
+
+    public function editProfileData()
+    {
+        
+    }
 }
