@@ -14,13 +14,13 @@ class UserController
     private View $view;
     private DB $db;
 
-    public function __construct()
+    public function __construct(View $view, DB $db)
     {
-        $this->view = new View();
-        $this->db = new DB();
+        $this->view = $view;
+        $this->db = $db;
     }
 
-    public function showProfile()
+    public function showEditProfilePage()
     {
         if (isset($_SESSION['user_id'])) {
             $sessionUserId = $_SESSION["user_id"];
@@ -31,12 +31,11 @@ class UserController
                 $statement->execute([$sessionUserId]);
                 $userData = $statement->fetch();
 
-                return $this->view->render("user-profile", [
+                return $this->view->render("edit-profile", [
                     "userData" => $userData
                 ]);
             } catch (Throwable $exception) {
-                throw new DatabaseQueryException();
-                // throw new DatabaseQueryException($exception->getMessage());
+                throw new DatabaseQueryException($exception->getMessage());
                 exit();
             }
         }

@@ -16,7 +16,7 @@ $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
 $IndexController = new IndexController($view, $db);
 $RegisterController = new RegisterController($view, $db);
 $LoginController = new LoginController($view, $db);
-$UserController = new UserController();
+$UserController = new UserController($view, $db);
 
 Route::get('/', function () use ($IndexController) {
     $IndexController->index();
@@ -54,8 +54,8 @@ Route::get('/logout', function () use ($LoginController) {
     $LoginController->logout();
 });
 
-Route::get('/user-profile', function () use ($UserController) {
-    $UserController->showProfile();
+Route::get('/edit-profile', function () use ($UserController) {
+    $UserController->showEditProfilePage();
 });
 
 Route::any('/not-found', function () use ($view) {
