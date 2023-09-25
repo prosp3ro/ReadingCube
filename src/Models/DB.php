@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Model;
+namespace Src\Models;
 
 use PDO;
-use Src\Exception\ConfigurationException;
-use Src\Exception\DatabaseConnectionException;
+use Src\Exceptions\ConfigurationException;
+use Src\Exceptions\DatabaseConnectionException;
 use Throwable;
 
 class DB extends PDO

@@ -1,10 +1,10 @@
 <?php
 
-use Src\Controller\Auth\LoginController;
-use Src\Controller\Auth\RegisterController;
-use Src\Controller\IndexController;
-use Src\Controller\UserController;
-use Src\Model\DB;
+use Src\Controllers\Auth\LoginController;
+use Src\Controllers\Auth\RegisterController;
+use Src\Controllers\IndexController;
+use Src\Controllers\UserController;
+use Src\Models\DB;
 use Src\Route;
 use Src\View;
 

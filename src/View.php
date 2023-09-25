@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Src;
 
 use Exception;
-use Src\Exception\AppException;
+use Src\Exceptions\AppException;
 use Throwable;
 
 class View

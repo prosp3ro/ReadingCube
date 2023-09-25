@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Controller\Auth;
+namespace Src\Controllers\Auth;
 
 use Src\Exception\DatabaseQueryException;
-use Src\Model\DB;
-use Src\Model\User;
+use Src\Models\DB;
+use Src\Models\User;
 use Src\View;
 use Throwable;
 

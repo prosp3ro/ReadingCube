@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Src\Controller\Auth;
+namespace Src\Controllers\Auth;
 
 use SimpleCaptcha\Builder;
-use Src\Exception\DatabaseQueryException;
-use Src\Model\DB;
+use Src\Exceptions\DatabaseQueryException;
+use Src\Models\DB;
 use Src\View;
 use Throwable;
 
