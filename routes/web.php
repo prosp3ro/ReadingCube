@@ -38,8 +38,8 @@ Route::get('/register', function () use ($RegisterController) {
     $RegisterController->index();
 });
 
-Route::post('/register', function () use ($RegisterController) {
-    $RegisterController->register();
+Route::post('/register', function () use ($RegisterController, $captcha) {
+    $RegisterController->register($captcha);
 });
 
 Route::get('/login', function () use ($LoginController) {

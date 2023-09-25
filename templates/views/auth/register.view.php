@@ -25,7 +25,8 @@
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_SITE_KEY ?>"></div>
+            <button type="submit" class="mt-2 btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
