@@ -78,6 +78,6 @@ class LoginController
             }
         }
 
-        exit("Login failed.");
+        return "Login failed.";
     }
 }
