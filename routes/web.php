@@ -38,17 +38,9 @@ Route::get('/register', function () use ($RegisterController) {
     $RegisterController->index();
 });
 
-// Route::get('/register?email=$email', function () use ($RegisterController) {
-//     $RegisterController->validateEmail();
-// });
-
 Route::post('/register', function () use ($RegisterController) {
     $RegisterController->register();
 });
-
-// Route::get('/register-success', function () use ($RegisterController) {
-//     $RegisterController->registerSuccess();
-// });
 
 Route::get('/login', function () use ($LoginController) {
     $LoginController->index();

@@ -41,7 +41,7 @@ class View
 
             require_once($path);
         } catch (Throwable $exception) {
-            throw new AppException("Template can't be rendered.", 0, $exception);
+            throw new AppException($exception->getMessage());
         }
     }
 
@@ -54,7 +54,7 @@ class View
 
             require_once($path);
         } catch (Throwable $exception) {
-            throw new AppException("Template can't be rendered.", 0, $exception);
+            throw new AppException($exception->getMessage());
         }
     }
 }

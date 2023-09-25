@@ -1,9 +1,6 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
-<?php
-?>
-
 <div class="container">
     <!-- <?php if (isset($_SESSION['user_id'])) : ?> -->
     <!--     <p class="text-success">You are logged in.</p> -->
