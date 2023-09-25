@@ -28,15 +28,8 @@ class LoginController
             exit();
         }
 
-        $captcha = new Builder();
-        $captcha->build(300, 100);
-        $captcha->bgColor = "#131313";
-        $captcha->distort = false;
-        $captcha->applyEffects = false;
-
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
-            "captcha" => $captcha
         ]);
     }
 
@@ -51,11 +44,34 @@ class LoginController
     public function login()
     {
         $email = $_POST['email'];
-
         $password = $_POST['password'];
+        $captchaPrivateKey = GOOGLE_RECAPTCHA_PRIVATE_KEY;
+        $captchaResponseKey = $_POST['g-recaptcha-response'];
 
         if (empty($email) || empty($password)) {
             exit("Email and password are required.");
+        }
+
+        $captchaVerificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+        $captchaData = [
+            'secret' => $captchaPrivateKey,
+            'response' => $captchaResponseKey
+        ];
+
+        $options = [
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($captchaData)
+            ]
+        ];
+
+        $context = stream_context_create($options);
+        $captchaVerificationResult = file_get_contents($captchaVerificationUrl, false, $context);
+        $jsonResult = json_decode($captchaVerificationResult);
+
+        if (!$jsonResult->success) {
+            exit("Captcha verification failed.");
         }
 
         $sql = "SELECT * FROM users WHERE email = ?";

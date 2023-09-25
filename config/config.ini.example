@@ -3,6 +3,8 @@ name = App
 env = local
 debug = true
 domain = "localhost"
+google_recaptcha_public_key = ""
+google_recaptcha_private_key = ""
 
 [database]
 driver = mysql

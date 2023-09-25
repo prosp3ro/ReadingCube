@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
-use Src\Exception\DatabaseQueryException;
+use Src\Exceptions\DatabaseQueryException;
 use Src\Models\DB;
 use Src\Models\User;
 use Src\View;
