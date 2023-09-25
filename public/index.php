@@ -8,8 +8,8 @@ define('ROOT', __DIR__ . "/..");
 
 $config = parse_ini_file(ROOT . "/config/config.ini", true);
 define('APP_NAME', $config['app']['name'] ?? "App");
-define('GOOGLE_RECAPTCHA_PUBLIC_KEY', $config['app']['google_recaptcha_public_key'] ?? "");
-define('GOOGLE_RECAPTCHA_PRIVATE_KEY', $config['app']['google_recaptcha_private_key'] ?? "");
+define('GOOGLE_RECAPTCHA_SITE_KEY', $config['app']['google_recaptcha_site_key'] ?? "");
+define('GOOGLE_RECAPTCHA_SECRET_KEY', $config['app']['google_recaptcha_secret_key'] ?? "");
 
 define('PARTIALS', ROOT . "/templates/partials");
 

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
-use SimpleCaptcha\Builder;
+use PDOException;
 use Src\Exceptions\DatabaseQueryException;
+use Src\Helpers\Captcha;
 use Src\Models\DB;
 use Src\View;
-use Throwable;
 
 class LoginController
 {
@@ -43,34 +43,18 @@ class LoginController
 
     public function login()
     {
-        $email = $_POST['email'];
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'];
-        $captchaPrivateKey = GOOGLE_RECAPTCHA_PRIVATE_KEY;
         $captchaResponseKey = $_POST['g-recaptcha-response'];
 
         if (empty($email) || empty($password)) {
             exit("Email and password are required.");
         }
 
-        $captchaVerificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
-        $captchaData = [
-            'secret' => $captchaPrivateKey,
-            'response' => $captchaResponseKey
-        ];
+        $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
+        $validationResult = $captcha->validateCaptcha($captchaResponseKey);
 
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => 'POST',
-                'content' => http_build_query($captchaData)
-            ]
-        ];
-
-        $context = stream_context_create($options);
-        $captchaVerificationResult = file_get_contents($captchaVerificationUrl, false, $context);
-        $jsonResult = json_decode($captchaVerificationResult);
-
-        if (!$jsonResult->success) {
+        if (!is_object($validationResult) || !property_exists($validationResult, 'success') || !$validationResult->success) {
             exit("Captcha verification failed.");
         }
 
@@ -80,10 +64,8 @@ class LoginController
         try {
             $statement->execute([$email]);
             $user = $statement->fetch();
-        } catch (Throwable $exception) {
+        } catch (PDOException $exception) {
             throw new DatabaseQueryException($exception->getMessage());
-            // throw new DatabaseQueryException($exception->getMessage());
-            exit();
         }
 
         if ($user) {

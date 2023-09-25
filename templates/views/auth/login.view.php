@@ -16,7 +16,7 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" required>
             </div>
-            <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_PUBLIC_KEY ?>"></div>
+            <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_SITE_KEY ?>"></div>
             <button type="submit" class="mt-2 btn btn-primary">Submit</button>
         </form>
     </div>
