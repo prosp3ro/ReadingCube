@@ -58,6 +58,10 @@ Route::get('/edit-profile', function () use ($UserController) {
     $UserController->showEditProfilePage();
 });
 
+Route::post('/edit-profile', function () use ($UserController, $captcha) {
+    $UserController->editProfileData($captcha);
+});
+
 Route::any('/not-found', function () use ($view) {
     $view->pageNotFound();
 });

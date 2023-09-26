@@ -43,12 +43,16 @@ class LoginController
 
     public function login(object $captcha)
     {
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $email = $_POST['email'];
         $password = $_POST['password'];
         $captchaResponseKey = $_POST['g-recaptcha-response'];
 
         if (empty($email) || empty($password)) {
             exit("Email and password are required.");
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            exit("Email has invalid format");
         }
 
         $validationResult = $captcha->validateCaptcha($captchaResponseKey);

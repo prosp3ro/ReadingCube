@@ -21,7 +21,7 @@ class Captcha
     //     return "<div class='g-recaptcha' data-sitekey='{$this->siteKey}'></div>";
     // }
 
-    public function validateCaptcha(string $responseKey): object
+    public function validateCaptcha(string $responseKey)
     {
         $captchaData = [
             'secret' => $this->secretKey,
@@ -40,6 +40,8 @@ class Captcha
         $captchaResult = file_get_contents($this->verificationUrl, false, $context);
         $jsonCaptchaResult = json_decode($captchaResult);
 
-        return $jsonCaptchaResult;
+        if (!is_object($jsonCaptchaResult) || !property_exists($jsonCaptchaResult, 'success') || !$jsonCaptchaResult->success) {
+            exit("Captcha verification failed.");
+        }
     }
 }
