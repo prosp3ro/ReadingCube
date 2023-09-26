@@ -46,32 +46,6 @@ class Route
         self::route($route, $callback);
     }
 
-    // public static function setCSRF(): void
-    // {
-    //     session_start();
-
-    //     if (!isset($_SESSION["csrf"])) {
-    //         $_SESSION["csrf"] = bin2hex(random_bytes(50));
-    //     }
-
-    //     echo '<input type="hidden" name="csrf" value="' . $_SESSION["csrf"] . '">';
-    // }
-
-    // public static function isCSRFValid(): bool
-    // {
-    //     session_start();
-
-    //     if (!isset($_SESSION['csrf']) || !isset($_POST['csrf'])) {
-    //         return false;
-    //     }
-
-    //     if ($_SESSION['csrf'] != $_POST['csrf']) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
-
     private static function sanitizeRequestUrl($url): string
     {
         $url = filter_var($url, FILTER_SANITIZE_URL);

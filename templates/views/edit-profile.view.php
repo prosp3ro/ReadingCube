@@ -29,6 +29,7 @@
                     <input type="password" class="form-control" name="password" id="password" required>
                 </div>
                 <?= $captcha->renderCaptcha(); ?>
+                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                 <button type="submit" class="mt-2 btn btn-primary">Submit</button>
             </form>
         </div>
@@ -49,6 +50,7 @@
                     <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" required>
                 </div>
                 <?= $captcha->renderCaptcha(); ?>
+                <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
                 <button type="submit" class="mt-2 btn btn-primary">Submit</button>
             </form>
         </div>

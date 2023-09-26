@@ -7,6 +7,7 @@ namespace Src\Controllers;
 use PDOException;
 use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\Captcha;
+use Src\Helpers\CsrfTokenManager;
 use Src\Models\DB;
 use Src\View;
 use Throwable;
@@ -35,13 +36,16 @@ class UserController
         $sql = "SELECT * FROM users WHERE id = ?";
         $statement = $this->db->prepare($sql);
 
+        $csrfToken = CsrfTokenManager::generateToken();
+
         try {
             $statement->execute([$this->sessionUserId]);
             $userData = $statement->fetch();
 
             return $this->view->render("edit-profile", [
                 "userData" => $userData,
-                "captcha" => $captcha
+                "captcha" => $captcha,
+                "csrfToken" => $csrfToken
             ]);
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
@@ -58,13 +62,18 @@ class UserController
         $newEmail = $_POST["newEmail"] ?? null;
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
+        $csrfToken = $_POST["csrf_token"];
 
-        if (empty($password)) {
-            exit("Password is required.");
+        if (!$this->verifyCsrfToken($csrfToken)) {
+            exit("CSRF Error. Request was blocked.");
         }
 
         if (!$captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
+        }
+
+        if (empty($password)) {
+            exit("Password is required.");
         }
 
         if (!$this->verifyPassword($password)) {
@@ -96,6 +105,11 @@ class UserController
         $newPassword = $_POST["new_password"];
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
+        $csrfToken = $_POST["csrf_token"];
+
+        if (!$this->verifyCsrfToken($csrfToken)) {
+            exit("CSRF Error. Request was blocked.");
+        }
 
         if (empty($currentPassword)) {
             exit("Current password is required.");
@@ -223,5 +237,14 @@ class UserController
             throw new DatabaseQueryException($exception->getMessage());
             exit();
         }
+    }
+
+    private function verifyCsrfToken(string $csrfToken): bool
+    {
+        if (isset($csrfToken) && CsrfTokenManager::verifyToken($csrfToken)) {
+            return true;
+        }
+
+        return false;
     }
 }
