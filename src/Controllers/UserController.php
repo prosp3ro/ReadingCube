@@ -26,6 +26,8 @@ class UserController
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = $_SESSION["user_id"];
         }
+
+        // new User object...
     }
 
     public function showEditProfilePage()
@@ -93,10 +95,6 @@ class UserController
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
 
-        // dd($currentPassword);
-        // dd($newPassword);
-        // dd($newPasswordConfirmation);
-
         if (empty($currentPassword)) {
             exit("Current password is required.");
         }
@@ -109,13 +107,37 @@ class UserController
             exit("Password confirmation is required.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
-        }
+        // if (!$captcha->validateCaptcha($captchaResponseKey)) {
+        //     exit("Captcha validation failed.");
+        // }
 
-        if (!$this->verifyPassword($password)) {
+        if (!$this->verifyPassword($currentPassword)) {
             exit("Password is incorrect.");
         }
+
+        if (!preg_match("/^(?=.*[a-z])(?=.*[0-9]).{8,}$/i", $newPassword)) {
+            exit("Password must be at least 8 characters and contain at least one letter and one number.");
+        }
+
+        if ($newPassword !== $newPasswordConfirmation) {
+            exit("Passwords must match.");
+        }
+
+        $updatePasswordSql = "UPDATE users SET password = ? WHERE id = ?";
+
+        try {
+            $statement = $this->db->prepare($updatePasswordSql);
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT, [
+                "cost" => 12
+            ]);
+
+            $statement->execute([$hashedPassword]);
+        } catch (\Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+
+        header("Location: /edit-profile?updatepwd=success");
+        exit();
     }
 
     // TODO rewrite
