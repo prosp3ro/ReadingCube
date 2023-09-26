@@ -6,7 +6,6 @@ namespace Src\Controllers\Auth;
 
 use PDOException;
 use Src\Exceptions\DatabaseQueryException;
-use Src\Helpers\Captcha;
 use Src\Models\DB;
 use Src\View;
 

@@ -18,11 +18,11 @@
             <!--   <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search"> -->
             <!-- </form> -->
 
-            <?php if (isset($_SESSION['user_id'])) : ?>
+            <?php if (isset($user)) : ?>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <p><?= htmlspecialchars($userData["username"]) ?></p>
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <img src="https://github.com/mdo.png" alt="mdo" width="28" height="28" class="rounded-circle me-2">
+                        <?= htmlspecialchars($user["username"]) ?>
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                         <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->

@@ -17,49 +17,56 @@ class UserController
     private View $view;
     private DB $db;
     private ?int $sessionUserId = null;
+    private ?array $user;
 
     public function __construct(View $view, DB $db)
     {
         $this->view = $view;
         $this->db = $db;
+
+        if (isset($_SESSION['user_id'])) {
+            $this->sessionUserId = $_SESSION["user_id"];
+
+            $sql = "SELECT * FROM users WHERE id = ?";
+            $statement = $this->db->prepare($sql);
+
+            try {
+                $statement->execute([$this->sessionUserId]);
+                $this->user = $statement->fetch();
+            } catch (PDOException $exception) {
+                throw new DatabaseQueryException($exception->getMessage());
+            }
+        }
     }
 
     public function showEditProfilePage(object $captcha)
     {
-        $this->userLoginCheck();
-
-        $sql = "SELECT * FROM users WHERE id = ?";
-        $statement = $this->db->prepare($sql);
-
-        $csrfToken = CsrfTokenManager::generateToken();
-
-        try {
-            $statement->execute([$this->sessionUserId]);
-            $userData = $statement->fetch();
-
-            return $this->view->render("edit-profile", [
-                "userData" => $userData,
-                "captcha" => $captcha,
-                "csrfToken" => $csrfToken
-            ]);
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
+        if (!$this->sessionUserId) {
+            header("Location: /login");
             exit();
         }
 
-        header("Location: /login");
-        exit();
+        $csrfToken = CsrfTokenManager::generateToken();
+
+        return $this->view->render("edit-profile", [
+            "user" => $this->user,
+            "captcha" => $captcha,
+            "csrfToken" => $csrfToken
+        ]);
     }
 
     public function updateProfile(object $captcha)
     {
+        if (!$this->sessionUserId) {
+            header("Location: /login");
+            exit();
+        }
+
         $newUsername = $_POST["newUsername"] ?? null;
         $newEmail = $_POST["newEmail"] ?? null;
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
-
-        $this->userLoginCheck();
 
         if (!$this->verifyCsrfToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -77,6 +84,7 @@ class UserController
             exit("Password is incorrect.");
         }
 
+        // TODO rewrite
         if ($newUsername && $newEmail) {
             $this->validateUsername($newUsername);
             $this->validateEmail($newEmail);
@@ -98,13 +106,16 @@ class UserController
     // TODO add check if new password is same as old
     public function updatePassword(Captcha $captcha)
     {
+        if (!$this->sessionUserId) {
+            header("Location: /login");
+            exit();
+        }
+
         $currentPassword = $_POST["current_password"];
         $newPassword = $_POST["new_password"];
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
-
-        $this->userLoginCheck();
 
         if (!$this->verifyCsrfToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -155,19 +166,6 @@ class UserController
         exit();
     }
 
-    // check if user is logged in - middleware?
-    private function userLoginCheck()
-    {
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /login");
-            exit();
-        }
-
-        $this->sessionUserId = $_SESSION["user_id"];
-
-        // new User object...
-    }
-
     // TODO rewrite
     private function verifyPassword(string $password): bool
     {
@@ -211,6 +209,7 @@ class UserController
     // TODO rewrite
     private function validateEmail(string $newEmail)
     {
+        // TODO dont exit here
         if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
             exit("Email has invalid format");
         }
@@ -226,6 +225,7 @@ class UserController
     // TODO rewrite
     private function validateUsername(string $newUsername)
     {
+        // TODO dont exit here
         if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
             exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
         }
@@ -238,6 +238,7 @@ class UserController
         }
     }
 
+    // TODO datatype should be an array and this method should allow for many types
     private function updateData(string $dataType, string $newData)
     {
         $updateSql = "UPDATE users SET {$dataType} = ? WHERE id = ?";
