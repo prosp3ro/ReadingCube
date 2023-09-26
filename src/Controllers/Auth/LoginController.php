@@ -80,6 +80,6 @@ class LoginController
             }
         }
 
-        return "Login failed.";
+        exit("Email or password is incorrect.");
     }
 }
