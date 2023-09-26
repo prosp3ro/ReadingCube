@@ -15,33 +15,34 @@ class UserController
 {
     private View $view;
     private DB $db;
-    private int $sessionUserId;
+    private ?int $sessionUserId = null;
 
     public function __construct(View $view, DB $db)
     {
         $this->view = $view;
         $this->db = $db;
-        $this->sessionUserId = $_SESSION["user_id"];
+
+        // check if user is logged in - middleware?
+        if (isset($_SESSION['user_id'])) {
+            $this->sessionUserId = $_SESSION["user_id"];
+        }
     }
 
     public function showEditProfilePage()
     {
-        // check if user is logged in - middleware?
-        if (isset($_SESSION['user_id'])) {
-            $sql = "SELECT * FROM users WHERE id = ?";
-            $statement = $this->db->prepare($sql);
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $statement = $this->db->prepare($sql);
 
-            try {
-                $statement->execute([$this->sessionUserId]);
-                $userData = $statement->fetch();
+        try {
+            $statement->execute([$this->sessionUserId]);
+            $userData = $statement->fetch();
 
-                return $this->view->render("edit-profile", [
-                    "userData" => $userData
-                ]);
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-                exit();
-            }
+            return $this->view->render("edit-profile", [
+                "userData" => $userData
+            ]);
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+            exit();
         }
 
         header("Location: /login");
