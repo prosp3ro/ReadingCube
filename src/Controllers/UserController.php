@@ -67,19 +67,8 @@ class UserController
         }
 
         if ($newUsername && $newEmail) {
-            // validate newUsername
-            if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
-                exit("Invalid newUsername format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
-            }
-
-            // check if newUsername is available
-
-            // validate email
-            if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-                exit("Email has invalid format");
-            }
-
-            // check if email is available
+            $this->validateUsername($newUsername);
+            $this->validateEmail($newEmail);
 
             // update newUsername and email in database
             $updateSql = "UPDATE users SET newUsername = ?, email = ? WHERE id = ?";
@@ -92,7 +81,7 @@ class UserController
                 exit();
             }
         } else if ($newEmail) {
-            // validate email
+            $this->validateEmail($newEmail);
 
             // update email in database
             $updateSql = "UPDATE users SET email = ? WHERE id = ?";
@@ -105,7 +94,6 @@ class UserController
                 exit();
             }
         } else if ($newUsername) {
-            // validate newUsername
             $this->validateUsername($newUsername);
 
             // update newUsername in database
