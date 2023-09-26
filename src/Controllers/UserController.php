@@ -88,6 +88,7 @@ class UserController
         exit();
     }
 
+    // TODO add check if new password is same as old
     public function updatePassword(Captcha $captcha)
     {
         $currentPassword = $_POST["current_password"];
@@ -112,7 +113,7 @@ class UserController
         // }
 
         if (!$this->verifyPassword($currentPassword)) {
-            exit("Password is incorrect.");
+            exit("Current password is incorrect.");
         }
 
         if (!preg_match("/^(?=.*[a-z])(?=.*[0-9]).{8,}$/i", $newPassword)) {
@@ -131,7 +132,7 @@ class UserController
                 "cost" => 12
             ]);
 
-            $statement->execute([$hashedPassword]);
+            $statement->execute([$hashedPassword, $this->sessionUserId]);
         } catch (\Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
