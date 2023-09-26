@@ -55,10 +55,8 @@ class LoginController
             exit("Email has invalid format");
         }
 
-        $validationResult = $captcha->validateCaptcha($captchaResponseKey);
-
-        if (!is_object($validationResult) || !property_exists($validationResult, 'success') || !$validationResult->success) {
-            exit("Captcha verification failed.");
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
         }
 
         $sql = "SELECT * FROM users WHERE email = ?";

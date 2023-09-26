@@ -21,6 +21,7 @@ class Captcha
     //     return "<div class='g-recaptcha' data-sitekey='{$this->siteKey}'></div>";
     // }
 
+    // TODO rewrite
     public function validateCaptcha(string $responseKey)
     {
         $captchaData = [

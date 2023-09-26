@@ -67,10 +67,8 @@ class RegisterController
             exit("Passwords must match.");
         }
 
-        $validationResult = $captcha->validateCaptcha($captchaResponseKey);
-
-        if (!is_object($validationResult) || !property_exists($validationResult, 'success') || !$validationResult->success) {
-            exit("Captcha verification failed.");
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
         }
 
         $user = new User($username, $email, $password);
