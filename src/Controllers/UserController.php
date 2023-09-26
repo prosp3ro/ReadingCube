@@ -22,17 +22,12 @@ class UserController
     {
         $this->view = $view;
         $this->db = $db;
-
-        // check if user is logged in - middleware?
-        if (isset($_SESSION['user_id'])) {
-            $this->sessionUserId = $_SESSION["user_id"];
-        }
-
-        // new User object...
     }
 
     public function showEditProfilePage(object $captcha)
     {
+        $this->userLoginCheck();
+
         $sql = "SELECT * FROM users WHERE id = ?";
         $statement = $this->db->prepare($sql);
 
@@ -63,6 +58,8 @@ class UserController
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
+
+        $this->userLoginCheck();
 
         if (!$this->verifyCsrfToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -106,6 +103,8 @@ class UserController
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
+
+        $this->userLoginCheck();
 
         if (!$this->verifyCsrfToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -154,6 +153,19 @@ class UserController
 
         header("Location: /edit-profile?updatepwd=success");
         exit();
+    }
+
+    // check if user is logged in - middleware?
+    private function userLoginCheck()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit();
+        }
+
+        $this->sessionUserId = $_SESSION["user_id"];
+
+        // new User object...
     }
 
     // TODO rewrite
