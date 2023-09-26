@@ -41,7 +41,9 @@ class Captcha
         $jsonCaptchaResult = json_decode($captchaResult);
 
         if (!is_object($jsonCaptchaResult) || !property_exists($jsonCaptchaResult, 'success') || !$jsonCaptchaResult->success) {
-            exit("Captcha verification failed.");
+            return false;
         }
+
+        return true;
     }
 }
