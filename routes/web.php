@@ -62,6 +62,10 @@ Route::post('/edit-profile', function () use ($UserController, $captcha) {
     $UserController->updateProfile($captcha);
 });
 
+Route::post('/update-password', function () use ($UserController, $captcha) {
+    $UserController->updatePassword($captcha);
+});
+
 Route::any('/not-found', function () use ($view) {
     $view->pageNotFound();
 });

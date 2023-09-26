@@ -6,6 +6,7 @@ namespace Src\Controllers;
 
 use PDOException;
 use Src\Exceptions\DatabaseQueryException;
+use Src\Helpers\Captcha;
 use Src\Models\DB;
 use Src\View;
 use Throwable;
@@ -14,23 +15,24 @@ class UserController
 {
     private View $view;
     private DB $db;
+    private int $sessionUserId;
 
     public function __construct(View $view, DB $db)
     {
         $this->view = $view;
         $this->db = $db;
+        $this->sessionUserId = $_SESSION["user_id"];
     }
 
     public function showEditProfilePage()
     {
         // check if user is logged in - middleware?
         if (isset($_SESSION['user_id'])) {
-            $sessionUserId = $_SESSION["user_id"];
             $sql = "SELECT * FROM users WHERE id = ?";
             $statement = $this->db->prepare($sql);
 
             try {
-                $statement->execute([$sessionUserId]);
+                $statement->execute([$this->sessionUserId]);
                 $userData = $statement->fetch();
 
                 return $this->view->render("edit-profile", [
@@ -52,7 +54,6 @@ class UserController
         $newEmail = $_POST["newEmail"] ?? null;
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
-        $sessionUserId = $_SESSION["user_id"];
 
         if (empty($password)) {
             exit("Password is required.");
@@ -62,7 +63,7 @@ class UserController
             exit("Captcha validation failed.");
         }
 
-        if (!$this->verifyPassword($sessionUserId, $password)) {
+        if (!$this->verifyPassword($password)) {
             exit("Password is incorrect.");
         }
 
@@ -70,33 +71,60 @@ class UserController
             $this->validateUsername($newUsername);
             $this->validateEmail($newEmail);
 
-            $this->updateData("username", $sessionUserId, $newUsername);
-            $this->updateData("email", $sessionUserId, $newEmail);
+            $this->updateData("username", $newUsername);
+            $this->updateData("email", $newEmail);
         } else if ($newEmail) {
             $this->validateEmail($newEmail);
-            $this->updateData("email", $sessionUserId, $newEmail);
+            $this->updateData("email", $newEmail);
         } else if ($newUsername) {
             $this->validateUsername($newUsername);
-            $this->updateData("username", $sessionUserId, $newUsername);
+            $this->updateData("username", $newUsername);
         }
 
         header("Location: /edit-profile?edit=success");
         exit();
     }
 
-    public function updatePassword()
+    public function updatePassword(Captcha $captcha)
     {
-        
+        $currentPassword = $_POST["current_password"];
+        $newPassword = $_POST["new_password"];
+        $newPasswordConfirmation = $_POST["new_password_confirmation"];
+        $captchaResponseKey = $_POST["g-recaptcha-response"];
+
+        // dd($currentPassword);
+        // dd($newPassword);
+        // dd($newPasswordConfirmation);
+
+        if (empty($currentPassword)) {
+            exit("Current password is required.");
+        }
+
+        if (empty($newPassword)) {
+            exit("New password is required.");
+        }
+
+        if (empty($newPasswordConfirmation)) {
+            exit("Password confirmation is required.");
+        }
+
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
+
+        if (!$this->verifyPassword($password)) {
+            exit("Password is incorrect.");
+        }
     }
 
     // TODO rewrite
-    private function verifyPassword(int $sessionUserId, string $password): bool
+    private function verifyPassword(string $password): bool
     {
         $sql = "SELECT * FROM users WHERE id = ?";
         $statement = $this->db->prepare($sql);
 
         try {
-            $statement->execute([$sessionUserId]);
+            $statement->execute([$this->sessionUserId]);
             $user = $statement->fetch();
         } catch (PDOException $exception) {
             throw new DatabaseQueryException($exception->getMessage());
@@ -159,13 +187,13 @@ class UserController
         }
     }
 
-    private function updateData(string $dataType, int $sessionUserId, string $newData)
+    private function updateData(string $dataType, string $newData)
     {
         $updateSql = "UPDATE users SET {$dataType} = ? WHERE id = ?";
         $statement = $this->db->prepare($updateSql);
 
         try {
-            $statement->execute([$newData, $sessionUserId]);
+            $statement->execute([$newData, $this->sessionUserId]);
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
             exit();

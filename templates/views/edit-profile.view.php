@@ -35,18 +35,18 @@
         <div class="w-25 col">
             <h3 class="mb-5">Change password</h3>
 
-            <form action="/change-password" method="post" id="change-password">
+            <form action="/update-password" method="post" id="change-password">
                 <div class="mb-3">
-                    <label for="password" class="form-label">Current password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
+                    <label for="current_password" class="form-label">Current password</label>
+                    <input type="password" class="form-control" name="current_password" id="current_password" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">New password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
+                    <label for="new_password" class="form-label">New password</label>
+                    <input type="password" class="form-control" name="new_password" id="new_password" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Confirm password</label>
-                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
+                    <label for="new_password_confirmation" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" required>
                 </div>
                 <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_SITE_KEY ?>"></div>
                 <button type="submit" class="mt-2 btn btn-primary">Submit</button>
