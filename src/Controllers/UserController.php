@@ -108,9 +108,9 @@ class UserController
             exit("Password confirmation is required.");
         }
 
-        // if (!$captcha->validateCaptcha($captchaResponseKey)) {
-        //     exit("Captcha validation failed.");
-        // }
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
 
         if (!$this->verifyPassword($currentPassword)) {
             exit("Current password is incorrect.");
@@ -133,7 +133,7 @@ class UserController
             ]);
 
             $statement->execute([$hashedPassword, $this->sessionUserId]);
-        } catch (\Throwable $exception) {
+        } catch (PDOException $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
 
