@@ -59,7 +59,7 @@ Route::get('/edit-profile', function () use ($UserController) {
 });
 
 Route::post('/edit-profile', function () use ($UserController, $captcha) {
-    $UserController->editProfileData($captcha);
+    $UserController->updateProfile($captcha);
 });
 
 Route::any('/not-found', function () use ($view) {

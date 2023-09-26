@@ -46,7 +46,7 @@ class UserController
         exit();
     }
 
-    public function editProfileData(object $captcha)
+    public function updateProfile(object $captcha)
     {
         $newUsername = $_POST["newUsername"] ?? null;
         $newEmail = $_POST["newEmail"] ?? null;
@@ -82,6 +82,11 @@ class UserController
 
         header("Location: /edit-profile?edit=success");
         exit();
+    }
+
+    public function updatePassword()
+    {
+        
     }
 
     // TODO rewrite
