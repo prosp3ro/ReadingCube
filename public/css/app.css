@@ -28,3 +28,10 @@ body {
 footer {
     margin-top: auto;
 }
+
+/* Add a line break on <=large screens */
+@media (max-width: 960px) {
+    .line-break {
+        margin-bottom: 70px;
+    }
+}
