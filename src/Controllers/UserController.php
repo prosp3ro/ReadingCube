@@ -58,38 +58,31 @@ class UserController
             exit("Password is required.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
+        // if (!$captcha->validateCaptcha($captchaResponseKey)) {
+        //     exit("Captcha validation failed.");
+        // }
+
+        if (!$this->verifyPassword($sessionUserId, $password)) {
+            exit("Password is incorrect.");
         }
 
         if ($newUsername && $newEmail) {
-            // validate username
+            // validate newUsername
             if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
-                exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
+                exit("Invalid newUsername format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
             }
+
+            // check if newUsername is available
 
             // validate email
             if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
                 exit("Email has invalid format");
             }
 
-            // verify password
-            $sql = "SELECT * FROM users WHERE id = ?";
-            $statement = $this->db->prepare($sql);
+            // check if email is available
 
-            try {
-                $statement->execute([$sessionUserId]);
-                $user = $statement->fetch();
-            } catch (PDOException $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-            }
-
-            if (!$user || !password_verify($password, $user['password'])) {
-                exit("...");
-            }
-
-            // update username and email in database
-            $updateSql = "UPDATE users SET username = ?, email = ? WHERE id = ?";
+            // update newUsername and email in database
+            $updateSql = "UPDATE users SET newUsername = ?, email = ? WHERE id = ?";
             $statement = $this->db->prepare($updateSql);
 
             try {
@@ -99,16 +92,104 @@ class UserController
                 exit();
             }
         } else if ($newEmail) {
-            if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-                exit("Email has invalid format");
+            // validate email
+
+            // update email in database
+            $updateSql = "UPDATE users SET email = ? WHERE id = ?";
+            $statement = $this->db->prepare($updateSql);
+
+            try {
+                $statement->execute([$newEmail, $sessionUserId]);
+            } catch (Throwable $exception) {
+                throw new DatabaseQueryException($exception->getMessage());
+                exit();
             }
         } else if ($newUsername) {
-            if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
-                exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
+            // validate newUsername
+            $this->validateUsername($newUsername);
+
+            // update newUsername in database
+            $updateSql = "UPDATE users SET newUsername = ? WHERE id = ?";
+            $statement = $this->db->prepare($updateSql);
+
+            try {
+                $statement->execute([$newUsername, $sessionUserId]);
+            } catch (Throwable $exception) {
+                throw new DatabaseQueryException($exception->getMessage());
+                exit();
             }
         }
 
         header("Location: /edit-profile?edit=success");
         exit();
+    }
+
+    // TODO rewrite
+    private function verifyPassword(int $sessionUserId, string $password): bool
+    {
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $statement = $this->db->prepare($sql);
+
+        try {
+            $statement->execute([$sessionUserId]);
+            $user = $statement->fetch();
+        } catch (PDOException $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+
+        if (!$user || !password_verify($password, $user['password'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function validate(string $type, string $data)
+    {
+        $sql = "SELECT COUNT(*) FROM users WHERE {$type} = ?";
+
+        try {
+            $statement = $this->db->prepare($sql);
+            $statement->execute([$data]);
+
+            header("Content-Type: application/json");
+
+            $jsonData = json_encode([
+                "available" => (int) $statement->fetchColumn() == 0
+            ]);
+
+            return $jsonData;
+            exit();
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+    }
+
+    private function validateEmail(string $newEmail)
+    {
+        if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+            exit("Email has invalid format");
+        }
+
+        $json = $this->validate("email", $newEmail);
+        $jsonArray = json_decode($json, true);
+
+        if ($jsonArray["available"] == false) {
+            exit("Email is already taken.");
+        }
+    }
+
+    private function validateUsername(string $newUsername)
+    {
+        if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
+            exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
+        }
+
+        $json = $this->validate("username", $newUsername);
+        $jsonArray = json_decode($json, true);
+
+        if ($jsonArray["available"] == false) {
+            exit("Username is already taken.");
+        }
     }
 }
