@@ -147,7 +147,6 @@ class UserController
             ]);
 
             return $jsonData;
-            exit();
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
