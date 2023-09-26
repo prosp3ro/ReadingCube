@@ -21,7 +21,7 @@ class RegisterController
         $this->db = $db;
     }
 
-    public function index()
+    public function index(object $captcha)
     {
         $email = $_GET["email"] ?? "";
 
@@ -35,7 +35,8 @@ class RegisterController
         }
 
         return $this->view->render("auth/register", [
-            "header" => "Register | " . APP_NAME
+            "header" => "Register | " . APP_NAME,
+            "captcha" => $captcha
         ]);
     }
 

@@ -21,7 +21,7 @@ class LoginController
         $this->db = $db;
     }
 
-    public function index()
+    public function index(object $captcha)
     {
         if (isset($_SESSION['user_id'])) {
             header("Location: /");
@@ -30,6 +30,7 @@ class LoginController
 
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
+            "captcha" => $captcha
         ]);
     }
 

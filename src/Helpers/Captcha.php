@@ -16,10 +16,10 @@ class Captcha
         $this->secretKey = $secretKey;
     }
 
-    // public function renderCaptcha(): string
-    // {
-    //     return "<div class='g-recaptcha' data-sitekey='{$this->siteKey}'></div>";
-    // }
+    public function renderCaptcha(): string
+    {
+        return "<div class='g-recaptcha' data-sitekey='{$this->siteKey}'></div>";
+    }
 
     // TODO rewrite
     public function validateCaptcha(string $responseKey)

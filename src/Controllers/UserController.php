@@ -30,7 +30,7 @@ class UserController
         // new User object...
     }
 
-    public function showEditProfilePage()
+    public function showEditProfilePage(object $captcha)
     {
         $sql = "SELECT * FROM users WHERE id = ?";
         $statement = $this->db->prepare($sql);
@@ -40,7 +40,8 @@ class UserController
             $userData = $statement->fetch();
 
             return $this->view->render("edit-profile", [
-                "userData" => $userData
+                "userData" => $userData,
+                "captcha" => $captcha
             ]);
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());

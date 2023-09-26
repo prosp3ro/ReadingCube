@@ -28,7 +28,7 @@
                     <label for="password" class="form-label">Type your password to continue</label>
                     <input type="password" class="form-control" name="password" id="password" required>
                 </div>
-                <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_SITE_KEY ?>"></div>
+                <?= $captcha->renderCaptcha(); ?>
                 <button type="submit" class="mt-2 btn btn-primary">Submit</button>
             </form>
         </div>
@@ -48,7 +48,7 @@
                     <label for="new_password_confirmation" class="form-label">Confirm password</label>
                     <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" required>
                 </div>
-                <div class="g-recaptcha" data-sitekey="<?= GOOGLE_RECAPTCHA_SITE_KEY ?>"></div>
+                <?= $captcha->renderCaptcha(); ?>
                 <button type="submit" class="mt-2 btn btn-primary">Submit</button>
             </form>
         </div>

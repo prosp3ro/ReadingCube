@@ -34,16 +34,16 @@ Route::get('/faq', function () use ($IndexController) {
     $IndexController->showFAQPage();
 });
 
-Route::get('/register', function () use ($RegisterController) {
-    $RegisterController->index();
+Route::get('/register', function () use ($RegisterController, $captcha) {
+    $RegisterController->index($captcha);
 });
 
 Route::post('/register', function () use ($RegisterController, $captcha) {
     $RegisterController->register($captcha);
 });
 
-Route::get('/login', function () use ($LoginController) {
-    $LoginController->index();
+Route::get('/login', function () use ($LoginController, $captcha) {
+    $LoginController->index($captcha);
 });
 
 Route::post('/login', function () use ($LoginController, $captcha) {
@@ -54,8 +54,8 @@ Route::get('/logout', function () use ($LoginController) {
     $LoginController->logout();
 });
 
-Route::get('/edit-profile', function () use ($UserController) {
-    $UserController->showEditProfilePage();
+Route::get('/edit-profile', function () use ($UserController, $captcha) {
+    $UserController->showEditProfilePage($captcha);
 });
 
 Route::post('/edit-profile', function () use ($UserController, $captcha) {
