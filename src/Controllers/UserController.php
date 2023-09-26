@@ -58,9 +58,9 @@ class UserController
             exit("Password is required.");
         }
 
-        // if (!$captcha->validateCaptcha($captchaResponseKey)) {
-        //     exit("Captcha validation failed.");
-        // }
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
 
         if (!$this->verifyPassword($sessionUserId, $password)) {
             exit("Password is incorrect.");
@@ -70,42 +70,14 @@ class UserController
             $this->validateUsername($newUsername);
             $this->validateEmail($newEmail);
 
-            // update newUsername and email in database
-            $updateSql = "UPDATE users SET newUsername = ?, email = ? WHERE id = ?";
-            $statement = $this->db->prepare($updateSql);
-
-            try {
-                $statement->execute([$newUsername, $newEmail, $sessionUserId]);
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-                exit();
-            }
+            $this->updateData("username", $sessionUserId, $newUsername);
+            $this->updateData("email", $sessionUserId, $newEmail);
         } else if ($newEmail) {
             $this->validateEmail($newEmail);
-
-            // update email in database
-            $updateSql = "UPDATE users SET email = ? WHERE id = ?";
-            $statement = $this->db->prepare($updateSql);
-
-            try {
-                $statement->execute([$newEmail, $sessionUserId]);
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-                exit();
-            }
+            $this->updateData("email", $sessionUserId, $newEmail);
         } else if ($newUsername) {
             $this->validateUsername($newUsername);
-
-            // update newUsername in database
-            $updateSql = "UPDATE users SET newUsername = ? WHERE id = ?";
-            $statement = $this->db->prepare($updateSql);
-
-            try {
-                $statement->execute([$newUsername, $sessionUserId]);
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-                exit();
-            }
+            $this->updateData("username", $sessionUserId, $newUsername);
         }
 
         header("Location: /edit-profile?edit=success");
@@ -152,6 +124,7 @@ class UserController
         }
     }
 
+    // TODO rewrite
     private function validateEmail(string $newEmail)
     {
         if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
@@ -166,6 +139,7 @@ class UserController
         }
     }
 
+    // TODO rewrite
     private function validateUsername(string $newUsername)
     {
         if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
@@ -177,6 +151,19 @@ class UserController
 
         if ($jsonArray["available"] == false) {
             exit("Username is already taken.");
+        }
+    }
+
+    private function updateData(string $dataType, int $sessionUserId, string $newData)
+    {
+        $updateSql = "UPDATE users SET {$dataType} = ? WHERE id = ?";
+        $statement = $this->db->prepare($updateSql);
+
+        try {
+            $statement->execute([$newData, $sessionUserId]);
+        } catch (Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+            exit();
         }
     }
 }
