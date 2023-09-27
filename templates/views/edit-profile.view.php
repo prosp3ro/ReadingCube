@@ -14,7 +14,7 @@
                 Current email: <strong><?= htmlspecialchars($user["email"]) ?></strong>
             </p>
 
-            <div class="form-group mt-4" id="edit-data">
+            <div class="form-group mt-4">
                 <form action="/edit-profile" method="post" id="edit-data">
                     <div class="mb-3">
                         <label for="newUsername" class="form-label">New username</label>
