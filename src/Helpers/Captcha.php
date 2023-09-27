@@ -54,13 +54,16 @@ class Captcha
         curl_setopt_array($curl, [
             CURLOPT_URL => $this->verificationUrl,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            // CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => http_build_query($captchaData),
             CURLOPT_HTTPHEADER => $headers
         ]);
 
         $captchaResult = curl_exec($curl);
+        // dd(curl_getinfo($curl));
         curl_close($curl);
+        // die();
 
         $jsonCaptchaResult = json_decode($captchaResult);
 
