@@ -14,8 +14,8 @@
                 Current email: <strong><?= htmlspecialchars($user["email"]) ?></strong>
             </p>
 
-            <div class="form-group mt-4">
-                <form action="/edit-profile" method="post" id="edit-profile">
+            <div class="form-group mt-4" id="edit-data">
+                <form action="/edit-profile" method="post" id="edit-data">
                     <div class="mb-3">
                         <label for="newUsername" class="form-label">New username</label>
                         <input type="text" class="form-control" name="newUsername" id="newUsername">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Type your password to continue <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="password" id="password" required>
+                        <input type="password" class="form-control" name="password" id="password">
                     </div>
                     <?= $captcha->renderCaptcha(); ?>
                     <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
@@ -43,18 +43,18 @@
             <?php endif ?>
 
             <div class="form-group mt-4">
-                <form action="/update-password" method="post" id="change-password">
+                <form action="/update-password" method="post" id="edit-password">
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Your current password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="current_password" id="current_password" required>
+                        <input type="password" class="form-control" name="current_password" id="current_password">
                     </div>
                     <div class="mb-3">
                         <label for="new_password" class="form-label">New password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="new_password" id="new_password" required>
+                        <input type="password" class="form-control" name="new_password" id="new_password">
                     </div>
                     <div class="mb-3">
                         <label for="new_password_confirmation" class="form-label">Confirm password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" required>
+                        <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation">
                     </div>
                     <?= $captcha->renderCaptcha(); ?>
                     <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
@@ -67,5 +67,8 @@
 
 
 <?php require_once(PARTIALS . "/scripts.view.php"); ?>
+
+<script src="js/validation/edit-profile.js"></script>
+
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
 <?php require_once(PARTIALS . "/pageend.view.php"); ?>

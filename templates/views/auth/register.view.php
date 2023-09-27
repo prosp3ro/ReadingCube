@@ -33,7 +33,7 @@
 
 <?php require_once(PARTIALS . "/scripts.view.php"); ?>
 
-<script src="js/register-validation.js"></script>
+<script src="js/validation/register.js"></script>
 
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
 <?php require_once(PARTIALS . "/pageend.view.php"); ?>

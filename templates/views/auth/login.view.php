@@ -11,7 +11,7 @@
     <?php endif ?>
 
     <div class="w-25">
-        <form action="/login" method="post">
+        <form action="/login" method="post" id="login">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="email" value="<?= htmlspecialchars($_POST["email"] ?? "") ?>">
@@ -27,5 +27,8 @@
 </div>
 
 <?php require_once(PARTIALS . "/scripts.view.php"); ?>
+
+<script src="js/validation/login.js"></script>
+
 <?php require_once(PARTIALS . "/footer.view.php"); ?>
 <?php require_once(PARTIALS . "/pageend.view.php"); ?>
