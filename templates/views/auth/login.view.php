@@ -6,6 +6,10 @@
         <h1>Login</h1>
     </div>
 
+    <?php if ($registerMessage === "success") : ?>
+        <p class="fw-bold text-success mb-4">You have been successfully registered. Now you can log in.</p>
+    <?php endif ?>
+
     <div class="w-25">
         <form action="/login" method="post">
             <div class="mb-3">
@@ -17,7 +21,7 @@
                 <input type="password" class="form-control" name="password" id="password" required>
             </div>
             <?= $captcha->renderCaptcha(); ?>
-            <button type="submit" class="mt-2 btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
         </form>
     </div>
 </div>

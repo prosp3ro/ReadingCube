@@ -27,9 +27,12 @@ class LoginController
             exit();
         }
 
+        $registerMessage = $_GET["register"] ?? "";
+
         return $this->view->render("auth/login", [
             "header" => "Login | " . APP_NAME,
-            "captcha" => $captcha
+            "captcha" => $captcha,
+            "registerMessage" => $registerMessage
         ]);
     }
 
