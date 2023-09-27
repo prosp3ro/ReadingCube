@@ -39,3 +39,27 @@ editDataValidation
     })
 
 editPasswordValidation
+    .addField("#current_password", [
+        {
+            rule: "required"
+        }
+    ])
+    .addField("#new_password", [
+        {
+            rule: "required"
+        },
+        {
+            rule: "password"
+        }
+    ])
+    .addField("#new_password_confirmation", [
+        {
+            rule: "required"
+        },
+        {
+            rule: "password"
+        }
+    ])
+    .onSuccess((event) => {
+        document.getElementById("edit-password").submit();
+    })
