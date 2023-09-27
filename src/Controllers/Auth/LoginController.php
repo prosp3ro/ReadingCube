@@ -50,16 +50,16 @@ class LoginController
         $password = $_POST['password'];
         $captchaResponseKey = $_POST['g-recaptcha-response'];
 
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
+
         if (empty($email) || empty($password)) {
             exit("Email and password are required.");
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             exit("Email has invalid format");
-        }
-
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
         }
 
         $sql = "SELECT * FROM users WHERE email = ?";

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\Controllers\Auth;
 
 use Src\Exceptions\DatabaseQueryException;
+use Src\Helpers\CsrfTokenManager;
 use Src\Models\DB;
 use Src\Models\User;
 use Src\View;
@@ -23,6 +24,8 @@ class RegisterController
 
     public function index(object $captcha)
     {
+        $csrfToken = CsrfTokenManager::generateToken();
+
         $email = $_GET["email"] ?? "";
 
         if (!empty($email)) {
@@ -36,7 +39,8 @@ class RegisterController
 
         return $this->view->render("auth/register", [
             "header" => "Register | " . APP_NAME,
-            "captcha" => $captcha
+            "captcha" => $captcha,
+            "csrfToken" => $csrfToken
         ]);
     }
 
@@ -47,6 +51,15 @@ class RegisterController
         $password = $_POST['password'];
         $passwordConfirmation = $_POST['password_confirmation'];
         $captchaResponseKey = $_POST['g-recaptcha-response'];
+        $csrfToken = $_POST["csrf_token"] ?? null;
+
+        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
+            exit("CSRF Error. Request was blocked.");
+        }
+
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
 
         if (empty($email) || empty($password) || empty($username)) {
             exit("Username, email and password fields are required.");
@@ -66,10 +79,6 @@ class RegisterController
 
         if ($password !== $passwordConfirmation) {
             exit("Passwords must match.");
-        }
-
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
         }
 
         $user = new User($username, $email, $password);

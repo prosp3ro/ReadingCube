@@ -25,6 +25,7 @@
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
+            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
             <?= $captcha->renderCaptcha() ?>
             <button type="submit" class="mt-2 btn btn-primary">Submit</button>
         </form>

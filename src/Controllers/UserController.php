@@ -69,9 +69,9 @@ class UserController
         $newEmail = $_POST["newEmail"] ?? null;
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
-        $csrfToken = $_POST["csrf_token"];
+        $csrfToken = $_POST["csrf_token"] ?? null;
 
-        if (!$this->verifyCsrfToken($csrfToken)) {
+        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
@@ -118,9 +118,9 @@ class UserController
         $newPassword = $_POST["new_password"];
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
-        $csrfToken = $_POST["csrf_token"];
+        $csrfToken = $_POST["csrf_token"] ?? null;
 
-        if (!$this->verifyCsrfToken($csrfToken)) {
+        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
@@ -253,14 +253,5 @@ class UserController
             throw new DatabaseQueryException($exception->getMessage());
             exit();
         }
-    }
-
-    private function verifyCsrfToken(string $csrfToken): bool
-    {
-        if (isset($csrfToken) && CsrfTokenManager::verifyToken($csrfToken)) {
-            return true;
-        }
-
-        return false;
     }
 }
