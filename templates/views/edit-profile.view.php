@@ -5,6 +5,10 @@
     <div class="row mt-5">
         <div class="col-lg-6 line-break">
             <h3>Edit username or email</h3>
+            <?php if ($updateMessage === "data") : ?>
+                <p class="text-success fw-bold mb-2 mt-3">Your information has been updated successfully.</p>
+            <?php endif ?>
+
             <p class="mt-3 lh-lg">
                 Current username: <strong><?= htmlspecialchars($user["username"]) ?></strong><br>
                 Current email: <strong><?= htmlspecialchars($user["email"]) ?></strong>
@@ -33,6 +37,10 @@
         </div>
         <div class="col-lg-6 line-break">
             <h3>Change password</h3>
+
+            <?php if ($updateMessage === "pwd") : ?>
+                <p class="text-success fw-bold mb-2 mt-3">Your password has been updated successfully.</p>
+            <?php endif ?>
 
             <div class="form-group mt-4">
                 <form action="/update-password" method="post" id="change-password">

@@ -48,10 +48,13 @@ class UserController
 
         $csrfToken = CsrfTokenManager::generateToken();
 
+        $updateMessage = $_GET["update"] ?? "";
+
         return $this->view->render("edit-profile", [
             "user" => $this->user,
             "captcha" => $captcha,
-            "csrfToken" => $csrfToken
+            "csrfToken" => $csrfToken,
+            "updateMessage" => $updateMessage
         ]);
     }
 
@@ -99,7 +102,7 @@ class UserController
             $this->updateData("username", $newUsername);
         }
 
-        header("Location: /edit-profile?edit=success");
+        header("Location: /edit-profile?update=data");
         exit();
     }
 
@@ -162,7 +165,7 @@ class UserController
             throw new DatabaseQueryException($exception->getMessage());
         }
 
-        header("Location: /edit-profile?updatepwd=success");
+        header("Location: /edit-profile?update=pwd");
         exit();
     }
 
