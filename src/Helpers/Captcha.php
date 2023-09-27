@@ -24,7 +24,7 @@ class Captcha
     // TODO rewrite
     public function validateCaptcha(string $responseKey)
     {
-        $captchaData = [
+        $reqBody = [
             'secret' => $this->secretKey,
             'response' => $responseKey
         ];
@@ -33,19 +33,19 @@ class Captcha
         //     'http' => [
         //         'header' => "Content-type: application/x-www-form-urlencoded",
         //         'method' => 'POST',
-        //         'content' => http_build_query($captchaData)
+        //         'content' => http_build_query($reqBody)
         //     ]
         // ];
 
         // $context = stream_context_create($requestOptions);
-        // $captchaResult = file_get_contents($this->verificationUrl, false, $context);
-        // $jsonCaptchaResult = json_decode($captchaResult);
+        // $res = file_get_contents($this->verificationUrl, false, $context);
+        // $resObj = json_decode($res);
 
-        // dd($jsonCaptchaResult);
+        // dd($resObj);
         // dd($http_response_header);
         // die();
 
-        $headers = [
+        $reqHeaders = [
             "Content-type: application/x-www-form-urlencoded"
         ];
 
@@ -56,18 +56,18 @@ class Captcha
             CURLOPT_RETURNTRANSFER => true,
             // CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($captchaData),
-            CURLOPT_HTTPHEADER => $headers
+            CURLOPT_POSTFIELDS => http_build_query($reqBody),
+            CURLOPT_HTTPHEADER => $reqHeaders
         ]);
 
-        $captchaResult = curl_exec($curl);
+        $res = curl_exec($curl);
         // dd(curl_getinfo($curl));
         curl_close($curl);
         // die();
 
-        $jsonCaptchaResult = json_decode($captchaResult);
+        $resObj = json_decode($res);
 
-        if (!is_object($jsonCaptchaResult) || !property_exists($jsonCaptchaResult, 'success') || !$jsonCaptchaResult->success) {
+        if (!is_object($resObj) || !property_exists($resObj, 'success') || !$resObj->success) {
             return false;
         }
 
