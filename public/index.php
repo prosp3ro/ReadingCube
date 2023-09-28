@@ -53,7 +53,7 @@ try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
     $exceptionClassName = get_class($exception);
-    $errorLogMessage = date('Y-m-d H:i:s') . " - {$exceptionClassName} Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine() . PHP_EOL . PHP_EOL;
+    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL . "Exception: {$exceptionClassName}" . PHP_EOL . "Message: {$exception->getMessage()}" .  PHP_EOL . "File: {$exception->getFile()}" . PHP_EOL . "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
     error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
 
     if (function_exists("showException")) {
