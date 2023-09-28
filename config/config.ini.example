@@ -5,6 +5,7 @@ debug = true
 domain = "localhost"
 google_recaptcha_site_key = ""
 google_recaptcha_secret_key = ""
+mailable_api_key = ""
 
 [database]
 driver = mysql
