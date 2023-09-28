@@ -10,7 +10,7 @@ $config = parse_ini_file(ROOT . "/config/config.ini", true);
 define('APP_NAME', $config['app']['name'] ?? "App");
 define('GOOGLE_RECAPTCHA_SITE_KEY', $config['app']['google_recaptcha_site_key'] ?? "");
 define('GOOGLE_RECAPTCHA_SECRET_KEY', $config['app']['google_recaptcha_secret_key'] ?? "");
-define('MAILABLE_API_KEY', $config['app']['mailable_api_key'] ?? "");
+define('EMAILABLE_API_KEY', $config['app']['emailable_api_key'] ?? "");
 
 define('PARTIALS', ROOT . "/templates/partials");
 
