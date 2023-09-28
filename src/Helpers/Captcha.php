@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\Helpers;
 
+use GuzzleHttp\Client;
+
 class Captcha
 {
     private $siteKey;
@@ -29,43 +31,20 @@ class Captcha
             'response' => $responseKey
         ];
 
-        // $requestOptions = [
-        //     'http' => [
-        //         'header' => "Content-type: application/x-www-form-urlencoded",
-        //         'method' => 'POST',
-        //         'content' => http_build_query($reqBody)
-        //     ]
-        // ];
-
-        // $context = stream_context_create($requestOptions);
-        // $res = file_get_contents($this->verificationUrl, false, $context);
-        // $resObj = json_decode($res);
-
-        // dd($resObj);
-        // dd($http_response_header);
-        // die();
-
         $reqHeaders = [
-            "Content-type: application/x-www-form-urlencoded"
+            "Content-type" => "application/x-www-form-urlencoded"
         ];
 
-        $curl = curl_init();
+        $guzzleClient = new Client();
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $this->verificationUrl,
-            CURLOPT_RETURNTRANSFER => true,
-            // CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($reqBody),
-            CURLOPT_HTTPHEADER => $reqHeaders
+        $res = $guzzleClient->post($this->verificationUrl, [
+            "headers" => $reqHeaders,
+            "body" => http_build_query($reqBody)
         ]);
 
-        $res = curl_exec($curl);
-        // dd(curl_getinfo($curl));
-        curl_close($curl);
-        // die();
-
-        $resObj = json_decode($res);
+        $resBody = $res->getBody();
+        $resConents = $resBody->getContents();
+        $resObj = json_decode($resConents);
 
         if (!is_object($resObj) || !property_exists($resObj, 'success') || !$resObj->success) {
             return false;
