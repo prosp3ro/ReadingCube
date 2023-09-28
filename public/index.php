@@ -52,7 +52,9 @@ if (!isset($_SESSION["last_regeneration"])) {
 try {
     require_once(ROOT . "/routes/web.php");
 } catch (Throwable $exception) {
-    error_log("Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine(), 3, ROOT . "/logs/error.log");
+    $exceptionClassName = get_class($exception);
+    $errorLogMessage = date('Y-m-d H:i:s') . " - {$exceptionClassName} Exception: " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine() . PHP_EOL . PHP_EOL;
+    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
 
     if (function_exists("showException")) {
         showException($exception);
