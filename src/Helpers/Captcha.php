@@ -13,7 +13,7 @@ class Captcha
 {
     private $siteKey;
     private $secretKey;
-    private $verificationUrl = "https://www.google.com/recaaptcha/api/siteverify";
+    private $verificationUrl = "https://www.google.com/recaptcha/api/siteverify";
 
     public function __construct(string $siteKey, string $secretKey)
     {
