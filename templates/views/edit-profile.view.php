@@ -18,11 +18,11 @@
                 <form action="/edit-profile" method="post" id="edit-data">
                     <div class="mb-3">
                         <label for="newUsername" class="form-label">New username</label>
-                        <input type="text" class="form-control" name="newUsername" id="newUsername">
+                        <input type="text" class="form-control" name="newUsername" id="newUsername" autocomplete="off">
                     </div>
                     <div class="mb-3">
                         <label for="newEmail" class="form-label">New email address</label>
-                        <input type="newEmail" class="form-control" name="newEmail" id="newEmail">
+                        <input type="newEmail" class="form-control" name="newEmail" id="newEmail" autocomplete="off">
                         <div class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3">
@@ -50,11 +50,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="new_password" class="form-label">New password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="new_password" id="new_password">
+                        <input type="password" class="form-control" name="new_password" id="new_password" autocomplete="off">
                     </div>
                     <div class="mb-3">
                         <label for="new_password_confirmation" class="form-label">Confirm password <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation">
+                        <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" autocomplete="off">
                     </div>
                     <?= $captcha->renderCaptcha(); ?>
                     <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
