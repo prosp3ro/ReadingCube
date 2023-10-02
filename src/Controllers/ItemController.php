@@ -22,7 +22,17 @@ class ItemController
 
     public function index(int $id)
     {
-        dd($id);
+        $sql = "SELECT * FROM books where id = ?";
+        $statement = $this->db->prepare($sql);
+        $statement->execute([$id]);
+        $results = $statement->fetch();
+
+        dd($results);
         die();
+
+        return $this->view->render("item", [
+            "header" => "Item | " . APP_NAME,
+            "id" => $id
+        ]);
     }
 }
