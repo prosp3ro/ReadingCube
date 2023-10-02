@@ -27,7 +27,7 @@
                             <?= $book['book_year']; ?>
                         </td>
                         <td class="text-center">
-                            <a href="/item/<?= $book['id'] ?>">Show information</a>
+                            <a class="btn btn-primary" href="/item/<?= $book['id'] ?>" role="button">Details</a>
                         </td>
                     </tr>
                 <?php endforeach ?>

@@ -38,21 +38,22 @@ class IndexController
 
     public function index()
     {
-        if (!$this->sessionUserId) {
-            header("Location: /login");
-            exit();
-        }
+        // if (!$this->sessionUserId) {
+        //     header("Location: /login");
+        //     exit();
+        // }
 
         // TODO its own method
+        $sql = "SELECT * FROM books";
+        $statement = $this->db->prepare($sql);
+
         try {
-            $sql = "SELECT * FROM books";
-            $statement = $this->db->prepare($sql);
             $statement->execute();
             $results = $statement->fetchAll();
 
             return $this->view->render("index", [
                 "books" => $results,
-                "user" => $this->user
+                "user" => $this->user ?? null
             ]);
         } catch (PDOException $exception) {
             throw new DatabaseQueryException($exception->getMessage());
