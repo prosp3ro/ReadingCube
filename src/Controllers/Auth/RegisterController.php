@@ -25,7 +25,7 @@ class RegisterController
 
     public function index(object $captcha)
     {
-        if ($this->userLoggedIn()) {
+        if (isset($_SESSION['user_id'])) {
             header("Location: /");
             exit();
         }
@@ -152,22 +152,6 @@ class RegisterController
 
         if ($jsonArray["available"] == false) {
             exit("Username is already taken.");
-        }
-    }
-
-    private function userLoggedIn()
-    {
-        if (isset($_SESSION['user_id'])) {
-            $sessionUserId = $_SESSION["user_id"];
-
-            $sql = "SELECT * FROM users WHERE id = ?";
-            $statement = $this->db->prepare($sql);
-
-            try {
-                return $statement->execute([$sessionUserId]);
-            } catch (PDOException $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-            }
         }
     }
 }
