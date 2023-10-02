@@ -83,4 +83,11 @@ class IndexController
             "user" => $this->user
         ]);
     }
+
+    public function pageNotFound()
+    {
+        return $this->view->pageNotFound([
+            "user" => $this->user ?? null,
+        ]);
+    }
 }

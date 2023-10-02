@@ -48,7 +48,9 @@ class ItemController
         }
 
         if (!$item) {
-            $this->view->pageNotFound();
+            $this->view->pageNotFound([
+                "user" => $this->user ?? null
+            ]);
             exit();
         }
 

@@ -72,6 +72,6 @@ Route::post('/update-password', function () use ($UserController, $captcha) {
     $UserController->updatePassword($captcha);
 });
 
-Route::any('/not-found', function () use ($view) {
-    $view->pageNotFound();
+Route::any('/not-found', function () use ($IndexController) {
+    $IndexController->pageNotFound();
 });

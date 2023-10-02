@@ -45,12 +45,16 @@ class View
         }
     }
 
-    public function pageNotFound(): void
+    public function pageNotFound(array $args = []): void
     {
         try {
             $page = "404.view.php";
             $path = $this->getPath($this->viewsPath . $page);
             $header = "Page Not Found | " . APP_NAME;
+
+            if (!empty($args)) {
+                extract($args);
+            }
 
             require_once($path);
         } catch (Throwable $exception) {
