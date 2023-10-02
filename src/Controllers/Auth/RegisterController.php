@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
+use PDOException;
 use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\CsrfTokenManager;
 use Src\Models\DB;
@@ -24,8 +25,12 @@ class RegisterController
 
     public function index(object $captcha)
     {
-        $csrfToken = CsrfTokenManager::generateToken();
+        if ($this->userLoggedIn()) {
+            header("Location: /");
+            exit();
+        }
 
+        $csrfToken = CsrfTokenManager::generateToken();
         $email = $_GET["email"] ?? "";
 
         if (!empty($email)) {
@@ -147,6 +152,23 @@ class RegisterController
 
         if ($jsonArray["available"] == false) {
             exit("Username is already taken.");
+        }
+    }
+
+    private function userLoggedIn(): bool
+    {
+
+        if (isset($_SESSION['user_id'])) {
+            $sessionUserId = $_SESSION["user_id"];
+
+            $sql = "SELECT * FROM users WHERE id = ?";
+            $statement = $this->db->prepare($sql);
+
+            try {
+                return $statement->execute([$sessionUserId]);
+            } catch (PDOException $exception) {
+                throw new DatabaseQueryException($exception->getMessage());
+            }
         }
     }
 }
