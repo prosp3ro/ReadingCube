@@ -13,9 +13,9 @@ validation
         {
             rule: "required"
         },
-        {
-            rule: "password"
-        }
+        // {
+        //     rule: "password"
+        // }
     ])
     .onSuccess((event) => {
         document.getElementById("login").submit();
