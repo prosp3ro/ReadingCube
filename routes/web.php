@@ -3,6 +3,7 @@
 use Src\Controllers\Auth\LoginController;
 use Src\Controllers\Auth\RegisterController;
 use Src\Controllers\IndexController;
+use Src\Controllers\ItemController;
 use Src\Controllers\UserController;
 use Src\Helpers\Captcha;
 use Src\Models\DB;
@@ -17,6 +18,11 @@ $IndexController = new IndexController($view, $db);
 $RegisterController = new RegisterController($view, $db);
 $LoginController = new LoginController($view, $db);
 $UserController = new UserController($view, $db);
+$ItemController = new ItemController($view, $db);
+
+Route::get('/item/$id', function (int $id) use ($ItemController) {
+    $ItemController->index($id);
+});
 
 Route::get('/', function () use ($IndexController) {
     $IndexController->index();

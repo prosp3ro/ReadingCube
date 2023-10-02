@@ -2,10 +2,6 @@
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <div class="container">
-    <!-- <?php if (isset($_SESSION['user_id'])) : ?> -->
-    <!--     <p class="text-success">You are logged in.</p> -->
-    <!-- <?php endif; ?> -->
-
     <div class="mt-5">
         <h2>List of available books</h2>
     </div>
@@ -31,7 +27,7 @@
                             <?= $book['book_year']; ?>
                         </td>
                         <td class="text-center">
-                            <a href="">Show information</a>
+                            <a href="/item/<?= $book['id'] ?>">Show information</a>
                         </td>
                     </tr>
                 <?php endforeach ?>

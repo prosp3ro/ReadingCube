@@ -6,44 +6,44 @@ namespace Src;
 
 class Route
 {
-    public static function get(string $route, callable $callback): void
+    public static function get(string $route, callable $userFunction): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
-            self::route($route, $callback);
+            self::route($route, $userFunction);
         }
     }
 
-    public static function post(string $route, callable $callback): void
+    public static function post(string $route, callable $userFunction): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            self::route($route, $callback);
+            self::route($route, $userFunction);
         }
     }
 
-    public static function put(string $route, callable $callback): void
+    public static function put(string $route, callable $userFunction): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-            self::route($route, $callback);
+            self::route($route, $userFunction);
         }
     }
 
-    public static function patch(string $route, callable $callback): void
+    public static function patch(string $route, callable $userFunction): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PATCH") {
-            self::route($route, $callback);
+            self::route($route, $userFunction);
         }
     }
 
-    public static function delete(string $route, callable $callback): void
+    public static function delete(string $route, callable $userFunction): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
-            self::route($route, $callback);
+            self::route($route, $userFunction);
         }
     }
 
-    public static function any(string $route, callable $callback): void
+    public static function any(string $route, callable $userFunction): void
     {
-        self::route($route, $callback);
+        self::route($route, $userFunction);
     }
 
     private static function sanitizeRequestUrl($url): string
@@ -53,10 +53,10 @@ class Route
         return (string) strtok($url, '?');
     }
 
-    private static function route(string $route, callable $callback): void
+    private static function route(string $route, callable $userFunction): void
     {
         if ($route === "/not-found") {
-            call_user_func($callback);
+            call_user_func($userFunction);
             exit();
         }
 
@@ -74,7 +74,7 @@ class Route
         array_shift($requestUrlParts);
 
         if ($routeParts[0] === "" && count($requestUrlParts) === 0) {
-            call_user_func($callback);
+            call_user_func($userFunction);
             exit();
         }
 
@@ -84,17 +84,29 @@ class Route
 
         $parameters = [];
 
-        foreach ($routeParts as $index => $routePart) {
+        foreach ($routeParts as $routeIndex => $routePart) {
             if (preg_match("/^[$]/", $routePart)) {
-                $parameterName = ltrim($routePart, '$');
-                $parameters[] = $requestUrlParts[$index];
-                ${$parameterName} = $requestUrlParts[$index];
-            } elseif ($routePart != $requestUrlParts[$index]) {
+                $parameters[] = $requestUrlParts[$routeIndex];
+            } elseif ($routePart != $requestUrlParts[$routeIndex]) {
                 return;
             }
         }
-        
-        call_user_func_array($callback, $parameters);
+
+        // if (!empty($parameters)) {
+        //     // extract($parameters);
+
+        //     // dd($parameters);
+        //     // die();
+
+        //     // it doesnt support named parameters
+        //     call_user_func_array($userFunction, $parameters);
+        //     exit();
+        // }
+
+        // dd($parameters);
+        // die();
+
+        call_user_func_array($userFunction, $parameters);
         exit();
     }
 }

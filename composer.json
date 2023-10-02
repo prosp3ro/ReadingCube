@@ -13,7 +13,6 @@
         }
     ],
     "require": {
-        "s1syphos/php-simple-captcha": "^2.3",
         "guzzlehttp/guzzle": "^7.8"
     }
 }
