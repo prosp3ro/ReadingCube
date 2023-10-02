@@ -12,7 +12,7 @@
                 <td>Book</td>
                 <td>Author</td>
                 <td>Year</td>
-                <td class="text-center">Book details</td>
+                <td class="text-center">Actions</td>
             </thead>
             <tbody>
                 <?php foreach ($books as $book) : ?>
@@ -27,7 +27,9 @@
                             <?= $book['book_year']; ?>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-primary" href="/item/<?= $book['id'] ?>" role="button">Details</a>
+                            <a class="btn btn-primary" href="/item/<?= $book['id'] ?>" role="button">View details</a>
+                            <!-- form -->
+                            <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Submit</button>
                         </td>
                     </tr>
                 <?php endforeach ?>

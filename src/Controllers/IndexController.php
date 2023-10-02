@@ -64,7 +64,7 @@ class IndexController
     {
         return $this->view->render("about-us", [
             "header" => "About Us | " . APP_NAME,
-            "user" => $this->user
+            "user" => $this->user ?? null
         ]);
     }
 
@@ -72,7 +72,7 @@ class IndexController
     {
         return $this->view->render("contact", [
             "header" => "Contact | " . APP_NAME,
-            "user" => $this->user
+            "user" => $this->user ?? null
         ]);
     }
 
@@ -80,7 +80,7 @@ class IndexController
     {
         return $this->view->render("faq", [
             "header" => "FAQ | " . APP_NAME,
-            "user" => $this->user
+            "user" => $this->user ?? null
         ]);
     }
 

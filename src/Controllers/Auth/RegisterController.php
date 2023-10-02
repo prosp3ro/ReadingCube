@@ -155,7 +155,7 @@ class RegisterController
         }
     }
 
-    private function userLoggedIn(): bool
+    private function userLoggedIn()
     {
         if (isset($_SESSION['user_id'])) {
             $sessionUserId = $_SESSION["user_id"];
