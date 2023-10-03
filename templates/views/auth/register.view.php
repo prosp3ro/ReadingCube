@@ -7,27 +7,32 @@
     </div>
 
     <div class="w-25">
-        <form action="/register" method="post" id="register">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" name="username" id="username" required>
+        <form action="/register" method="post" class="row g-3" id="register">
+            <div>
+                <label for="username" class="form-label d-inline-block">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <input type="text" class="form-control" id="username" aria-describedby="inputGroupPrepend" required>
+                </div>
             </div>
-            <div class="mb-3">
+            <div>
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="email" required>
                 <div class="form-text">We'll never share your email with anyone else.</div>
             </div>
-            <div class="mb-3">
+            <div>
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" required>
             </div>
-            <div class="mb-3">
+            <div>
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
             <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
             <?= $captcha->renderCaptcha() ?>
-            <button type="submit" class="mt-2 btn btn-primary">Submit</button>
+            <div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </form>
     </div>
 </div>
