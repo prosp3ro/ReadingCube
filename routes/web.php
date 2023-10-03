@@ -14,15 +14,11 @@ $db = new DB();
 $view = new View();
 $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
 
-$IndexController = new IndexController($view, $db);
+$IndexController = new IndexController($view);
 $RegisterController = new RegisterController($view, $db);
 $LoginController = new LoginController($view, $db);
 $UserController = new UserController($view, $db);
 $ItemController = new ItemController($view, $db);
-
-Route::get('/item/$id', function (int $id) use ($ItemController) {
-    $ItemController->index($id);
-});
 
 Route::get('/', function () use ($IndexController) {
     $IndexController->index();
@@ -70,6 +66,10 @@ Route::post('/edit-profile', function () use ($UserController, $captcha) {
 
 Route::post('/update-password', function () use ($UserController, $captcha) {
     $UserController->updatePassword($captcha);
+});
+
+Route::get('/item/$id', function (int $id) use ($ItemController) {
+    $ItemController->index($id);
 });
 
 Route::any('/not-found', function () use ($IndexController) {

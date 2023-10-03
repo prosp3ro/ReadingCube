@@ -68,11 +68,14 @@ $capsule = new Capsule();
 $database = $config["database"];
 
 $capsule->addConnection([
-    "driver" => $database["driver"],
+    "driver" => $database["driver"] ?? "mysql",
     "host" => $database["host"],
     "database" => $database["schema"],
     "username" => $database["username"],
-    "password" => $database["password"]
+    "password" => $database["password"],
+    "charset" => "utf8",
+    "collation" => "utf8_unicode_ci",
+    "prefix" => ""
 ]);
 
 $capsule->setAsGlobal();

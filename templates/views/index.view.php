@@ -18,16 +18,16 @@
                 <?php foreach ($books as $book) : ?>
                     <tr>
                         <td>
-                            <?= $book['book_name']; ?>
+                            <?= $book->book_name; ?>
                         </td>
                         <td>
-                            <?= $book['book_author']; ?>
+                            <?= $book->book_author; ?>
                         </td>
                         <td>
-                            <?= $book['book_year']; ?>
+                            <?= $book->book_year; ?>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-primary" href="/item/<?= $book['id'] ?>" role="button">View details</a>
+                            <a class="btn btn-primary" href="/item/<?= $book->id ?>" role="button">View details</a>
                             <!-- form -->
                             <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Submit</button>
                         </td>
