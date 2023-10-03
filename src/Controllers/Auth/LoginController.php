@@ -61,8 +61,7 @@ class LoginController
         $user = DB::table("users")
             ->select("id", "email", "password")
             ->where("email", "=", $email)
-            ->first()
-        ;
+            ->first();
 
         if ($user) {
             if (password_verify($password, $user->password)) {

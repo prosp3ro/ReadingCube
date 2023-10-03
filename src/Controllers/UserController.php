@@ -8,32 +8,29 @@ use PDOException;
 use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\Captcha;
 use Src\Helpers\CsrfTokenManager;
-use Src\Models\DB;
 use Src\View;
 use Throwable;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UserController
 {
     private View $view;
-    private DB $db;
     private ?int $sessionUserId = null;
-    private ?array $user;
+    private ?object $user = null;
 
-    public function __construct(View $view, DB $db)
+    public function __construct(View $view)
     {
         $this->view = $view;
-        $this->db = $db;
 
         if (isset($_SESSION['user_id'])) {
-            $this->sessionUserId = $_SESSION["user_id"];
-
-            $sql = "SELECT * FROM users WHERE id = ?";
-            $statement = $this->db->prepare($sql);
+            $this->sessionUserId = (int) $_SESSION["user_id"];
 
             try {
-                $statement->execute([$this->sessionUserId]);
-                $this->user = $statement->fetch();
-            } catch (PDOException $exception) {
+                $this->user = DB::table("users")
+                    ->select("*")
+                    ->where("id", "=", $this->sessionUserId)
+                    ->first();
+            } catch (Throwable $exception) {
                 throw new DatabaseQueryException($exception->getMessage());
             }
         }
@@ -102,7 +99,7 @@ class UserController
             $this->updateData("username", $newUsername);
         }
 
-        header("Location: /edit-profile?update=data");
+        header("Location: /edit-profile?update=newData");
         exit();
     }
 
@@ -152,16 +149,17 @@ class UserController
             exit("Passwords must match.");
         }
 
-        $updatePasswordSql = "UPDATE users SET password = ? WHERE id = ?";
+        $newPasswordHashed = password_hash($newPassword, PASSWORD_BCRYPT, [
+            "cost" => 12
+        ]);
 
         try {
-            $statement = $this->db->prepare($updatePasswordSql);
-            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT, [
-                "cost" => 12
-            ]);
-
-            $statement->execute([$hashedPassword, $this->sessionUserId]);
-        } catch (PDOException $exception) {
+            DB::table("users")
+                ->where("id", "=", $this->sessionUserId)
+                ->update([
+                    "password" => $newPasswordHashed
+                ]);
+        } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
 
@@ -172,41 +170,35 @@ class UserController
     // TODO rewrite
     private function verifyPassword(string $password): bool
     {
-        $sql = "SELECT * FROM users WHERE id = ?";
-        $statement = $this->db->prepare($sql);
-
         try {
-            $statement->execute([$this->sessionUserId]);
-            $user = $statement->fetch();
-        } catch (PDOException $exception) {
+            $user = DB::table("users")
+                ->select("password", "id")
+                ->where("id", "=", $this->sessionUserId)
+                ->first();
+        } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
 
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user || !password_verify($password, $user->password)) {
             return false;
         }
 
         return true;
     }
 
-    private function validate(string $type, string $data)
+    private function validate(string $dataType, string $newData)
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE {$type} = ?";
+        $isAvailable = DB::table("users")
+            ->where($dataType, "=", $newData)
+            ->count();
 
-        try {
-            $statement = $this->db->prepare($sql);
-            $statement->execute([$data]);
+        header("Content-Type: application/json");
 
-            header("Content-Type: application/json");
+        $jsonData = json_encode([
+            "available" => (int) $isAvailable == 0
+        ]);
 
-            $jsonData = json_encode([
-                "available" => (int) $statement->fetchColumn() == 0
-            ]);
-
-            return $jsonData;
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
+        return $jsonData;
     }
 
     // TODO rewrite
@@ -244,14 +236,14 @@ class UserController
     // TODO datatype should be an array and this method should allow for many types
     private function updateData(string $dataType, string $newData)
     {
-        $updateSql = "UPDATE users SET {$dataType} = ? WHERE id = ?";
-        $statement = $this->db->prepare($updateSql);
-
         try {
-            $statement->execute([$newData, $this->sessionUserId]);
+            DB::table("users")
+                ->where("id", "=", $this->sessionUserId)
+                ->update([
+                    $dataType => $newData
+                ]);
         } catch (Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
-            exit();
         }
     }
 }

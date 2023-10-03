@@ -102,8 +102,7 @@ class RegisterController
     {
         $isAvailable = DB::table("users")
             ->where($type, "=", $data)
-            ->count()
-        ;
+            ->count();
 
         header("Content-Type: application/json");
 

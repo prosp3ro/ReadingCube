@@ -10,8 +10,8 @@
             <?php endif ?>
 
             <p class="mt-3 lh-lg">
-                Current username: <strong><?= htmlspecialchars($user["username"]) ?></strong><br>
-                Current email: <strong><?= htmlspecialchars($user["email"]) ?></strong>
+                Current username: <strong><?= htmlspecialchars($user->username) ?></strong><br>
+                Current email: <strong><?= htmlspecialchars($user->email) ?></strong>
             </p>
 
             <div class="form-group mt-4">
