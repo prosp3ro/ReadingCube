@@ -15,8 +15,8 @@ $view = new View();
 $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
 
 $IndexController = new IndexController($view);
-$RegisterController = new RegisterController($view, $db);
-$LoginController = new LoginController($view, $db);
+$RegisterController = new RegisterController($view);
+$LoginController = new LoginController($view);
 $UserController = new UserController($view, $db);
 $ItemController = new ItemController($view, $db);
 
