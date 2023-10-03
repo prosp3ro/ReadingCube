@@ -4,7 +4,7 @@
 <div class="container">
     <div class="mt-5">
         <div>
-            <h1>Book information</h1>
+            <h2>Book information</h2>
         </div>
         <div class="mt-4">
             <strong>Name:</strong> <?= htmlspecialchars($item->book_name) ?>

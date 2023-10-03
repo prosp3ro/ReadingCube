@@ -2,11 +2,11 @@
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <div class="container">
-    <div class="mt-4 mb-4">
-        <h1>FAQ</h1>
+    <div class="mt-5">
+        <h2>FAQ</h2>
     </div>
 
-    <div class="">
+    <div class="mt-4">
         <p class="w-75 text-break">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             Earum sequi doloribus molestias facere deleniti nobis, maiores dignissimos vitae saepe.

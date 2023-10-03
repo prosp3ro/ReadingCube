@@ -2,11 +2,11 @@
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <div class="container">
-    <div class="mt-4 mb-4">
+    <div class="mt-5">
         <h1>Register</h1>
     </div>
 
-    <div class="w-25">
+    <div class="w-25 mt-4">
         <form action="/register" method="post" class="row g-3" id="register">
             <div>
                 <label for="username" class="form-label d-inline-block">Username</label>

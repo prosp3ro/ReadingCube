@@ -2,7 +2,7 @@
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
 <div class="container">
-    <div class="mt-4">
+    <div class="mt-5">
         <p class="fs-5">Error occured. Please try again later.</p>
     </div>
 </div>

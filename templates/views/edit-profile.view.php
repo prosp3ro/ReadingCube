@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-6 line-break">
-            <h3>Edit username or email</h3>
+            <h2>Edit username or email</h2>
             <?php if ($updateMessage === "data") : ?>
                 <p class="text-success fw-bold mb-2 mt-3">Your information has been updated successfully.</p>
             <?php endif ?>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="col-lg-6 line-break">
-            <h3>Change password</h3>
+            <h2>Change password</h2>
 
             <?php if ($updateMessage === "pwd") : ?>
                 <p class="text-success fw-bold mb-2 mt-3">Your password has been updated successfully.</p>
