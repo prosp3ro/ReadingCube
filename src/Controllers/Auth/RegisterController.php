@@ -100,14 +100,14 @@ class RegisterController
 
     private function validate(string $type, string $data)
     {
-        $isAvailable = DB::table("users")
+        $isNotAvailable = DB::table("users")
             ->where($type, "=", $data)
             ->count();
 
         header("Content-Type: application/json");
 
         $jsonData = json_encode([
-            "available" => (int) $isAvailable == 0
+            "available" => (int) $isNotAvailable == 0
         ]);
 
         return $jsonData;

@@ -186,14 +186,14 @@ class UserController
 
     private function validate(string $dataType, string $newData)
     {
-        $isAvailable = DB::table("users")
+        $isNotAvailable = DB::table("users")
             ->where($dataType, "=", $newData)
             ->count();
 
         header("Content-Type: application/json");
 
         $jsonData = json_encode([
-            "available" => (int) $isAvailable == 0
+            "available" => (int) $isNotAvailable == 0
         ]);
 
         return $jsonData;
