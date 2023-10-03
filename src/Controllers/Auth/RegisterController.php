@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
-use PDOException;
+// use Illuminate\Database\Capsule\Manager as DB;
 use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\CsrfTokenManager;
 use Src\Models\DB;
@@ -17,10 +17,10 @@ class RegisterController
     private View $view;
     private DB $db;
 
-    public function __construct(View $view, DB $db)
+    public function __construct(View $view)
     {
         $this->view = $view;
-        $this->db = $db;
+        $this->db = new DB();
     }
 
     public function index(object $captcha)
@@ -86,32 +86,20 @@ class RegisterController
             exit("Passwords must match.");
         }
 
-        $user = new User($username, $email, $password);
-
         $this->validateEmail($email);
         $this->validateUsername($username);
 
-        if ($this->createUser($user)) {
+        $user = User::Create([
+            'username' => $username,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_BCRYPT)
+        ]);
+
+        if ($user) {
             header("Location: /login?register=success");
             exit();
         } else {
             exit("Registration failed.");
-        }
-    }
-
-    private function createUser(User $user): bool
-    {
-        $sql = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
-
-        try {
-            $statement = $this->db->prepare($sql);
-            $hashedPassword = password_hash($user->getPassword(), PASSWORD_BCRYPT, [
-                "cost" => 12
-            ]);
-
-            return $statement->execute([$user->getUsername(), $user->getEmail(), $hashedPassword]);
-        } catch (\Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
         }
     }
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\Controllers;
 
 use Illuminate\Database\Capsule\Manager as DB;
-use PDOException;
 use Src\Exceptions\DatabaseQueryException;
 use Src\View;
 use Throwable;

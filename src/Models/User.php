@@ -4,38 +4,19 @@ declare(strict_types=1);
 
 namespace Src\Models;
 
-class User
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
 {
-    private string $username;
-    private string $email;
-    private string $password;
-    private int $isAdmin;
+    protected $table = 'users';
 
-    public function __construct(string $username, string $email, string $password, int $isAdmin = 0)
-    {
-        $this->username = $username;
-        $this->email = $email;
-        $this->password = $password;
-        $this->isAdmin = $isAdmin;
-    }
+    protected $fillable = [
+        'username', 'email', 'password'
+    ];
 
-    public function getEmail()
-    {
-        return $this->email;
-    }
+    protected $hidden = [
+        'password'
+    ];
 
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    // public function isAdmin()
-    // {
-
-    // }
+    public $timestamps = true;
 }
