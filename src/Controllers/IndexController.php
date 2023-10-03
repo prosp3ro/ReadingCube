@@ -24,7 +24,6 @@ class IndexController
 
             try {
                 $this->user = DB::table("users")
-                    ->select("*")
                     ->where("id", "=", $this->sessionUserId)
                     ->first()
                 ;

@@ -26,7 +26,6 @@ class UserController
 
             try {
                 $this->user = DB::table("users")
-                    ->select("*")
                     ->where("id", "=", $this->sessionUserId)
                     ->first();
             } catch (Throwable $exception) {

@@ -23,7 +23,6 @@ class ItemController
 
             try {
                 $this->user = DB::table("users")
-                    ->select("*")
                     ->where("id", "=", $this->sessionUserId)
                     ->first()
                 ;
