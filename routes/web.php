@@ -17,7 +17,7 @@ $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
 $IndexController = new IndexController($view);
 $RegisterController = new RegisterController($view);
 $LoginController = new LoginController($view);
-$UserController = new UserController($view, $db);
+$UserController = new UserController($view);
 $ItemController = new ItemController($view, $db);
 
 Route::get('/', function () use ($IndexController) {

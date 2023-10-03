@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Controllers;
 
-use PDOException;
 use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\Captcha;
 use Src\Helpers\CsrfTokenManager;
