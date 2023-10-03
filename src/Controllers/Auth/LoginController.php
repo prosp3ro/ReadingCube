@@ -59,7 +59,7 @@ class LoginController
         }
 
         $user = DB::table("users")
-            ->select("*")
+            ->select("id", "email", "password")
             ->where("email", "=", $email)
             ->first()
         ;
