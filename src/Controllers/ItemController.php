@@ -4,33 +4,30 @@ declare(strict_types=1);
 
 namespace Src\Controllers;
 
-use PDOException;
+use Illuminate\Database\Capsule\Manager as DB;
 use Src\Exceptions\DatabaseQueryException;
-use Src\Models\DB;
 use Src\View;
 
 class ItemController
 {
     private View $view;
-    private DB $db;
     private ?int $sessionUserId = null;
-    private ?array $user;
+    private ?object $user = null;
 
-    public function __construct(View $view, DB $db)
+    public function __construct(View $view)
     {
         $this->view = $view;
-        $this->db = $db;
 
         if (isset($_SESSION['user_id'])) {
-            $this->sessionUserId = $_SESSION["user_id"];
-
-            $sql = "SELECT * FROM users WHERE id = ?";
-            $statement = $this->db->prepare($sql);
+            $this->sessionUserId = (int) $_SESSION["user_id"];
 
             try {
-                $statement->execute([$this->sessionUserId]);
-                $this->user = $statement->fetch();
-            } catch (PDOException $exception) {
+                $this->user = DB::table("users")
+                    ->select("*")
+                    ->where("id", "=", $this->sessionUserId)
+                    ->first()
+                ;
+            } catch (\Throwable $exception) {
                 throw new DatabaseQueryException($exception->getMessage());
             }
         }
@@ -38,26 +35,25 @@ class ItemController
 
     public function index(int $id)
     {
-        $sql = "SELECT * FROM books where id = ?";
-        $statement = $this->db->prepare($sql);
-
         try {
-            $statement->execute([$id]);
-            $item = $statement->fetch();
+            $item = DB::table("books")
+                ->where("id", "=", $id)
+                ->first();
         } catch (\Throwable $exception) {
         }
 
         if (!$item) {
             $this->view->pageNotFound([
-                "user" => $this->user ?? null
+                "user" => $this->user
             ]);
+
             exit();
         }
 
         return $this->view->render("item", [
             "header" => "Item | " . APP_NAME,
             "item" => $item,
-            "user" => $this->user ?? null
+            "user" => $this->user
         ]);
     }
 }
