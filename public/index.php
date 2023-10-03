@@ -2,11 +2,24 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Src\View;
 
 define('ROOT', __DIR__ . "/..");
 
-$config = parse_ini_file(ROOT . "/config/config.ini", true);
+$configFile = ROOT . "/config/config.ini";
+$configFile = str_replace('\\', '/', $configFile);
+
+if (!file_exists($configFile)) {
+    throw new Exception("Configuration file <strong>{$configFile}</strong> does not exist.");
+}
+
+$config = parse_ini_file($configFile, true);
+
+if (!$config) {
+    throw new Exception("Unable to parse <strong>{$configFile}</strong>.");
+}
+
 define('APP_NAME', $config['app']['name'] ?? "App");
 define('GOOGLE_RECAPTCHA_SITE_KEY', $config['app']['google_recaptcha_site_key'] ?? "");
 define('GOOGLE_RECAPTCHA_SECRET_KEY', $config['app']['google_recaptcha_secret_key'] ?? "");
@@ -49,6 +62,21 @@ if (!isset($_SESSION["last_regeneration"])) {
         $_SESSION["last_regeneration"] = time();
     }
 }
+
+$capsule = new Capsule();
+
+$database = $config["database"];
+
+$capsule->addConnection([
+    "driver" => $database["driver"],
+    "host" => $database["host"],
+    "database" => $database["schema"],
+    "username" => $database["username"],
+    "password" => $database["password"]
+]);
+
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
 
 try {
     require_once(ROOT . "/routes/web.php");
