@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
-// use Illuminate\Database\Capsule\Manager as DB;
-use Src\Exceptions\DatabaseQueryException;
+use Illuminate\Database\Capsule\Manager as DB;
 use Src\Helpers\CsrfTokenManager;
-use Src\Models\DB;
 use Src\Models\User;
 use Src\View;
-use Throwable;
 
 class RegisterController
 {
     private View $view;
-    private DB $db;
 
     public function __construct(View $view)
     {
         $this->view = $view;
-        $this->db = new DB();
     }
 
     public function index(object $captcha)
@@ -105,22 +100,18 @@ class RegisterController
 
     private function validate(string $type, string $data)
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE {$type} = ?";
+        $isAvailable = DB::table("users")
+            ->where($type, "=", $data)
+            ->count()
+        ;
 
-        try {
-            $statement = $this->db->prepare($sql);
-            $statement->execute([$data]);
+        header("Content-Type: application/json");
 
-            header("Content-Type: application/json");
+        $jsonData = json_encode([
+            "available" => (int) $isAvailable == 0
+        ]);
 
-            $jsonData = json_encode([
-                "available" => (int) $statement->fetchColumn() == 0
-            ]);
-
-            return $jsonData;
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
+        return $jsonData;
     }
 
     private function validateEmail(string $email)
