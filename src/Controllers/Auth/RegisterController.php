@@ -27,16 +27,11 @@ class RegisterController
         }
 
         $csrfToken = CsrfTokenManager::generateToken();
-        $email = $_GET["email"] ?? "";
 
-        if (!empty($email)) {
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo $this->isUnique("email", $email);
-                exit();
-            } else {
-                exit("Email has invalid format");
-            }
-        }
+        // TODO it should be done differently
+        $email = $_GET["email"] ?? "";
+        $validator = new Validator();
+        $validator->isEmailAvailableJson($email);
 
         return $this->view->render("auth/register", [
             "header" => "Register | " . APP_NAME,
@@ -74,8 +69,9 @@ class RegisterController
             "password" => $password,
         ]);
 
-        $this->isEmailUnique($email);
-        $this->isUsernameUnique($username);
+        // test
+        // $this->isEmailUnique($email);
+        // $this->isUsernameUnique($username);
 
         $user = User::Create([
             'username' => $username,
@@ -88,41 +84,6 @@ class RegisterController
             exit();
         } else {
             exit("Registration failed.");
-        }
-    }
-
-    private function isUnique(string $type, string $data)
-    {
-        $isNotAvailable = DB::table("users")
-            ->where($type, "=", $data)
-            ->count();
-
-        header("Content-Type: application/json");
-
-        $jsonData = json_encode([
-            "available" => (int) $isNotAvailable == 0
-        ]);
-
-        return $jsonData;
-    }
-
-    private function isEmailUnique(string $email)
-    {
-        $json = $this->isUnique("email", $email);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Email is already taken.");
-        }
-    }
-
-    private function isUsernameUnique(string $username)
-    {
-        $json = $this->isUnique("username", $username);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Username is already taken.");
         }
     }
 }
