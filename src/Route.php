@@ -6,44 +6,44 @@ namespace Src;
 
 class Route
 {
-    public static function get(string $route, callable $userFunction): void
+    public static function get(string $route, callable|array $action): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
-            self::route($route, $userFunction);
+            self::route($route, $action);
         }
     }
 
-    public static function post(string $route, callable $userFunction): void
+    public static function post(string $route, callable|array $action): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            self::route($route, $userFunction);
+            self::route($route, $action);
         }
     }
 
-    public static function put(string $route, callable $userFunction): void
+    public static function put(string $route, callable|array $action): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-            self::route($route, $userFunction);
+            self::route($route, $action);
         }
     }
 
-    public static function patch(string $route, callable $userFunction): void
+    public static function patch(string $route, callable|array $action): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "PATCH") {
-            self::route($route, $userFunction);
+            self::route($route, $action);
         }
     }
 
-    public static function delete(string $route, callable $userFunction): void
+    public static function delete(string $route, callable|array $action): void
     {
         if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
-            self::route($route, $userFunction);
+            self::route($route, $action);
         }
     }
 
-    public static function any(string $route, callable $userFunction): void
+    public static function any(string $route, callable|array $action): void
     {
-        self::route($route, $userFunction);
+        self::route($route, $action);
     }
 
     private static function sanitizeRequestUrl($url): string
@@ -53,10 +53,10 @@ class Route
         return (string) strtok($url, '?');
     }
 
-    private static function route(string $route, callable $userFunction): void
+    private static function route(string $route, callable|array $action): void
     {
         if ($route === "/not-found") {
-            call_user_func($userFunction);
+            call_user_func($action);
             exit();
         }
 
@@ -74,7 +74,7 @@ class Route
         array_shift($requestUrlParts);
 
         if ($routeParts[0] === "" && count($requestUrlParts) === 0) {
-            call_user_func($userFunction);
+            call_user_func($action);
             exit();
         }
 
@@ -99,14 +99,14 @@ class Route
         //     // die();
 
         //     // it doesnt support named parameters
-        //     call_user_func_array($userFunction, $parameters);
+        //     call_user_func_array($action, $parameters);
         //     exit();
         // }
 
         // dd($parameters);
         // die();
 
-        call_user_func_array($userFunction, $parameters);
+        call_user_func_array($action, $parameters);
         exit();
     }
 }

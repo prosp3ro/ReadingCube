@@ -32,7 +32,15 @@ class Router
             throw new RouteNotFoundException();
         }
 
-        return call_user_func($action);
+        if (is_callable($action)) {
+            return call_user_func($action);
+        }
+
+        if (is_array($action)) {
+            dd("array yeaa");
+        }
+
+        throw new RouteNotFoundException();
 
         // dd($requestUri);
         // dd($action);
