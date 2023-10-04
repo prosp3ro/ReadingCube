@@ -85,16 +85,12 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 $router = new Router();
-// $router->register("/blog", function () {
-//     return "hey";
-// });
 
-$router->get("/", [IndexController::class, "index"]);
-$router->post("/", [IndexController::class, "store"]);
+$router
+    ->get("/", [IndexController::class, "index"])
+    ->post("/", [IndexController::class, "store"]);
 
-$router->resolve($_SERVER["REQUEST_URI"]);
-
-die();
+$router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
 
 // try {
 //     $router->resolve($_SERVER["REQUEST_URI"]);

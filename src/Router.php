@@ -26,40 +26,43 @@ class Router
         return $this;
     }
 
-    public function get(string $route, callable|array $action)
+    public function get(string $route, callable|array $action): self
     {
         return $this->register("get", $route, $action);
     }
 
-    public function post(string $route, callable|array $action)
+    public function post(string $route, callable|array $action): self
     {
         return $this->register("post", $route, $action);
     }
 
-    public function put(string $route, callable|array $action)
+    public function put(string $route, callable|array $action): self
     {
         return $this->register("put", $route, $action);
     }
 
-    public function patch(string $route, callable|array $action)
+    public function patch(string $route, callable|array $action): self
     {
         return $this->register("patch", $route, $action);
     }
 
-    public function delete(string $route, callable|array $action)
+    public function delete(string $route, callable|array $action): self
     {
         return $this->register("delete", $route, $action);
     }
 
-    public function resolve(string $requestUri)
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    public function resolve(string $requestUri, string $requestMethod)
     {
         $requestUri = strtok($requestUri, "?");
         // $requestUri = explode("?", $requestUri)[0];
+        $requestMethod = strtolower($requestMethod);
 
-        $action = $this->routes["get"][$requestUri] ?? null;
-
-        dd($action);
-        die();
+        $action = $this->routes[$requestMethod][$requestUri] ?? null;
 
         if (!$action) {
             throw new RouteNotFoundException();
