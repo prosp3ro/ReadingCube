@@ -12,10 +12,7 @@ validation
     .addField("#password", [
         {
             rule: "required"
-        },
-        // {
-        //     rule: "password"
-        // }
+        }
     ])
     .onSuccess((event) => {
         document.getElementById("login").submit();

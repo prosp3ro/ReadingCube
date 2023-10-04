@@ -51,7 +51,7 @@ class RegisterController
         $password = $_POST['password'];
         $passwordConfirmation = $_POST['password_confirmation'];
         $captchaResponseKey = $_POST['g-recaptcha-response'];
-        $csrfToken = $_POST["csrf_token"] ?? null;
+        $csrfToken = $_POST["csrf_token"];
 
         if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -61,11 +61,13 @@ class RegisterController
             exit("Captcha validation failed.");
         }
 
-        if (empty($email) || empty($password) || empty($username)) {
-            exit("Username, email and password fields are required.");
+        if (empty($username) || empty($email) || empty($password) || empty($passwordConfirmation)) {
+            exit("Username, email, password and password confirmation fields are required.");
         }
 
-        if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $username)) {
+        $usernameRegex = "/^[a-zA-Z0-9]{5,}$/";
+
+        if (!preg_match($usernameRegex, $username)) {
             exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
         }
 
@@ -73,8 +75,10 @@ class RegisterController
             exit("Email has invalid format");
         }
 
-        if (!preg_match("/^(?=.*[a-z])(?=.*[0-9]).{8,}$/i", $password)) {
-            exit("Password must be at least 8 characters and contain at least one letter and one number.");
+        $passwordRegex = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m";
+
+        if (!preg_match($passwordRegex, $password)) {
+            exit("Password must be at least 8 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.");
         }
 
         if ($password !== $passwordConfirmation) {

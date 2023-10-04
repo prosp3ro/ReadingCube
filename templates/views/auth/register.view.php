@@ -12,7 +12,7 @@
                 <label for="username" class="form-label d-inline-block">Username</label>
                 <div class="input-group">
                     <span class="input-group-text" id="inputGroupPrepend">@</span>
-                    <input type="text" class="form-control" id="username" aria-describedby="inputGroupPrepend" required>
+                    <input type="text" class="form-control" name="username" id="username" aria-describedby="inputGroupPrepend" required>
                 </div>
             </div>
             <div>
