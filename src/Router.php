@@ -8,17 +8,47 @@ use Src\Exceptions\RouteNotFoundException;
 
 class Router
 {
-    public array $routes;
+    private array $routes;
 
     public function __construct()
     {
     }
 
-    public function register(string $route, callable|array $action): self
+    public function register(string $requestMethod, string $route, callable|array $action): self
     {
-        $this->routes[$route] = $action;
+        // $this->routes[$route] = [
+        //     "request_method" => $requestMethod,
+        //     "action" => $action,
+        // ];
+
+        $this->routes[$requestMethod] = $action;
 
         return $this;
+    }
+
+    public function get(string $route, callable|array $action)
+    {
+        return $this->register("get", $route, $action);
+    }
+
+    public function post(string $route, callable|array $action)
+    {
+        return $this->register("post", $route, $action);
+    }
+
+    public function put(string $route, callable|array $action)
+    {
+        return $this->register("put", $route, $action);
+    }
+
+    public function patch(string $route, callable|array $action)
+    {
+        return $this->register("patch", $route, $action);
+    }
+
+    public function delete(string $route, callable|array $action)
+    {
+        return $this->register("delete", $route, $action);
     }
 
     public function resolve(string $requestUri)
@@ -26,7 +56,7 @@ class Router
         $requestUri = strtok($requestUri, "?");
         // $requestUri = explode("?", $requestUri)[0];
 
-        $action = $this->routes[$requestUri] ?? null;
+        $action = $this->routes[$requestUri]["action"] ?? null;
 
         if (!$action) {
             throw new RouteNotFoundException();
@@ -37,7 +67,18 @@ class Router
         }
 
         if (is_array($action)) {
-            dd("array yeaa");
+            [$class, $method] = $action;
+
+            if (class_exists($class)) {
+                $class = new $class();
+
+                if (method_exists($class, $method)) {
+                    // $class->$method();
+                    return call_user_func_array([$class, $method], []);
+                }
+            }
+
+            die();
         }
 
         throw new RouteNotFoundException();

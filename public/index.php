@@ -89,9 +89,9 @@ $router = new Router();
 //     return "hey";
 // });
 
-$router->register("/", [IndexController::class, "index"]);
+$router->register("get", "/", [IndexController::class, "index"]);
 
-$router->register("/about-us", function () {
+$router->register("get", "/about-us", function () {
     echo "about us";
 });
 
