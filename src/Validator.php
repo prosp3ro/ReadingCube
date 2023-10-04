@@ -20,7 +20,9 @@ class Validator
                 exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
             }
 
-            $this->isUsernameUnique($username);
+            if (!$this->isUsernameUnique($username)) {
+                exit("Username is already taken.");
+            }
         }
 
         if (array_key_exists("email", $args)) {
@@ -30,7 +32,9 @@ class Validator
                 exit("Email has invalid format.");
             }
 
-            $this->isEmailUnique($email);
+            if (!$this->isEmailUnique($email)) {
+                exit("Email is already taken.");
+            }
         }
 
         if (array_key_exists("password", $args)) {
@@ -72,21 +76,17 @@ class Validator
     private function isEmailUnique(string $email)
     {
         $json = $this->isUnique("email", $email);
-        $jsonArray = json_decode($json, true);
+        $jsonObject = json_decode($json);
 
-        if ($jsonArray["available"] == false) {
-            exit("Email is already taken.");
-        }
+        return $jsonObject->available === true;
     }
 
     private function isUsernameUnique(string $username)
     {
         $json = $this->isUnique("username", $username);
-        $jsonArray = json_decode($json, true);
+        $jsonObject = json_decode($json);
 
-        if ($jsonArray["available"] == false) {
-            exit("Username is already taken.");
-        }
+        return $jsonObject->available === true;
     }
 
     private function isUnique(string $type, string $data)

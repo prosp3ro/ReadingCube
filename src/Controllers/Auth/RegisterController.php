@@ -69,10 +69,6 @@ class RegisterController
             "password" => $password,
         ]);
 
-        // test
-        // $this->isEmailUnique($email);
-        // $this->isUsernameUnique($username);
-
         $user = User::Create([
             'username' => $username,
             'email' => $email,
