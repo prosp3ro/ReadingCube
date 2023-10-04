@@ -15,23 +15,23 @@ class IndexController
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    // public function __construct(View $view)
-    // {
-    //     $this->view = $view;
+    public function __construct(View $view)
+    {
+        $this->view = $view;
 
-    //     if (isset($_SESSION['user_id'])) {
-    //         $this->sessionUserId = (int) $_SESSION["user_id"];
+        if (isset($_SESSION['user_id'])) {
+            $this->sessionUserId = (int) $_SESSION["user_id"];
 
-    //         try {
-    //             $this->user = DB::table("users")
-    //                 ->where("id", "=", $this->sessionUserId)
-    //                 ->first()
-    //             ;
-    //         } catch (Throwable $exception) {
-    //             throw new DatabaseQueryException($exception->getMessage());
-    //         }
-    //     }
-    // }
+            try {
+                $this->user = DB::table("users")
+                    ->where("id", "=", $this->sessionUserId)
+                    ->first()
+                ;
+            } catch (Throwable $exception) {
+                throw new DatabaseQueryException($exception->getMessage());
+            }
+        }
+    }
 
     public function index()
     {
@@ -39,9 +39,6 @@ class IndexController
         //     header("Location: /login");
         //     exit();
         // }
-
-        echo "hi";
-        die();
 
         $books = DB::table("books")->get();
 

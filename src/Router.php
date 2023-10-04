@@ -16,11 +16,6 @@ class Router
 
     public function register(string $requestMethod, string $route, callable|array $action): self
     {
-        // $this->routes[$route] = [
-        //     "request_method" => $requestMethod,
-        //     "action" => $action,
-        // ];
-
         $this->routes[$requestMethod][$route] = $action;
 
         return $this;
@@ -83,13 +78,8 @@ class Router
                     return call_user_func_array([$class, $method], []);
                 }
             }
-
-            die();
         }
 
         throw new RouteNotFoundException();
-
-        // dd($requestUri);
-        // dd($action);
     }
 }
