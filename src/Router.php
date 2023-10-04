@@ -57,11 +57,20 @@ class Router
         // $requestUri = explode("?", $requestUri)[0];
         $requestMethod = strtolower($requestMethod);
 
-        $action = $this->routes[$requestMethod][$requestUri] ?? null;
+        $route = $this->routes[$requestMethod] ?? null;
+        $requestUri = urldecode($requestUri);
+        $action = $route[$requestUri] ?? null;
 
-        if (!$action) {
+        if (!$route || !$action) {
             throw new RouteNotFoundException();
         }
+
+        dd(key($route));
+        if (preg_match('/^[{].[}]/', key($route))) {
+            dd("y");
+        }
+
+        die();
 
         if (is_callable($action)) {
             return call_user_func($action);

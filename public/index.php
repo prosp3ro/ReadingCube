@@ -88,6 +88,7 @@ $router = new Router();
 
 $router
     ->get("/", [IndexController::class, "index"])
+    ->get("/{id}", [IndexController::class, "index"])
     ->post("/", [IndexController::class, "store"]);
 
 $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
