@@ -153,21 +153,16 @@ class UserController
             "cost" => 12
         ]);
 
-        try {
-            DB::table("users")
-                ->where("id", "=", $this->sessionUserId)
-                ->update([
-                    "password" => $newPasswordHashed
-                ]);
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
+        DB::table("users")
+            ->where("id", "=", $this->sessionUserId)
+            ->update([
+                "password" => $newPasswordHashed
+            ]);
 
         header("Location: /edit-profile?update=pwd");
         exit();
     }
 
-    // TODO rewrite
     private function verifyPassword(string $password): bool
     {
         try {
@@ -179,11 +174,8 @@ class UserController
             throw new DatabaseQueryException($exception->getMessage());
         }
 
-        // convert to one line return
-        if (!$user || !password_verify($password, $user->password)) {
-            return false;
-        }
+        $passwordVerified = password_verify($password, $user->password);
 
-        return true;
+        return !$user || !$passwordVerified;
     }
 }
