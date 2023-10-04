@@ -89,11 +89,8 @@ $router = new Router();
 //     return "hey";
 // });
 
-$router->register("get", "/", [IndexController::class, "index"]);
-
-$router->register("get", "/about-us", function () {
-    echo "about us";
-});
+$router->get("/", [IndexController::class, "index"]);
+$router->post("/", [IndexController::class, "store"]);
 
 $router->resolve($_SERVER["REQUEST_URI"]);
 

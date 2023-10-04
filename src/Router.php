@@ -21,7 +21,7 @@ class Router
         //     "action" => $action,
         // ];
 
-        $this->routes[$requestMethod] = $action;
+        $this->routes[$requestMethod][$route] = $action;
 
         return $this;
     }
@@ -56,7 +56,10 @@ class Router
         $requestUri = strtok($requestUri, "?");
         // $requestUri = explode("?", $requestUri)[0];
 
-        $action = $this->routes[$requestUri]["action"] ?? null;
+        $action = $this->routes["get"][$requestUri] ?? null;
+
+        dd($action);
+        die();
 
         if (!$action) {
             throw new RouteNotFoundException();
