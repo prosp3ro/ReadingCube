@@ -60,11 +60,11 @@ class UserController
             exit();
         }
 
-        $newUsername = $_POST["newUsername"] ?? null;
-        $newEmail = $_POST["newEmail"] ?? null;
+        $newUsername = $_POST["newUsername"];
+        $newEmail = $_POST["newEmail"];
         $password = $_POST["password"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
-        $csrfToken = $_POST["csrf_token"] ?? null;
+        $csrfToken = $_POST["csrf_token"];
 
         if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
@@ -95,9 +95,11 @@ class UserController
         } else if ($newUsername) {
             $this->validateUsername($newUsername);
             $this->updateData("username", $newUsername);
+        } else {
+            header("Location: /edit-profile");
         }
 
-        header("Location: /edit-profile?update=newData");
+        header("Location: /edit-profile?update=data");
         exit();
     }
 
@@ -113,10 +115,14 @@ class UserController
         $newPassword = $_POST["new_password"];
         $newPasswordConfirmation = $_POST["new_password_confirmation"];
         $captchaResponseKey = $_POST["g-recaptcha-response"];
-        $csrfToken = $_POST["csrf_token"] ?? null;
+        $csrfToken = $_POST["csrf_token"];
 
         if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
+        }
+
+        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
         }
 
         if (empty($currentPassword)) {
@@ -131,16 +137,14 @@ class UserController
             exit("Password confirmation is required.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
-        }
-
         if (!$this->verifyPassword($currentPassword)) {
             exit("Current password is incorrect.");
         }
 
-        if (!preg_match("/^(?=.*[a-z])(?=.*[0-9]).{8,}$/i", $newPassword)) {
-            exit("Password must be at least 8 characters and contain at least one letter and one number.");
+        $passwordRegex = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m";
+
+        if (!preg_match($passwordRegex, $newPassword)) {
+            exit("Password must be at least 8 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.");
         }
 
         if ($newPassword !== $newPasswordConfirmation) {
@@ -218,8 +222,10 @@ class UserController
     // TODO rewrite
     private function validateUsername(string $newUsername)
     {
+        $usernameRegex = "/^[a-zA-Z0-9]{5,}$/";
+
         // TODO dont exit here
-        if (!preg_match('/^[a-zA-Z0-9]{5,}$/', $newUsername)) {
+        if (!preg_match($usernameRegex, $newUsername)) {
             exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
         }
 
