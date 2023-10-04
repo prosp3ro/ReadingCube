@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Src\Route;
+use Src\Router;
 use Src\View;
 
 define('ROOT', __DIR__ . "/..");
@@ -81,22 +83,39 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-try {
-    require_once(ROOT . "/routes/web.php");
-} catch (Throwable $exception) {
-    $exceptionClassName = get_class($exception);
-    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
-        "Exception: {$exceptionClassName}" . PHP_EOL .
-        "Message: {$exception->getMessage()}" . PHP_EOL .
-        "File: {$exception->getFile()}" . PHP_EOL .
-        "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
+$router = new Router();
+// $router->register("/blog", function () {
+//     return "hey";
+// });
 
-    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+$router->register("/", function () {
+    echo "home";
+});
 
-    if (function_exists("showException")) {
-        showException($exception);
-    } else {
-        $view = new View();
-        $view->render("error-page");
-    }
-}
+$router->register("/about-us", function () {
+    echo "about us";
+});
+
+$router->resolve($_SERVER["REQUEST_URI"]);
+
+die();
+
+// try {
+//     require_once(ROOT . "/routes/web.php");
+// } catch (Throwable $exception) {
+//     $exceptionClassName = get_class($exception);
+//     $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
+//         "Exception: {$exceptionClassName}" . PHP_EOL .
+//         "Message: {$exception->getMessage()}" . PHP_EOL .
+//         "File: {$exception->getFile()}" . PHP_EOL .
+//         "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
+
+//     error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+
+//     if (function_exists("showException")) {
+//         showException($exception);
+//     } else {
+//         $view = new View();
+//         $view->render("error-page");
+//     }
+// }

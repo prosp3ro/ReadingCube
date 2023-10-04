@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
-use Illuminate\Database\Capsule\Manager as DB;
 use Src\Helpers\CsrfTokenManager;
 use Src\Models\User;
 use Src\Validator;
