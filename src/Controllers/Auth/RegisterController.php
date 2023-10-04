@@ -29,9 +29,9 @@ class RegisterController
         $csrfToken = CsrfTokenManager::generateToken();
 
         // TODO it should be done differently
-        $email = $_GET["email"] ?? "";
-        $validator = new Validator();
-        $validator->isEmailAvailableJson($email);
+        // $email = $_GET["email"] ?? "";
+        // $validator = new Validator();
+        // $validator->isEmailAvailableJson($email);
 
         return $this->view->render("auth/register", [
             "header" => "Register | " . APP_NAME,
@@ -67,6 +67,7 @@ class RegisterController
             "username" => $username,
             "email" => $email,
             "password" => $password,
+            "password_confirmation" => $passwordConfirmation
         ]);
 
         $user = User::Create([

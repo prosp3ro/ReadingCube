@@ -10,6 +10,7 @@ use Src\Helpers\CsrfTokenManager;
 use Src\View;
 use Throwable;
 use Illuminate\Database\Capsule\Manager as DB;
+use Src\Validator;
 
 class UserController
 {
@@ -82,21 +83,29 @@ class UserController
             exit("Password is incorrect.");
         }
 
-        // TODO rewrite
-        if ($newUsername && $newEmail) {
-            $this->validateUsername($newUsername);
-            $this->validateEmail($newEmail);
-
-            $this->updateData("username", $newUsername);
-            $this->updateData("email", $newEmail);
-        } else if ($newEmail) {
-            $this->validateEmail($newEmail);
-            $this->updateData("email", $newEmail);
-        } else if ($newUsername) {
-            $this->validateUsername($newUsername);
-            $this->updateData("username", $newUsername);
-        } else {
+        if (!$newUsername && !$newEmail) {
             header("Location: /edit-profile");
+            exit;
+        }
+
+        $validator = new Validator();
+
+        $dataToUpdate = [];
+
+        if ($newUsername) {
+            $validator->validate(["username" => $newUsername]);
+            $dataToUpdate["username"] = $newUsername;
+        }
+
+        if ($newEmail) {
+            $validator->validate(["email" => $newEmail]);
+            $dataToUpdate["email"] = $newEmail;
+        }
+
+        if (!empty($dataToUpdate)) {
+            DB::table("users")
+                ->where("id", "=", $this->sessionUserId)
+                ->update($dataToUpdate);
         }
 
         header("Location: /edit-profile?update=data");
@@ -125,31 +134,20 @@ class UserController
             exit("Captcha validation failed.");
         }
 
-        if (empty($currentPassword)) {
-            exit("Current password is required.");
-        }
-
-        if (empty($newPassword)) {
-            exit("New password is required.");
-        }
-
-        if (empty($newPasswordConfirmation)) {
-            exit("Password confirmation is required.");
+        if (empty($currentPassword) || empty($newPassword) || empty($newPasswordConfirmation)) {
+            exit("Current password, new password and password confirmation are required.");
         }
 
         if (!$this->verifyPassword($currentPassword)) {
             exit("Current password is incorrect.");
         }
 
-        $passwordRegex = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m";
+        $validator = new Validator();
 
-        if (!preg_match($passwordRegex, $newPassword)) {
-            exit("Password must be at least 8 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.");
-        }
-
-        if ($newPassword !== $newPasswordConfirmation) {
-            exit("Passwords must match.");
-        }
+        $validator->validate([
+            "password" => $newPassword,
+            "password_confirmation" => $newPasswordConfirmation
+        ]);
 
         $newPasswordHashed = password_hash($newPassword, PASSWORD_BCRYPT, [
             "cost" => 12
@@ -181,73 +179,11 @@ class UserController
             throw new DatabaseQueryException($exception->getMessage());
         }
 
+        // convert to one line return
         if (!$user || !password_verify($password, $user->password)) {
             return false;
         }
 
         return true;
-    }
-
-    private function validate(string $dataType, string $newData)
-    {
-        $isNotAvailable = DB::table("users")
-            ->where($dataType, "=", $newData)
-            ->count();
-
-        header("Content-Type: application/json");
-
-        $jsonData = json_encode([
-            "available" => (int) $isNotAvailable == 0
-        ]);
-
-        return $jsonData;
-    }
-
-    // TODO rewrite
-    private function validateEmail(string $newEmail)
-    {
-        // TODO dont exit here
-        if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-            exit("Email has invalid format");
-        }
-
-        $json = $this->validate("email", $newEmail);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Email is already taken.");
-        }
-    }
-
-    // TODO rewrite
-    private function validateUsername(string $newUsername)
-    {
-        $usernameRegex = "/^[a-zA-Z0-9]{5,}$/";
-
-        // TODO dont exit here
-        if (!preg_match($usernameRegex, $newUsername)) {
-            exit("Invalid username format. Please use only letters and numbers, and ensure it's at least 5 characters long.");
-        }
-
-        $json = $this->validate("username", $newUsername);
-        $jsonArray = json_decode($json, true);
-
-        if ($jsonArray["available"] == false) {
-            exit("Username is already taken.");
-        }
-    }
-
-    // TODO datatype should be an array and this method should allow for many types
-    private function updateData(string $dataType, string $newData)
-    {
-        try {
-            DB::table("users")
-                ->where("id", "=", $this->sessionUserId)
-                ->update([
-                    $dataType => $newData
-                ]);
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
     }
 }
