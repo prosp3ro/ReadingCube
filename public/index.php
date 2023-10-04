@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Src\Controllers\IndexController;
 use Src\Route;
 use Src\Router;
 use Src\View;
@@ -88,9 +89,7 @@ $router = new Router();
 //     return "hey";
 // });
 
-$router->register("/", function () {
-    echo "home";
-});
+$router->register("/", [IndexController::class, "index"]);
 
 $router->register("/about-us", function () {
     echo "about us";
@@ -99,6 +98,27 @@ $router->register("/about-us", function () {
 $router->resolve($_SERVER["REQUEST_URI"]);
 
 die();
+
+// try {
+//     $router->resolve($_SERVER["REQUEST_URI"]);
+// } catch (\Throwable $exception) {
+//     $exceptionClassName = get_class($exception);
+
+//     $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
+//         "Exception: {$exceptionClassName}" . PHP_EOL .
+//         "Message: {$exception->getMessage()}" . PHP_EOL .
+//         "File: {$exception->getFile()}" . PHP_EOL .
+//         "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
+
+//     error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+
+//     if (function_exists("showException")) {
+//         showException($exception);
+//     } else {
+//         $view = new View();
+//         $view->render("error-page");
+//     }
+// }
 
 // try {
 //     require_once(ROOT . "/routes/web.php");
