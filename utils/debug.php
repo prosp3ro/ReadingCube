@@ -14,7 +14,18 @@ function dd($data)
     echo "</pre>";
     echo "</div>";
     echo "<br/>";
-    // die();
+    die();
+}
+
+function dump($data)
+{
+    echo "<br/>";
+    echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: lightgray;">';
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+    echo "</div>";
+    echo "<br/>";
 }
 
 function showException(Throwable $exception)

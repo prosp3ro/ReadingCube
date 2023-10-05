@@ -86,6 +86,8 @@ $capsule->bootEloquent();
 
 $router = new Router();
 
+phpinfo();
+
 $router
     ->get("/", [IndexController::class, "index"])
     ->get("/{id}", [IndexController::class, "index"])
