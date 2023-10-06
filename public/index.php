@@ -86,14 +86,12 @@ $capsule->bootEloquent();
 
 $router = new Router();
 
-phpinfo();
+// $router
+//     ->get("/", [IndexController::class, "index"])
+//     ->get("/{id}", [IndexController::class, "index"])
+//     ->get("/bla/bla", [IndexController::class, "store"]);
 
-$router
-    ->get("/", [IndexController::class, "index"])
-    ->get("/{id}", [IndexController::class, "index"])
-    ->get("/bla/bla", [IndexController::class, "store"]);
-
-$router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
+// $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
 
 // try {
 //     $router->resolve($_SERVER["REQUEST_URI"]);
@@ -116,22 +114,22 @@ $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
 //     }
 // }
 
-// try {
-//     require_once(ROOT . "/routes/web.php");
-// } catch (Throwable $exception) {
-//     $exceptionClassName = get_class($exception);
-//     $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
-//         "Exception: {$exceptionClassName}" . PHP_EOL .
-//         "Message: {$exception->getMessage()}" . PHP_EOL .
-//         "File: {$exception->getFile()}" . PHP_EOL .
-//         "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
+try {
+    require_once(ROOT . "/routes/web.php");
+} catch (Throwable $exception) {
+    $exceptionClassName = get_class($exception);
+    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
+        "Exception: {$exceptionClassName}" . PHP_EOL .
+        "Message: {$exception->getMessage()}" . PHP_EOL .
+        "File: {$exception->getFile()}" . PHP_EOL .
+        "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
 
-//     error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
 
-//     if (function_exists("showException")) {
-//         showException($exception);
-//     } else {
-//         $view = new View();
-//         $view->render("error-page");
-//     }
-// }
+    if (function_exists("showException")) {
+        showException($exception);
+    } else {
+        $view = new View();
+        $view->render("error-page");
+    }
+}
