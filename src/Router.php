@@ -64,15 +64,6 @@ class Router
             throw new RouteNotFoundException();
         }
 
-        dd($action);
-        die();
-
-        // if (preg_match("/^\/[{].*[}]/", key($route))) {
-        //     dd("y");
-        // }
-
-        // die();
-
         if (is_callable($action)) {
             return call_user_func($action);
         }

@@ -10,6 +10,9 @@ use Src\View;
 
 define('ROOT', __DIR__ . "/..");
 
+date_default_timezone_set('Europe/Warsaw');
+ini_set("max_execution_time", 15);
+
 $configFile = ROOT . "/config/config.ini";
 $configFile = str_replace('\\', '/', $configFile);
 
@@ -86,12 +89,14 @@ $capsule->bootEloquent();
 
 $router = new Router();
 
-// $router
-//     ->get("/", [IndexController::class, "index"])
-//     ->get("/{id}", [IndexController::class, "index"])
-//     ->get("/bla/bla", [IndexController::class, "store"]);
+die();
 
-// $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
+$router
+    ->get("/", [IndexController::class, "index"])
+    ->get("/a", [IndexController::class, "index"])
+    ->get("/a/b", [IndexController::class, "index"]);
+
+$router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
 
 // try {
 //     $router->resolve($_SERVER["REQUEST_URI"]);
@@ -126,7 +131,7 @@ try {
 
     error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
 
-    if (function_exists("showException")) {
+    if (is_callable("showException")) {
         showException($exception);
     } else {
         $view = new View();
