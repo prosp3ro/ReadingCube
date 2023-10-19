@@ -87,7 +87,7 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-$router = new Router();
+// $router = new Router();
 
 // die();
 
