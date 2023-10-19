@@ -11,14 +11,11 @@ use Throwable;
 
 class IndexController
 {
-    private View $view;
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    public function __construct(View $view)
+    public function __construct(private View $view)
     {
-        $this->view = $view;
-
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
 

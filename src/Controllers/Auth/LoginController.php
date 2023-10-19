@@ -9,11 +9,8 @@ use Src\View;
 
 class LoginController
 {
-    private View $view;
-
-    public function __construct(View $view)
+    public function __construct(private View $view)
     {
-        $this->view = $view;
     }
 
     public function index(object $captcha)

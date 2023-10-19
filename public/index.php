@@ -89,14 +89,14 @@ $capsule->bootEloquent();
 
 $router = new Router();
 
-die();
+// die();
 
-$router
-    ->get("/", [IndexController::class, "index"])
-    ->get("/a", [IndexController::class, "index"])
-    ->get("/a/b", [IndexController::class, "index"]);
+// $router
+//     ->get("/", [IndexController::class, "index"])
+//     ->get("/a", [IndexController::class, "index"])
+//     ->get("/a/b", [IndexController::class, "index"]);
 
-$router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
+// $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
 
 // try {
 //     $router->resolve($_SERVER["REQUEST_URI"]);
