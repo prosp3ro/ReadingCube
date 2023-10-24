@@ -29,7 +29,7 @@
                         <td class="text-center">
                             <a class="btn btn-primary" href="/item/<?= $book->id ?>" role="button">View details</a>
                             <!-- form -->
-                            <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Submit</button>
+                            <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
                         </td>
                     </tr>
                 <?php endforeach ?>

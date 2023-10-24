@@ -30,46 +30,51 @@ define('GOOGLE_RECAPTCHA_SECRET_KEY', $config['app']['google_recaptcha_secret_ke
 define('EMAILABLE_API_KEY', $config['app']['emailable_api_key'] ?? "");
 
 define('PARTIALS', ROOT . "/templates/partials");
+define('STORAGE_PATH', ROOT . "/storage");
 
 if ($config['app']['debug']) {
-    require_once(ROOT . "/utils/debug.php");
+    include_once ROOT . "/utils/debug.php";
 }
 
 if ($config['app']['env'] == "production") {
-    require_once(ROOT . "/utils/production.php");
+    include_once ROOT . "/utils/production.php";
 }
 
-require_once(ROOT . "/utils/urlIs.php");
-require_once(ROOT . "/vendor/autoload.php");
+require_once ROOT . "/utils/urlIs.php";
+require_once ROOT . "/vendor/autoload.php";
 
-set_exception_handler(function (Throwable $exception) {
-    $exceptionClassName = get_class($exception);
-    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
+set_exception_handler(
+    function (Throwable $exception) {
+        $exceptionClassName = get_class($exception);
+        $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
         "Exception: {$exceptionClassName}" . PHP_EOL .
         "Message: {$exception->getMessage()}" . PHP_EOL .
         "File: {$exception->getFile()}" . PHP_EOL .
         "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
 
-    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+        error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
 
-    if (is_callable("showException")) {
-        showException($exception);
-    } else {
-        $view = new View();
-        $view->render("error-page");
+        if (is_callable("showException")) {
+            showException($exception);
+        } else {
+            $view = new View();
+            $view->render("error-page");
+        }
     }
-});
+);
 
 ini_set('session.use_only_cookies', 1);
 ini_set('session.use_strict_mode', 1);
 
-session_set_cookie_params([
+session_set_cookie_params(
+    [
     "lifetime" => 86400 * 7,
     "domain" => $config["app"]["domain"] ?? "localhost",
     "path" => "/",
     "secure" => true,
     "httponly" => true
-]);
+    ]
+);
 
 session_start();
 
@@ -89,7 +94,8 @@ $capsule = new Capsule();
 
 $database = $config["database"];
 
-$capsule->addConnection([
+$capsule->addConnection(
+    [
     "driver" => $database["driver"] ?? "mysql",
     "host" => $database["host"],
     "database" => $database["schema"],
@@ -98,7 +104,8 @@ $capsule->addConnection([
     "charset" => "utf8",
     "collation" => "utf8_unicode_ci",
     "prefix" => ""
-]);
+    ]
+);
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
@@ -110,6 +117,17 @@ $capsule->bootEloquent();
 //     ->get("/a", [IndexController::class, "index"])
 //     ->get("/a/b", [IndexController::class, "index"]);
 
-// $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
+// $router->resolve(
+//     $_SERVER["REQUEST_URI"],
+//     $_SERVER["REQUEST_METHOD"]
+// );
 
-require_once(ROOT . "/routes/web.php");
+setcookie(
+    "username",
+    "prospero",
+    time() + 10, // expiration time
+);
+
+// dd($_COOKIE);
+
+require_once ROOT . "/routes/web.php";

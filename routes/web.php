@@ -24,6 +24,10 @@ Route::get('/', function () use ($IndexController) {
     $IndexController->index();
 });
 
+Route::post('/upload', function () use ($IndexController) {
+    $IndexController->upload();
+});
+
 Route::get('/about-us', function () use ($IndexController) {
     $IndexController->showAboutUsPage();
 });

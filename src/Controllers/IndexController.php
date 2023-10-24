@@ -39,10 +39,26 @@ class IndexController
 
         $books = DB::table("books")->get();
 
+        // dd($_SESSION);
+
+echo <<<FORM
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="receipt" />
+    <button type="submit">Upload</button>
+</form>
+FORM;
+
+        die();
+
         return $this->view->render("index", [
             "books" => $books,
             "user" => $this->user
         ]);
+    }
+
+    public function upload()
+    {
+        dd($_FILES);
     }
 
     public function showAboutUsPage()

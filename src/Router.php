@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src;
 
 use Src\Exceptions\RouteException;
-use Src\Exceptions\RouteNotFoundException;
 
 class Router
 {
