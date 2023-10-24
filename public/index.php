@@ -119,9 +119,7 @@ $capsule->bootEloquent();
 //     }
 // }
 
-try {
-    require_once(ROOT . "/routes/web.php");
-} catch (Throwable $exception) {
+set_exception_handler(function (Throwable $exception) {
     $exceptionClassName = get_class($exception);
     $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
         "Exception: {$exceptionClassName}" . PHP_EOL .
@@ -137,4 +135,6 @@ try {
         $view = new View();
         $view->render("error-page");
     }
-}
+});
+
+require_once(ROOT . "/routes/web.php");
