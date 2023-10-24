@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Src\Router;
 use Src\View;
 
 define('ROOT', __DIR__ . "/..");
@@ -40,6 +41,24 @@ if ($config['app']['env'] == "production") {
 
 require_once(ROOT . "/utils/urlIs.php");
 require_once(ROOT . "/vendor/autoload.php");
+
+set_exception_handler(function (Throwable $exception) {
+    $exceptionClassName = get_class($exception);
+    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
+        "Exception: {$exceptionClassName}" . PHP_EOL .
+        "Message: {$exception->getMessage()}" . PHP_EOL .
+        "File: {$exception->getFile()}" . PHP_EOL .
+        "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
+
+    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
+
+    if (is_callable("showException")) {
+        showException($exception);
+    } else {
+        $view = new View();
+        $view->render("error-page");
+    }
+});
 
 ini_set('session.use_only_cookies', 1);
 ini_set('session.use_strict_mode', 1);
@@ -92,23 +111,5 @@ $capsule->bootEloquent();
 //     ->get("/a/b", [IndexController::class, "index"]);
 
 // $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
-
-set_exception_handler(function (Throwable $exception) {
-    $exceptionClassName = get_class($exception);
-    $errorLogMessage = date('Y-m-d H:i:s') . PHP_EOL .
-        "Exception: {$exceptionClassName}" . PHP_EOL .
-        "Message: {$exception->getMessage()}" . PHP_EOL .
-        "File: {$exception->getFile()}" . PHP_EOL .
-        "Line: {$exception->getLine()}" . PHP_EOL . PHP_EOL;
-
-    error_log($errorLogMessage, 3, ROOT . "/logs/error.log");
-
-    if (is_callable("showException")) {
-        showException($exception);
-    } else {
-        $view = new View();
-        $view->render("error-page");
-    }
-});
 
 require_once(ROOT . "/routes/web.php");

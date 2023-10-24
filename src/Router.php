@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src;
 
+use Src\Exceptions\RouteException;
 use Src\Exceptions\RouteNotFoundException;
 
 class Router
@@ -61,7 +62,7 @@ class Router
         $action = $route[urldecode($requestUri)] ?? null;
 
         if (!$route || !$action) {
-            throw new RouteNotFoundException();
+            throw RouteException::routeNotFound();
         }
 
         if (is_callable($action)) {
@@ -81,6 +82,6 @@ class Router
             }
         }
 
-        throw new RouteNotFoundException();
+        throw RouteException::routeNotFound();
     }
 }
