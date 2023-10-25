@@ -43,7 +43,7 @@ class View
         $this->render($view, $params);
     }
 
-    public static function make(string $view, array $params = []): static
+    public static function create(string $view, array $params = []): static
     {
         return new static($view, $params);
     }

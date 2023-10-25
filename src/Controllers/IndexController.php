@@ -39,7 +39,7 @@ class IndexController
 
         $books = DB::table("books")->get();
 
-        return View::make("index", [
+        return View::create("index", [
             "books" => $books,
             "user" => $this->user
         ])->render();

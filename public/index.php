@@ -58,8 +58,7 @@ set_exception_handler(
         if (is_callable("showException")) {
             showException($exception);
         } else {
-            $view = new View();
-            $view->render("error-page");
+            View::create("error-page")->render();
         }
     }
 );
@@ -123,11 +122,11 @@ $capsule->bootEloquent();
 //     $_SERVER["REQUEST_METHOD"]
 // );
 
-setcookie(
-    "username",
-    "prospero",
-    time() + 10, // expiration time
-);
+// setcookie(
+//     "username",
+//     "prospero",
+//     time() + 10, // expiration time
+// );
 
 // dd($_COOKIE);
 
