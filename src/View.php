@@ -8,41 +8,53 @@ use Src\Exceptions\ViewException;
 
 class View
 {
-    private function getPath(string $str): string
-    {
-        return str_replace('\\', '/', $str);
+    public function __construct(
+        protected string $view,
+        protected array $params = []
+    ) {
     }
 
-    public function render(string $page, array $params = []): string
+    public function render()
     {
-        if (! strpos($page, '.view.php')) {
-            $page .= '.view.php';
+        if (! strpos($this->view, '.view.php')) {
+            $this->view .= '.view.php';
         }
 
-        $viewPath = $this->getPath(VIEW_PATH . '/' . $page);
+        $viewPath = $this->getPath(VIEW_PATH . '/' . $this->view);
 
         if (! file_exists($viewPath)) {
             throw ViewException::viewNotFound();
         }
 
-        if (! array_key_exists("header", $params)) {
-            $params["header"] = APP_NAME;
+        if (! empty($this->params)) {
+            extract($this->params);
         }
 
-        if (! empty($params)) {
-            extract($params);
+        if (! isset($header)) {
+            $header = APP_NAME;
         }
-
-        ob_start();
 
         include $viewPath;
-
-        return (string) ob_get_clean();
     }
 
     public function pageNotFound(array $params = []): void
     {
-        $page = "404.view.php";
-        $this->render($page, $params);
+        $view = "404.view.php";
+        $this->render($view, $params);
+    }
+
+    public static function make(string $view, array $params = []): static
+    {
+        return new static($view, $params);
+    }
+
+    private function getPath(string $str): string
+    {
+        return str_replace('\\', '/', $str);
+    }
+
+    public function __toString()
+    {
+        return $this->render();
     }
 }

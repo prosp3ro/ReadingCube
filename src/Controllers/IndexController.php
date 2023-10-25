@@ -14,7 +14,7 @@ class IndexController
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    public function __construct(private View $view)
+    public function __construct()
     {
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
@@ -39,10 +39,10 @@ class IndexController
 
         $books = DB::table("books")->get();
 
-        return $this->view->render("index", [
+        return View::make("index", [
             "books" => $books,
             "user" => $this->user
-        ]);
+        ])->render();
     }
 
     public function upload()
