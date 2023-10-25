@@ -31,6 +31,7 @@ define('EMAILABLE_API_KEY', $config['app']['emailable_api_key'] ?? "");
 
 define('PARTIALS', ROOT . "/templates/partials");
 define('STORAGE_PATH', ROOT . "/storage");
+define('VIEW_PATH', ROOT . "/templates/views");
 
 if ($config['app']['debug']) {
     include_once ROOT . "/utils/debug.php";

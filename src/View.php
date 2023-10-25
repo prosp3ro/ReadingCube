@@ -4,61 +4,45 @@ declare(strict_types=1);
 
 namespace Src;
 
-use Exception;
-use Src\Exceptions\AppException;
-use Throwable;
+use Src\Exceptions\ViewException;
 
 class View
 {
-    private string $viewsPath;
-
-    public function __construct()
-    {
-        $this->viewsPath = ROOT . "/templates/views/";
-    }
-
     private function getPath(string $str): string
     {
         return str_replace('\\', '/', $str);
     }
 
-    public function render(string $page, array $args = []): void
+    public function render(string $page, array $params = []): string
     {
-        try {
-            if (!strpos($page, '.view.php')) {
-                $page .= '.view.php';
-            }
-
-            $path = $this->getPath($this->viewsPath . $page);
-
-            if (!array_key_exists("header", $args)) {
-                $args["header"] = APP_NAME;
-            }
-
-            if (!empty($args)) {
-                extract($args);
-            }
-
-            require_once($path);
-        } catch (Throwable $exception) {
-            throw new AppException($exception->getMessage());
+        if (! strpos($page, '.view.php')) {
+            $page .= '.view.php';
         }
+
+        $viewPath = $this->getPath(VIEW_PATH . '/' . $page);
+
+        if (! file_exists($viewPath)) {
+            throw ViewException::viewNotFound();
+        }
+
+        if (! array_key_exists("header", $params)) {
+            $params["header"] = APP_NAME;
+        }
+
+        if (! empty($params)) {
+            extract($params);
+        }
+
+        ob_start();
+
+        include $viewPath;
+
+        return (string) ob_get_clean();
     }
 
-    public function pageNotFound(array $args = []): void
+    public function pageNotFound(array $params = []): void
     {
-        try {
-            $page = "404.view.php";
-            $path = $this->getPath($this->viewsPath . $page);
-            $header = "Page Not Found | " . APP_NAME;
-
-            if (!empty($args)) {
-                extract($args);
-            }
-
-            require_once($path);
-        } catch (Throwable $exception) {
-            throw new AppException($exception->getMessage());
-        }
+        $page = "404.view.php";
+        $this->render($page, $params);
     }
 }
