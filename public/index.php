@@ -110,6 +110,8 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
+// dd($_SERVER);
+
 try {
     $router = new Router();
 
@@ -122,7 +124,8 @@ try {
         $_SERVER["REQUEST_METHOD"]
     );
 } catch (RouteException $exception) {
-    header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    // header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    http_response_code(404);
 
     View::create('error/404')->render();
 }
