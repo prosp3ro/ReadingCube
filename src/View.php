@@ -39,7 +39,7 @@ class View
 
     public function pageNotFound(array $params = []): void
     {
-        $view = "404.view.php";
+        $view = "error/404.view.php";
         $this->render($view, $params);
     }
 

@@ -10,10 +10,6 @@ class Router
 {
     private array $routes;
 
-    public function __construct()
-    {
-    }
-
     public function register(string $requestMethod, string $route, callable|array $action): self
     {
         $this->routes[$requestMethod][$route] = $action;
@@ -57,10 +53,11 @@ class Router
         // $requestUri = explode("?", $requestUri)[0];
         $requestMethod = strtolower($requestMethod);
 
-        $route = $this->routes[$requestMethod] ?? null;
-        $action = $route[urldecode($requestUri)] ?? null;
+        // $route = $this->routes[$requestMethod] ?? null;
+        $action = $this->routes[$requestMethod][urldecode($requestUri)] ?? null;
 
-        if (!$route || !$action) {
+        // if (! $route || ! $action) {
+        if (! $action) {
             throw RouteException::routeNotFound();
         }
 

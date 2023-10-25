@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Src\Controllers\IndexController;
+use Src\Exceptions\RouteException;
 use Src\Router;
 use Src\View;
 
@@ -57,8 +59,6 @@ set_exception_handler(
 
         if (is_callable("showException")) {
             showException($exception);
-        } else {
-            View::create("error-page")->render();
         }
     }
 );
@@ -110,17 +110,22 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// $router = new Router();
+try {
+    $router = new Router();
 
-// $router
-//     ->get("/", [IndexController::class, "index"])
-//     ->get("/a", [IndexController::class, "index"])
-//     ->get("/a/b", [IndexController::class, "index"]);
+    $router
+    ->get("/", [IndexController::class, "index"])
+    ;
 
-// $router->resolve(
-//     $_SERVER["REQUEST_URI"],
-//     $_SERVER["REQUEST_METHOD"]
-// );
+    $router->resolve(
+        $_SERVER["REQUEST_URI"],
+        $_SERVER["REQUEST_METHOD"]
+    );
+} catch (RouteException $exception) {
+    header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+
+    View::create('error/404')->render();
+}
 
 // setcookie(
 //     "username",
@@ -130,4 +135,4 @@ $capsule->bootEloquent();
 
 // dd($_COOKIE);
 
-require_once ROOT . "/routes/web.php";
+// require_once ROOT . "/routes/web.php";
