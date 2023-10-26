@@ -6,7 +6,7 @@ define('ROOT', __DIR__ . "/..");
 
 require_once(ROOT . "/vendor/autoload.php");
 
-use Src\Models\DB;
+use App\Models\DB;
 
 $db = new DB();
 $seeder = new \tebazil\dbseeder\Seeder($db);
