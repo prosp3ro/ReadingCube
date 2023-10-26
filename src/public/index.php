@@ -155,7 +155,9 @@ try {
     // header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
     http_response_code(404);
 
-    View::create('error/404')->render();
+    View::create('error/404', [
+        "header" => "Not Found | " . APP_NAME
+    ])->render();
 }
 
 // setcookie(
