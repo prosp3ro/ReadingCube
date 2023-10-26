@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Src\Controllers\Auth;
 
+use Illuminate\Database\Capsule\Manager as DB;
+use Src\Exceptions\DatabaseQueryException;
 use Src\Helpers\CsrfTokenManager;
-use Src\Models\User;
 use Src\Validator;
 use Src\View;
 
@@ -66,17 +67,30 @@ class RegisterController
             "password_confirmation" => $passwordConfirmation
         ]);
 
-        $user = User::Create([
-            'username' => $username,
-            'email' => $email,
-            'password' => password_hash($password, PASSWORD_BCRYPT)
-        ]);
+        // $user = User::Create([
+        //     'username' => $username,
+        //     'email' => $email,
+        //     'password' => password_hash($password, PASSWORD_BCRYPT)
+        // ]);
 
-        if ($user) {
+        DB::beginTransaction();
+
+        try {
+            DB::table('users')->insert([
+                'username' => $username,
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_BCRYPT)
+            ]);
+
+            DB::commit();
+
             header("Location: /login?register=success");
             exit();
-        } else {
-            exit("Registration failed.");
+        } catch (\Throwable $exception) {
+            DB::rollback();
+            throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
         }
+
+        exit("Registration failed.");
     }
 }
