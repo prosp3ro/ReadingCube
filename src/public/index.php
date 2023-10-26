@@ -20,7 +20,13 @@ ini_set("max_execution_time", 15);
 require_once ROOT . "/vendor/autoload.php";
 require_once ROOT . "/utils/urlIs.php";
 
-$dotenv = Dotenv::createImmutable(ROOT);
+$repository = \Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
+    ->addAdapter(\Dotenv\Repository\Adapter\EnvConstAdapter::class)
+    ->addWriter(\Dotenv\Repository\Adapter\PutenvAdapter::class)
+    ->immutable()
+    ->make();
+
+$dotenv = Dotenv::create($repository, ROOT);
 $dotenv->load();
 
 define('APP_NAME', $_ENV["APP_NAME"] ?? "App");
@@ -98,7 +104,7 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// dd($_SERVER);
+dd($_ENV);
 
 // $db = new DB();
 // $user = $db->query("SELECT * FROM users")->fetchAll();
