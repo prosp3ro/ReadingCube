@@ -17,7 +17,7 @@ class UserController
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    public function __construct(private View $view)
+    public function __construct()
     {
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
@@ -43,12 +43,12 @@ class UserController
 
         $updateMessage = $_GET["update"] ?? "";
 
-        return $this->view->render("edit-profile", [
+        return View::create("edit-profile", [
             "user" => $this->user,
             "captcha" => $captcha,
             "csrfToken" => $csrfToken,
             "updateMessage" => $updateMessage
-        ]);
+        ])->render();
     }
 
     public function updateProfile(object $captcha)
@@ -173,6 +173,6 @@ class UserController
 
         $passwordVerified = password_verify($password, $user->password);
 
-        return !$user || !$passwordVerified;
+        return (! $user) || (! $passwordVerified);
     }
 }

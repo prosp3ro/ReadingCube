@@ -50,34 +50,34 @@ class IndexController
         dd($_FILES);
     }
 
-    // public function showAboutUsPage()
-    // {
-    //     return $this->view->render("about-us", [
-    //         "header" => "About Us | " . APP_NAME,
-    //         "user" => $this->user
-    //     ]);
-    // }
+    public function showAboutUsPage()
+    {
+        return View::create("about-us", [
+            "header" => "About Us | " . APP_NAME,
+            "user" => $this->user
+        ])->render();
+    }
 
-    // public function showContactPage()
-    // {
-    //     return $this->view->render("contact", [
-    //         "header" => "Contact | " . APP_NAME,
-    //         "user" => $this->user
-    //     ]);
-    // }
+    public function showContactPage()
+    {
+        return View::create("contact", [
+            "header" => "Contact | " . APP_NAME,
+            "user" => $this->user
+        ])->render();
+    }
 
-    // public function showFAQPage()
-    // {
-    //     return $this->view->render("faq", [
-    //         "header" => "FAQ | " . APP_NAME,
-    //         "user" => $this->user
-    //     ]);
-    // }
+    public function showFAQPage()
+    {
+        return View::create("faq", [
+            "header" => "FAQ | " . APP_NAME,
+            "user" => $this->user
+        ])->render();
+    }
 
-    // public function pageNotFound()
-    // {
-    //     return $this->view->pageNotFound([
-    //         "user" => $this->user
-    //     ]);
-    // }
+    public function pageNotFound()
+    {
+        return View::create("error/404", [
+            "user" => $this->user
+        ])->render();
+    }
 }

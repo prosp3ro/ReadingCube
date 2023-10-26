@@ -13,7 +13,7 @@ class ItemController
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    public function __construct(private View $view)
+    public function __construct()
     {
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
@@ -39,17 +39,15 @@ class ItemController
         }
 
         if (!$item) {
-            $this->view->pageNotFound([
+            return View::create("error/404", [
                 "user" => $this->user
-            ]);
-
-            exit();
+            ])->render();
         }
 
-        return $this->view->render("item", [
+        return View::create("item", [
             "header" => "Item | " . APP_NAME,
             "item" => $item,
             "user" => $this->user
-        ]);
+        ])->render();
     }
 }

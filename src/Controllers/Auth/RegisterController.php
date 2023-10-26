@@ -12,10 +12,6 @@ use Src\View;
 
 class RegisterController
 {
-    public function __construct(private View $view)
-    {
-    }
-
     public function index(object $captcha)
     {
         if (isset($_SESSION['user_id'])) {
@@ -30,11 +26,11 @@ class RegisterController
         // $validator = new Validator();
         // $validator->isEmailAvailableJson($email);
 
-        return $this->view->render("auth/register", [
+        return View::create("auth/register", [
             "header" => "Register | " . APP_NAME,
             "captcha" => $captcha,
             "csrfToken" => $csrfToken
-        ]);
+        ])->render();
     }
 
     public function register(object $captcha): void

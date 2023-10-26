@@ -9,10 +9,6 @@ use Src\View;
 
 class LoginController
 {
-    public function __construct(private View $view)
-    {
-    }
-
     public function index(object $captcha)
     {
         if (isset($_SESSION['user_id'])) {
@@ -22,11 +18,11 @@ class LoginController
 
         $registerMessage = $_GET["register"] ?? "";
 
-        return $this->view->render("auth/login", [
+        return View::create("auth/login", [
             "header" => "Login | " . APP_NAME,
             "captcha" => $captcha,
             "registerMessage" => $registerMessage
-        ]);
+        ])->render();
     }
 
     public function logout(): void
