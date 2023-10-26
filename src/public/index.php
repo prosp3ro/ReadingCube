@@ -2,12 +2,17 @@
 
 declare(strict_types=1);
 
+use App\Controllers\Auth\LoginController;
+use App\Controllers\Auth\RegisterController;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Controllers\IndexController;
+use App\Controllers\ItemController;
+use App\Controllers\UserController;
 use App\Exceptions\RouteException;
 use App\Models\DB;
 use App\Router;
+use App\View;
 
 define('ROOT', dirname(__DIR__));
 define('PARTIALS', ROOT . "/templates/partials");
@@ -27,6 +32,7 @@ $repository = \Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
     ->make();
 
 $dotenv = Dotenv::create($repository, ROOT);
+// $dotenv->required('APP_DEBUG')->isBoolean();
 $dotenv->load();
 
 define('APP_NAME', $_ENV["APP_NAME"] ?? "App");
@@ -34,6 +40,7 @@ define('GOOGLE_RECAPTCHA_SITE_KEY', $_ENV["GOOGLE_RECAPTCHA_SITE_KEY"] ?? "");
 define('GOOGLE_RECAPTCHA_SECRET_KEY', $_ENV["GOOGLE_RECAPTCHA_SECRET_KEY"] ?? "");
 define('EMAILABLE_API_KEY', $_ENV["EMAILABLE_API_KEY"] ?? "");
 
+// TODO make it a boolean, not string
 if ($_ENV["APP_DEBUG"] === "true") {
     include_once ROOT . "/utils/debug.php";
 }
@@ -104,7 +111,7 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-dd($_ENV);
+// dd($_ENV);
 
 // $db = new DB();
 // $user = $db->query("SELECT * FROM users")->fetchAll();
@@ -113,23 +120,43 @@ dd($_ENV);
 
 // die();
 
-// try {
-//     $router = new Router();
+try {
+    $router = new Router();
 
-//     $router
-//     ->get("/", [IndexController::class, "index"])
-//     ;
+    // TODO inject captcha object
+    $router
+        ->get("/", [IndexController::class, "index"])
+        ->get("/about-us", [IndexController::class, "showAboutUsPage"])
+        ->get("/contact", [IndexController::class, "showContactPage"])
+        ->get("/faq", [IndexController::class, "showFAQPage"])
+        ->post("/upload", [IndexController::class, "upload"])
 
-//     $router->resolve(
-//         $_SERVER["REQUEST_URI"],
-//         $_SERVER["REQUEST_METHOD"]
-//     );
-// } catch (RouteException $exception) {
-//     // header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
-//     http_response_code(404);
+        ->get("/register", [RegisterController::class, "index"])
+        ->post("/register", [RegisterController::class, "register"])
 
-//     View::create('error/404')->render();
-// }
+        ->get("/login", [LoginController::class, "index"])
+        ->post("/login", [LoginController::class, "login"])
+        ->get("/logout", [LoginController::class, "logout"])
+
+        // TODO method should be `index`
+        ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
+        // updateProfileData
+        ->post("/edit-profile", [UserController::class, "updateProfile"])
+        ->post("/update-password", [UserController::class, "updatePassword"]);
+
+        // TODO
+        // ->get("/item/{id}", [ItemController::class, "index"])
+
+    $router->resolve(
+        $_SERVER["REQUEST_URI"],
+        $_SERVER["REQUEST_METHOD"]
+    );
+} catch (RouteException) {
+    // header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    http_response_code(404);
+
+    View::create('error/404')->render();
+}
 
 // setcookie(
 //     "username",
@@ -139,4 +166,4 @@ dd($_ENV);
 
 // dd($_COOKIE);
 
-require_once ROOT . "/routes/web.php";
+// require_once ROOT . "/routes/web.php";

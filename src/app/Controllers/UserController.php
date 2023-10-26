@@ -17,7 +17,7 @@ class UserController
     private ?int $sessionUserId = null;
     private ?object $user = null;
 
-    public function __construct()
+    public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
     {
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
@@ -32,7 +32,7 @@ class UserController
         }
     }
 
-    public function showEditProfilePage(object $captcha)
+    public function showEditProfilePage()
     {
         if (!$this->sessionUserId) {
             header("Location: /login");
@@ -45,13 +45,13 @@ class UserController
 
         return View::create("edit-profile", [
             "user" => $this->user,
-            "captcha" => $captcha,
+            "captcha" => $this->captcha,
             "csrfToken" => $csrfToken,
             "updateMessage" => $updateMessage
         ])->render();
     }
 
-    public function updateProfile(object $captcha)
+    public function updateProfile()
     {
         if (!$this->sessionUserId) {
             header("Location: /login");
@@ -68,7 +68,7 @@ class UserController
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
@@ -110,7 +110,7 @@ class UserController
     }
 
     // TODO add check if new password is same as old
-    public function updatePassword(Captcha $captcha)
+    public function updatePassword()
     {
         if (!$this->sessionUserId) {
             header("Location: /login");
@@ -127,7 +127,7 @@ class UserController
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 

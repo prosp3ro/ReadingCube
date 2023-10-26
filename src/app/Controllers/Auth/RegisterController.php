@@ -6,13 +6,18 @@ namespace App\Controllers\Auth;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Exceptions\DatabaseQueryException;
+use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
 use App\Validator;
 use App\View;
 
 class RegisterController
 {
-    public function index(object $captcha)
+    public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
+    {
+    }
+
+    public function index()
     {
         if (isset($_SESSION['user_id'])) {
             header("Location: /");
@@ -28,12 +33,12 @@ class RegisterController
 
         return View::create("auth/register", [
             "header" => "Register | " . APP_NAME,
-            "captcha" => $captcha,
+            "captcha" => $this->captcha,
             "csrfToken" => $csrfToken
         ])->render();
     }
 
-    public function register(object $captcha): void
+    public function register(): void
     {
         $username = $_POST['username'];
         $email = $_POST['email'];
@@ -46,7 +51,7 @@ class RegisterController
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$captcha->validateCaptcha($captchaResponseKey)) {
+        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
