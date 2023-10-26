@@ -6,8 +6,6 @@ namespace Src\Models;
 
 use PDO;
 use Src\Exceptions\ConfigurationException;
-use Src\Exceptions\DatabaseConnectionException;
-use Throwable;
 
 class DB extends PDO
 {
@@ -15,13 +13,13 @@ class DB extends PDO
     {
         $file = str_replace('\\', '/', $file);
 
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             throw new ConfigurationException("Configuration file <strong>{$file}</strong> does not exist.");
         }
 
         $connection = parse_ini_file($file, true);
 
-        if (!$connection) {
+        if (! $connection) {
             throw new ConfigurationException("Unable to parse <strong>{$file}</strong>.");
         }
 
@@ -29,7 +27,7 @@ class DB extends PDO
 
         $dbDriver = $database['driver'];
         $dbHost = $database['host'];
-        $dbPort = ((!empty($database['port'])) ? (";port={$database['port']}") : "");
+        $dbPort = (! empty($database['port'])) ? (";port={$database['port']}") : "";
         $dbName = $database['schema'];
 
         $dsn = "{$dbDriver}:host={$dbHost}{$dbPort};dbname={$dbName}";
@@ -37,13 +35,9 @@ class DB extends PDO
         $dbUsername = $database['username'];
         $dbPassword = $database['password'];
 
-        try {
-            parent::__construct($dsn, $dbUsername, $dbPassword, [
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
-        } catch (Throwable $exception) {
-            throw new DatabaseConnectionException("Connection to the database failed.", 0, $exception);
-        }
+        parent::__construct($dsn, $dbUsername, $dbPassword, [
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
     }
 }
