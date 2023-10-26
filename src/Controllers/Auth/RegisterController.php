@@ -83,7 +83,10 @@ class RegisterController
             header("Location: /login?register=success");
             exit();
         } catch (\Throwable $exception) {
+            // if (DB::inTransaction()) {
             DB::rollback();
+            // }
+
             throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
         }
 
