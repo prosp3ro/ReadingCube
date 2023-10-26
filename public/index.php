@@ -9,7 +9,7 @@ use Src\Exceptions\RouteException;
 use Src\Models\DB;
 use Src\Router;
 
-define('ROOT', __DIR__ . "/..");
+define('ROOT', dirname(__DIR__));
 define('PARTIALS', ROOT . "/templates/partials");
 define('STORAGE_PATH', ROOT . "/storage");
 define('VIEW_PATH', ROOT . "/templates/views");
@@ -104,8 +104,6 @@ $capsule->bootEloquent();
 // $user = $db->query("SELECT * FROM users")->fetchAll();
 
 // dd($user);
-
-// dump($_ENV);
 
 // die();
 
