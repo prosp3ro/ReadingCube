@@ -30,7 +30,7 @@ class UserController
 
     public function showEditProfilePage()
     {
-        if (!$this->sessionUserId) {
+        if (! $this->sessionUserId) {
             header("Location: /login");
             exit();
         }
@@ -49,10 +49,12 @@ class UserController
 
     public function updateProfile()
     {
-        if (!$this->sessionUserId) {
+        if (! $this->sessionUserId) {
             header("Location: /login");
             exit();
         }
+
+        $User = new User();
 
         $newUsername = $_POST["newUsername"];
         $newEmail = $_POST["newEmail"];
@@ -60,11 +62,11 @@ class UserController
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
 
-        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
+        if (! isset($csrfToken) || ! CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
+        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
@@ -72,11 +74,11 @@ class UserController
             exit("Password is required.");
         }
 
-        if (!$this->verifyPassword($password)) {
-            exit("Password is incorrect.");
+        if (! $User->verifyPassword($this->sessionUserId, $password)) {
+            exit("Current password is incorrect.");
         }
 
-        if (!$newUsername && !$newEmail) {
+        if (! $newUsername && ! $newEmail) {
             header("Location: /edit-profile");
             exit;
         }
@@ -95,9 +97,7 @@ class UserController
             $dataToUpdate["email"] = $newEmail;
         }
 
-        if (!empty($dataToUpdate)) {
-            $User = new User();
-
+        if (! empty($dataToUpdate)) {
             $User->updateProfile($this->sessionUserId, $dataToUpdate);
         }
 
@@ -108,10 +108,12 @@ class UserController
     // TODO add check if new password is same as old
     public function updatePassword()
     {
-        if (!$this->sessionUserId) {
+        if (! $this->sessionUserId) {
             header("Location: /login");
             exit();
         }
+
+        $User = new User();
 
         $currentPassword = $_POST["current_password"];
         $newPassword = $_POST["new_password"];
@@ -119,11 +121,11 @@ class UserController
         $captchaResponseKey = $_POST["g-recaptcha-response"];
         $csrfToken = $_POST["csrf_token"];
 
-        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
+        if (! isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
+        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
@@ -131,7 +133,7 @@ class UserController
             exit("Current password, new password and password confirmation are required.");
         }
 
-        if (! $this->verifyPassword($currentPassword)) {
+        if (! $User->verifyPassword($this->sessionUserId, $currentPassword)) {
             exit("Current password is incorrect.");
         }
 
@@ -146,26 +148,9 @@ class UserController
             "cost" => 12
         ]);
 
-        $User = new User();
         $User->updatePassword($this->sessionUserId, $newPasswordHashed);
 
         header("Location: /edit-profile?update=pwd");
         exit();
-    }
-
-    private function verifyPassword(string $password): bool
-    {
-        try {
-            $user = DB::table("users")
-                ->select("password", "id")
-                ->where("id", "=", $this->sessionUserId)
-                ->first();
-        } catch (Throwable $exception) {
-            throw new DatabaseQueryException($exception->getMessage());
-        }
-
-        $passwordVerified = password_verify($password, $user->password);
-
-        return $user && $passwordVerified;
     }
 }

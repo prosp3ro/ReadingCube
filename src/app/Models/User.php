@@ -29,6 +29,23 @@ class User
         return null;
     }
 
+    public function verifyPassword(int $sessionUserId = null, string $password): bool
+    {
+        try {
+            $user = QueryBuilder::table("users")
+                ->select("password", "id")
+                ->where("id", "=", $sessionUserId)
+                ->first();
+        } catch (\Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+
+        $passwordVerified = password_verify($password, $user->password);
+
+        return $user && $passwordVerified;
+        
+    }
+
     public function updateProfile(int $sessionUserId = null, array $dataToUpdate)
     {
         QueryBuilder::beginTransaction();
