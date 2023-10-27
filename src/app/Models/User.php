@@ -14,7 +14,7 @@ class User
         
     }
 
-    public function getCurrentUser(int $sessionUserId): object
+    public function getCurrentUser(int $sessionUserId = null): object
     {
         $user = QueryBuilder::table("users")
             ->where("id", "=", $sessionUserId)
@@ -23,7 +23,7 @@ class User
         return $user;
     }
 
-    public function updateProfile(int $sessionUserId, array $dataToUpdate)
+    public function updateProfile(int $sessionUserId = null, array $dataToUpdate)
     {
         QueryBuilder::beginTransaction();
 
@@ -31,6 +31,27 @@ class User
             QueryBuilder::table("users")
                 ->where("id", "=", $sessionUserId)
                 ->update($dataToUpdate);
+
+            QueryBuilder::commit();
+        } catch (\Throwable $exception) {
+            // if (QueryBuilder::inTransaction()) {
+            QueryBuilder::rollback();
+            // }
+
+            throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
+        }
+    }
+
+    public function updatePassword(int $sessionUserId = null, string $newPassword)
+    {
+        QueryBuilder::beginTransaction();
+
+        try {
+            QueryBuilder::table("users")
+                ->where("id", "=", $sessionUserId)
+                ->update([
+                    "password" => $newPassword
+                ]);
 
             QueryBuilder::commit();
         } catch (\Throwable $exception) {

@@ -136,7 +136,7 @@ class UserController
             exit("Current password, new password and password confirmation are required.");
         }
 
-        if (!$this->verifyPassword($currentPassword)) {
+        if (! $this->verifyPassword($currentPassword)) {
             exit("Current password is incorrect.");
         }
 
@@ -151,11 +151,8 @@ class UserController
             "cost" => 12
         ]);
 
-        DB::table("users")
-            ->where("id", "=", $this->sessionUserId)
-            ->update([
-                "password" => $newPasswordHashed
-            ]);
+        $User = new User();
+        $User->updatePassword($this->sessionUserId, $newPasswordHashed);
 
         header("Location: /edit-profile?update=pwd");
         exit();
@@ -174,6 +171,6 @@ class UserController
 
         $passwordVerified = password_verify($password, $user->password);
 
-        return (! $user) || (! $passwordVerified);
+        return $user && $passwordVerified;
     }
 }
