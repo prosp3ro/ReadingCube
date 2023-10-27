@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\App;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Auth\RegisterController;
 use Dotenv\Dotenv;
@@ -113,52 +114,42 @@ $capsule->bootEloquent();
 
 // dd($_ENV);
 
-// $db = new DB();
-// $user = $db->query("SELECT * FROM users")->fetchAll();
 
-// dd($user);
+$router = new Router();
 
-// die();
+// TODO inject captcha object
+$router
+    ->get("/", [IndexController::class, "index"])
+    ->get("/about-us", [IndexController::class, "showAboutUsPage"])
+    ->get("/contact", [IndexController::class, "showContactPage"])
+    ->get("/faq", [IndexController::class, "showFAQPage"])
+    ->post("/upload", [IndexController::class, "upload"])
 
-try {
-    $router = new Router();
+    ->get("/register", [RegisterController::class, "index"])
+    ->post("/register", [RegisterController::class, "register"])
 
-    // TODO inject captcha object
-    $router
-        ->get("/", [IndexController::class, "index"])
-        ->get("/about-us", [IndexController::class, "showAboutUsPage"])
-        ->get("/contact", [IndexController::class, "showContactPage"])
-        ->get("/faq", [IndexController::class, "showFAQPage"])
-        ->post("/upload", [IndexController::class, "upload"])
+    ->get("/login", [LoginController::class, "index"])
+    ->post("/login", [LoginController::class, "login"])
+    ->get("/logout", [LoginController::class, "logout"])
 
-        ->get("/register", [RegisterController::class, "index"])
-        ->post("/register", [RegisterController::class, "register"])
+    // TODO method should be `index`
+    ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
+    // updateProfileData
+    ->post("/edit-profile", [UserController::class, "updateProfile"])
+    ->post("/update-password", [UserController::class, "updatePassword"]);
 
-        ->get("/login", [LoginController::class, "index"])
-        ->post("/login", [LoginController::class, "login"])
-        ->get("/logout", [LoginController::class, "logout"])
+    // TODO
+    // ->get("/item/{id}", [ItemController::class, "index"])
 
-        // TODO method should be `index`
-        ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
-        // updateProfileData
-        ->post("/edit-profile", [UserController::class, "updateProfile"])
-        ->post("/update-password", [UserController::class, "updatePassword"]);
+$db = new DB();
+$user = $db->query("SELECT * FROM users")->fetchAll();
 
-        // TODO
-        // ->get("/item/{id}", [ItemController::class, "index"])
+dd($user);
 
-    $router->resolve(
-        $_SERVER["REQUEST_URI"],
-        $_SERVER["REQUEST_METHOD"]
-    );
-} catch (RouteException) {
-    // header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
-    http_response_code(404);
-
-    View::create('error/404', [
-        "header" => "Not Found | " . APP_NAME
-    ])->render();
-}
+(new App($router, [
+    'uri' => $_SERVER["REQUEST"],
+    'method' => $_SERVER["REQUEST_METHOD"]
+]))->run();
 
 // setcookie(
 //     "username",
