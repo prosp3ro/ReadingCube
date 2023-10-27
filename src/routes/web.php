@@ -6,7 +6,7 @@ use App\Controllers\IndexController;
 use App\Controllers\ItemController;
 use App\Controllers\UserController;
 use App\Helpers\Captcha;
-use App\Models\DB;
+use App\DB;
 use App\Route;
 
 $db = new DB();

@@ -11,7 +11,6 @@ use App\Controllers\IndexController;
 use App\Controllers\ItemController;
 use App\Controllers\UserController;
 use App\Exceptions\RouteException;
-use App\Models\DB;
 use App\Router;
 use App\View;
 
