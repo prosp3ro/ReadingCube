@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as EloquentBaseModel;
 
-class User extends Model
+class User extends EloquentBaseModel
 {
     protected $table = 'books';
     protected $primaryKey = 'id';
