@@ -75,7 +75,7 @@ class UserController
 
         if (! $newUsername && ! $newEmail) {
             header("Location: /edit-profile");
-            exit;
+            exit();
         }
 
         $validator = new Validator();
