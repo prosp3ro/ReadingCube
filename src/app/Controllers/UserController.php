@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Exceptions\DatabaseQueryException;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
+use App\Models\User;
 use App\View;
 use Throwable;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -23,9 +24,9 @@ class UserController
             $this->sessionUserId = (int) $_SESSION["user_id"];
 
             try {
-                $this->user = DB::table("users")
-                    ->where("id", "=", $this->sessionUserId)
-                    ->first();
+                $User = new User();
+
+                $this->user = $User->getCurrentUser($this->sessionUserId);
             } catch (Throwable $exception) {
                 throw new DatabaseQueryException($exception->getMessage());
             }

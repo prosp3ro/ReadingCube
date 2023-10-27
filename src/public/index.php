@@ -142,7 +142,7 @@ $router
     // ->get("/item/{id}", [ItemController::class, "index"])
 
 (new App($router, [
-    'uri' => $_SERVER["REQUEST"],
+    'uri' => $_SERVER["REQUEST_URI"],
     'method' => $_SERVER["REQUEST_METHOD"]
 ]))->run();
 
