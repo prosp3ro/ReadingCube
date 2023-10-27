@@ -23,13 +23,8 @@ class UserController
         if (isset($_SESSION['user_id'])) {
             $this->sessionUserId = (int) $_SESSION["user_id"];
 
-            try {
-                $User = new User();
-
-                $this->user = $User->getCurrentUser($this->sessionUserId);
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-            }
+            $User = new User();
+            $this->user = $User->getCurrentUser($this->sessionUserId);
         }
     }
 

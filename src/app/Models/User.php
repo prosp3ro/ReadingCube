@@ -14,13 +14,19 @@ class User
         
     }
 
-    public function getCurrentUser(int $sessionUserId = null): object
+    public function getCurrentUser(int $sessionUserId = null): object|null
     {
-        $user = QueryBuilder::table("users")
-            ->where("id", "=", $sessionUserId)
-            ->first();
+        try {
+            $user = QueryBuilder::table("users")
+                ->where("id", "=", $sessionUserId)
+                ->first();
 
-        return $user;
+            return $user;
+        } catch (\Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+
+        return null;
     }
 
     public function updateProfile(int $sessionUserId = null, array $dataToUpdate)
