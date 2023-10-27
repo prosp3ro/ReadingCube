@@ -141,11 +141,6 @@ $router
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
 
-$db = new DB();
-$user = $db->query("SELECT * FROM users")->fetchAll();
-
-dd($user);
-
 (new App($router, [
     'uri' => $_SERVER["REQUEST"],
     'method' => $_SERVER["REQUEST_METHOD"]

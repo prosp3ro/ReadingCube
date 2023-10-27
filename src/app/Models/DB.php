@@ -13,13 +13,18 @@ use PDOException;
 class DB
 {
     private PDO $pdo;
-
-    public function __construct(private $config = [
+    private array $defaultConfig = [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_EMULATE_PREPARES => false
-    ])
+    ];
+
+    public function __construct(array $config = [])
     {
+        if (empty($config)) {
+            $config = $this->defaultConfig;
+        }
+
         $dbDriver = $_ENV["DB_DRIVER"] ?? "mysql";
         $dbHost = $_ENV["DB_HOST"];
         $dbPort = (!empty($_ENV["DB_PORT"])) ? (";port={$_ENV['DB_PORT']}") : "";
