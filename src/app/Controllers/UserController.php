@@ -4,33 +4,28 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Exceptions\DatabaseQueryException;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
 use App\Models\User;
 use App\View;
-use Throwable;
-use Illuminate\Database\Capsule\Manager as DB;
 use App\Validator;
 
 class UserController
 {
-    private ?int $sessionUserId = null;
     private ?object $user = null;
 
     public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
     {
-        if (isset($_SESSION['user_id'])) {
-            $this->sessionUserId = (int) $_SESSION["user_id"];
+        $userId = $_SESSION["user_id"] ?? null;
 
-            $User = new User();
-            $this->user = $User->getCurrentUser($this->sessionUserId);
+        if (isset($userId)) {
+            $this->user = (new User())->getCurrentUser((int) $userId);
         }
     }
 
     public function showEditProfilePage()
     {
-        if (! $this->sessionUserId) {
+        if (! $this->user) {
             header("Location: /login");
             exit();
         }
@@ -49,7 +44,7 @@ class UserController
 
     public function updateProfile()
     {
-        if (! $this->sessionUserId) {
+        if (! $this->user) {
             header("Location: /login");
             exit();
         }
@@ -74,7 +69,7 @@ class UserController
             exit("Password is required.");
         }
 
-        if (! $User->verifyPassword($this->sessionUserId, $password)) {
+        if (! $User->verifyPassword($this->user->id, $password)) {
             exit("Current password is incorrect.");
         }
 
@@ -98,7 +93,7 @@ class UserController
         }
 
         if (! empty($dataToUpdate)) {
-            $User->updateProfile($this->sessionUserId, $dataToUpdate);
+            $User->updateProfile($this->user->id, $dataToUpdate);
         }
 
         header("Location: /edit-profile?update=data");
@@ -108,7 +103,7 @@ class UserController
     // TODO add check if new password is same as old
     public function updatePassword()
     {
-        if (! $this->sessionUserId) {
+        if (! $this->user->id) {
             header("Location: /login");
             exit();
         }
@@ -133,7 +128,7 @@ class UserController
             exit("Current password, new password and password confirmation are required.");
         }
 
-        if (! $User->verifyPassword($this->sessionUserId, $currentPassword)) {
+        if (! $User->verifyPassword($this->user->id, $currentPassword)) {
             exit("Current password is incorrect.");
         }
 
@@ -148,7 +143,7 @@ class UserController
             "cost" => 12
         ]);
 
-        $User->updatePassword($this->sessionUserId, $newPasswordHashed);
+        $User->updatePassword($this->user->id, $newPasswordHashed);
 
         header("Location: /edit-profile?update=pwd");
         exit();

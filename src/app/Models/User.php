@@ -9,16 +9,11 @@ use Illuminate\Database\Capsule\Manager as QueryBuilder;
 
 class User
 {
-    public function __construct()
-    {
-        
-    }
-
-    public function getCurrentUser(int $sessionUserId = null): object|null
+    public function getCurrentUser(int $userId = null): object|null
     {
         try {
             $user = QueryBuilder::table("users")
-                ->where("id", "=", $sessionUserId)
+                ->where("id", "=", $userId)
                 ->first();
 
             return $user;
@@ -29,12 +24,12 @@ class User
         return null;
     }
 
-    public function verifyPassword(int $sessionUserId = null, string $password): bool
+    public function verifyPassword(int $userId = null, string $password): bool
     {
         try {
             $user = QueryBuilder::table("users")
                 ->select("password", "id")
-                ->where("id", "=", $sessionUserId)
+                ->where("id", "=", $userId)
                 ->first();
         } catch (\Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
@@ -46,13 +41,13 @@ class User
         
     }
 
-    public function updateProfile(int $sessionUserId = null, array $dataToUpdate)
+    public function updateProfile(int $userId = null, array $dataToUpdate)
     {
         QueryBuilder::beginTransaction();
 
         try {
             QueryBuilder::table("users")
-                ->where("id", "=", $sessionUserId)
+                ->where("id", "=", $userId)
                 ->update($dataToUpdate);
 
             QueryBuilder::commit();
@@ -65,13 +60,13 @@ class User
         }
     }
 
-    public function updatePassword(int $sessionUserId = null, string $newPassword)
+    public function updatePassword(int $userId = null, string $newPassword)
     {
         QueryBuilder::beginTransaction();
 
         try {
             QueryBuilder::table("users")
-                ->where("id", "=", $sessionUserId)
+                ->where("id", "=", $userId)
                 ->update([
                     "password" => $newPassword
                 ]);
