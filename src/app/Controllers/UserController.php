@@ -101,9 +101,9 @@ class UserController
         }
 
         if (!empty($dataToUpdate)) {
-            DB::table("users")
-                ->where("id", "=", $this->sessionUserId)
-                ->update($dataToUpdate);
+            $User = new User();
+
+            $User->updateProfile($this->sessionUserId, $dataToUpdate);
         }
 
         header("Location: /edit-profile?update=data");
