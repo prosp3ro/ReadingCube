@@ -19,7 +19,7 @@ class UserController
         $userId = $_SESSION["user_id"] ?? null;
 
         if (isset($userId)) {
-            $this->user = (new User())->getCurrentUser((int) $userId);
+            $this->user = (new User())->getCurrentUser((int) $userId ?? null);
         }
     }
 
