@@ -9,8 +9,12 @@ use Illuminate\Database\Capsule\Manager as QueryBuilder;
 
 class User
 {
-    public function getCurrentUser(int $userId = null): object|bool
+    public function getCurrentUser(?int $userId): object|null
     {
+        if (is_null($userId)) {
+            return null;
+        }
+
         try {
             return QueryBuilder::table("users")
                 ->where("id", "=", $userId)
@@ -18,8 +22,6 @@ class User
         } catch (\Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
-
-        return false;
     }
 
     public function verifyPassword(int $userId = null, string $password): bool

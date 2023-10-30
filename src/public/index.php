@@ -140,6 +140,8 @@ $router
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
 
+// dd($router->getRoutes());
+
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
     'method' => $_SERVER["REQUEST_METHOD"]

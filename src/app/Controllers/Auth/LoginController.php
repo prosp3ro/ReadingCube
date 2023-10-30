@@ -63,9 +63,12 @@ class LoginController
 
         if ($user) {
             if (password_verify($password, $user->password)) {
-                session_start();
                 session_regenerate_id();
                 $_SESSION["user_id"] = $user->id;
+
+                // dd($user);
+
+                // dd($_SESSION);
 
                 header("Location: /");
                 exit();

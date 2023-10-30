@@ -4,40 +4,35 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use Illuminate\Database\Capsule\Manager as DB;
-use App\Exceptions\DatabaseQueryException;
+use App\Models\Book;
+use App\Models\User;
 use App\View;
-use Throwable;
 
 class IndexController
 {
-    private ?int $sessionUserId = null;
     private ?object $user = null;
 
     public function __construct()
     {
-        if (isset($_SESSION['user_id'])) {
-            $this->sessionUserId = (int) $_SESSION["user_id"];
+        $userId = $_SESSION["user_id"] ?? null;
 
-            try {
-                $this->user = DB::table("users")
-                    ->where("id", "=", $this->sessionUserId)
-                    ->first()
-                ;
-            } catch (Throwable $exception) {
-                throw new DatabaseQueryException($exception->getMessage());
-            }
+        if (isset($userId)) {
+            $this->user = (new User())->getCurrentUser((int) $userId ?? null);
         }
     }
 
     public function index()
     {
-        // if (!$this->sessionUserId) {
+        // if (! $this->user) {
         //     header("Location: /login");
         //     exit();
         // }
 
-        $books = DB::table("books")->get();
+        $books = (new Book)->getBooks();
+
+        // dd($this->user);
+
+        // dd($_SESSION);
 
         return View::create("index", [
             "books" => $books,

@@ -28,5 +28,6 @@ class App
                 "header" => "Not Found | " . APP_NAME
             ])->render();
         }
+
     }
 }

@@ -16,10 +16,10 @@ class UserController
 
     public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
     {
-        $userId = $_SESSION["user_id"] ?? null;
+        $userId = (int) $_SESSION["user_id"] ?? null;
 
         if (isset($userId)) {
-            $this->user = (new User())->getCurrentUser((int) $userId ?? null);
+            $this->user = (new User())->getCurrentUser($userId);
         }
     }
 
