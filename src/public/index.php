@@ -147,6 +147,8 @@ $router
 
 // phpinfo();
 
+dd("1");
+
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
     'method' => $_SERVER["REQUEST_METHOD"]
