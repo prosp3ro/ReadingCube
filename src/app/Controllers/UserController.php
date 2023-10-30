@@ -93,7 +93,7 @@ class UserController
         }
 
         if (! empty($dataToUpdate)) {
-            $User->updateProfile($this->user->id, $dataToUpdate);
+            $User->updateData($this->user->id, $dataToUpdate);
         }
 
         header("Location: /edit-profile?update=data");
@@ -143,7 +143,9 @@ class UserController
             "cost" => 12
         ]);
 
-        $User->updatePassword($this->user->id, $newPasswordHashed);
+        $User->updateData($this->user->id, [
+            "password" => $newPasswordHashed
+        ]);
 
         header("Location: /edit-profile?update=pwd");
         exit();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers\Auth;
 
 use App\Helpers\Captcha;
-use Illuminate\Database\Capsule\Manager as DB;
+use App\Models\User;
 use App\View;
 
 class LoginController
@@ -44,7 +44,7 @@ class LoginController
         $password = $_POST['password'];
         $captchaResponseKey = $_POST['g-recaptcha-response'];
 
-        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
+        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
@@ -52,14 +52,11 @@ class LoginController
             exit("Email and password are required.");
         }
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             exit("Email has invalid format");
         }
 
-        $user = DB::table("users")
-            ->select("id", "email", "password")
-            ->where("email", "=", $email)
-            ->first();
+        $user = (new User)->login($email);
 
         if ($user) {
             if (password_verify($password, $user->password)) {

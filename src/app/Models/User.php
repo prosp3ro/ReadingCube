@@ -41,7 +41,7 @@ class User
         
     }
 
-    public function updateProfile(int $userId = null, array $dataToUpdate)
+    public function updateData(int $userId = null, array $dataToUpdate)
     {
         QueryBuilder::beginTransaction();
 
@@ -60,23 +60,14 @@ class User
         }
     }
 
-    public function updatePassword(int $userId = null, string $newPassword)
+    public function login(string $email): object|null
     {
-        QueryBuilder::beginTransaction();
-
         try {
-            QueryBuilder::table("users")
-                ->where("id", "=", $userId)
-                ->update([
-                    "password" => $newPassword
-                ]);
-
-            QueryBuilder::commit();
+           return QueryBuilder::table("users")
+                ->select("id", "email", "password")
+                ->where("email", "=", $email)
+                ->first(); 
         } catch (\Throwable $exception) {
-            // if (QueryBuilder::inTransaction()) {
-            QueryBuilder::rollback();
-            // }
-
             throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
         }
     }
