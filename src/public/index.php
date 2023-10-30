@@ -77,7 +77,8 @@ if (! is_writable(session_save_path())) {
 session_set_cookie_params(
     [
         "lifetime" => 86400 * 7,
-        "domain" => $_ENV["APP_DOMAIN"] ?? "localhost",
+        // "domain" => $_ENV["APP_DOMAIN"] ?? "127.0.0.1",
+        "domain" => "127.0.0.1",
         "path" => "/",
         "secure" => true,
         "httponly" => true
@@ -144,7 +145,7 @@ $router
 
 // dd($router->getRoutes());
 
-phpinfo();
+// phpinfo();
 
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
