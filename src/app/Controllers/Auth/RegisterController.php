@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
-use Illuminate\Database\Capsule\Manager as DB;
-use App\Exceptions\DatabaseQueryException;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
+use App\Models\User;
 use App\Validator;
 use App\View;
 
@@ -47,11 +46,13 @@ class RegisterController
         $captchaResponseKey = $_POST['g-recaptcha-response'];
         $csrfToken = $_POST["csrf_token"];
 
-        if (!isset($csrfToken) || !CsrfTokenManager::verifyToken($csrfToken)) {
+        // dd($_SESSION);
+
+        if (! isset($csrfToken) || ! CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (!$this->captcha->validateCaptcha($captchaResponseKey)) {
+        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
             exit("Captcha validation failed.");
         }
 
@@ -74,27 +75,9 @@ class RegisterController
         //     'password' => password_hash($password, PASSWORD_BCRYPT)
         // ]);
 
-        DB::beginTransaction();
+        // TODO
+        // (new User)->register($username, $email, $password);
 
-        try {
-            DB::table('users')->insert([
-                'username' => $username,
-                'email' => $email,
-                'password' => password_hash($password, PASSWORD_BCRYPT)
-            ]);
-
-            DB::commit();
-
-            header("Location: /login?register=success");
-            exit();
-        } catch (\Throwable $exception) {
-            // if (DB::inTransaction()) {
-            DB::rollback();
-            // }
-
-            throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
-        }
-
-        exit("Registration failed.");
+        // exit("Registration failed.");
     }
 }

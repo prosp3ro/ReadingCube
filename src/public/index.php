@@ -68,6 +68,11 @@ set_exception_handler(
 
 ini_set('session.use_only_cookies', 1);
 ini_set('session.use_strict_mode', 1);
+// ini_set('session.save_path', ROOT . '/session');
+
+if (! is_writable(session_save_path())) {
+    exit('Session path "' . session_save_path() . '" is not writable for PHP!');
+}
 
 session_set_cookie_params(
     [
@@ -81,7 +86,7 @@ session_set_cookie_params(
 
 session_start();
 
-if (!isset($_SESSION["last_regeneration"])) {
+if (! isset($_SESSION["last_regeneration"])) {
     session_regenerate_id(true);
     $_SESSION["last_regeneration"] = time();
 } else {
@@ -111,9 +116,6 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// dd($_ENV);
-
-
 $router = new Router();
 
 // TODO inject captcha object
@@ -141,6 +143,8 @@ $router
     // ->get("/item/{id}", [ItemController::class, "index"])
 
 // dd($router->getRoutes());
+
+phpinfo();
 
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],

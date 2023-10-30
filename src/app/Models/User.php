@@ -56,7 +56,7 @@ class User
             QueryBuilder::rollback();
             // }
 
-            throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
+            throw new DatabaseQueryException($exception->getMessage());
         }
     }
 
@@ -68,6 +68,31 @@ class User
                 ->where("email", "=", $email)
                 ->first(); 
         } catch (\Throwable $exception) {
+            throw new DatabaseQueryException($exception->getMessage());
+        }
+    }
+
+    public function register(string $username, string $email, string $password)
+    {
+        
+        QueryBuilder::beginTransaction();
+
+        try {
+            QueryBuilder::table('users')->insert([
+                'username' => $username,
+                'email' => $email,
+                'password' => password_hash($password, PASSWORD_BCRYPT)
+            ]);
+
+            return QueryBuilder::commit();
+
+            header("Location: /login?register=success");
+            exit();
+        } catch (\Throwable $exception) {
+            // if (QueryBuilder::inTransaction()) {
+            QueryBuilder::rollback();
+            // }
+
             throw new DatabaseQueryException('Registration failed: ' . $exception->getMessage());
         }
     }
