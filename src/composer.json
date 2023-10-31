@@ -16,5 +16,8 @@
         "guzzlehttp/guzzle": "^7.8",
         "illuminate/database": "^10.25",
         "vlucas/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.4"
     }
 }

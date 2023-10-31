@@ -143,12 +143,6 @@ $router
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
 
-// dd($router->getRoutes());
-
-// phpinfo();
-
-dd("1");
-
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
     'method' => $_SERVER["REQUEST_METHOD"]
@@ -159,7 +153,5 @@ dd("1");
 //     "prospero",
 //     time() + 10, // expiration time
 // );
-
-// dd($_COOKIE);
 
 // require_once ROOT . "/routes/web.php";

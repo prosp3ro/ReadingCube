@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\Unit\\RouterTest::registers_a_route":7,"Tests\\Unit\\UserControllerTest::user_is_object":8},"times":{"Tests\\Unit\\RouterTest::registers_a_route":0.003,"Tests\\Unit\\RouterTest::there_are_no_routes_when_router_is_created":0,"Tests\\Unit\\UserControllerTest::user_is_object":0.01}}

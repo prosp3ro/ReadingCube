@@ -150,4 +150,9 @@ class UserController
         header("Location: /edit-profile?update=pwd");
         exit();
     }
+
+    public function getUserData(): object
+    {
+        return $this->user;
+    }
 }
