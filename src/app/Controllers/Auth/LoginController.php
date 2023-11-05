@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
+use App\App;
 use App\Helpers\Captcha;
 use App\Models\User;
 use App\View;
@@ -12,6 +13,7 @@ class LoginController
 {
     public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
     {
+        App::container()->resolve(Captcha::class);
     }
 
     public function index()

@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App;
 
-class ClassName
+class Container
 {
-    protected array $bindings = [];
+    public array $bindings = [];
 
     public function bind($key, callable $resolver)
     {
         $this->bindings[$key] = $resolver;
     }
 
-    public function resolve($binding)
+    public function resolve($key)
     {
-        if (! array_key_exists($this->bindings, $binding)) {
+        if (! array_key_exists($key, $this->bindings)) {
             throw new \Exception("Binding not found.");
         }
 
-        return new $this->bindings[$binding];
+        $resolver = $this->bindings[$key];
+
+        return call_user_func($resolver);
     }
 }
