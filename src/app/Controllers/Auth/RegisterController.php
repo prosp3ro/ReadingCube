@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
+use App\App;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
-use App\Models\User;
 use App\Validator;
 use App\View;
 
 class RegisterController
 {
-    public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
+    private $captcha;
+
+    public function __construct()
     {
+        $this->captcha = App::resolve(Captcha::class);
     }
 
     public function index()

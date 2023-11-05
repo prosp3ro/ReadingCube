@@ -17,7 +17,7 @@ class App
     ) {
     }
 
-    public function run()
+    public function run(): void
     {
         $container = new Container();
 
@@ -45,5 +45,10 @@ class App
     public static function container()
     {
         return static::$container;
+    }
+
+    public static function resolve($key)
+    {
+        return static::container()->resolve($key);
     }
 }
