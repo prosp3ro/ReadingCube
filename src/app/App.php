@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exceptions\RouteException;
+use App\Helpers\Captcha;
+use Illuminate\Container\Container;
 
 class App
 {
@@ -16,6 +18,12 @@ class App
 
     public function run()
     {
+        $container = new Container();
+
+        $container->bind(Captcha::class, function () {
+            return new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
+        });
+
         try {
             $this->router->resolve(
                 $this->request["uri"],
@@ -29,5 +37,10 @@ class App
             ])->render();
         }
 
+    }
+
+    public function setContainer()
+    {
+        
     }
 }
