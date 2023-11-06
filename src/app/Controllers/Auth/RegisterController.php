@@ -7,6 +7,7 @@ namespace App\Controllers\Auth;
 use App\App;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
+use App\Models\User;
 use App\Validator;
 use App\View;
 
@@ -29,9 +30,9 @@ class RegisterController
         $csrfToken = CsrfTokenManager::generateToken();
 
         // TODO it should be done differently
-        // $email = $_GET["email"] ?? "";
-        // $validator = new Validator();
-        // $validator->isEmailAvailableJson($email);
+        $email = $_GET["email"] ?? "";
+        $validator = new Validator();
+        $validator->isEmailAvailableJson($email);
 
         return View::create("auth/register", [
             "header" => "Register | " . APP_NAME,
@@ -49,15 +50,13 @@ class RegisterController
         $captchaResponseKey = $_POST['g-recaptcha-response'];
         $csrfToken = $_POST["csrf_token"];
 
-        // dd($_SESSION);
-
         if (! isset($csrfToken) || ! CsrfTokenManager::verifyToken($csrfToken)) {
             exit("CSRF Error. Request was blocked.");
         }
 
-        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
-            exit("Captcha validation failed.");
-        }
+        // if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
+        //     exit("Captcha validation failed.");
+        // }
 
         $validator = new Validator();
 
@@ -79,7 +78,10 @@ class RegisterController
         // ]);
 
         // TODO
-        // (new User)->register($username, $email, $password);
+        (new User)->register($username, $email, $password);
+
+        header("Location: /login?register=success");
+        exit();
 
         // exit("Registration failed.");
     }
