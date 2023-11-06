@@ -10,17 +10,30 @@ use PHPUnit\Framework\TestCase;
 class ContainerTest extends TestCase
 {
     /**
+     * @var Container
+     */
+    protected $container;
+    
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->container = new Container();
+    }
+
+    /**
      * @test 
      */
     public function allows_to_register_services_using_closures(): void
     {
-        $container = new Container();
+        $this->container = new Container();
 
-        $container->bind('Service', fn() => new TestService());
+        $this->container->bind('Service', fn() => new TestService());
 
-        $this->assertTrue($container->has('Service'));
-        $this->assertInstanceOf(TestService::class, $container->resolve('Service'));
-        $this->assertNotSame($container->resolve('Service'), $container->resolve('Service'));
+        $this->assertTrue($this->container->has('Service'));
+        $this->assertInstanceOf(TestService::class, $this->container->resolve('Service'));
+        // it should return single instance
+        $this->assertNotSame($this->container->resolve('Service'), $this->container->resolve('Service'));
     }
 }
 
