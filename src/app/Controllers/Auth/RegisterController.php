@@ -54,9 +54,9 @@ class RegisterController
             exit("CSRF Error. Request was blocked.");
         }
 
-        // if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
-        //     exit("Captcha validation failed.");
-        // }
+        if (! $this->captcha->validateCaptcha($captchaResponseKey)) {
+            exit("Captcha validation failed.");
+        }
 
         $validator = new Validator();
 
@@ -71,13 +71,6 @@ class RegisterController
             "password_confirmation" => $passwordConfirmation
         ]);
 
-        // $user = User::Create([
-        //     'username' => $username,
-        //     'email' => $email,
-        //     'password' => password_hash($password, PASSWORD_BCRYPT)
-        // ]);
-
-        // TODO
         (new User)->register($username, $email, $password);
 
         header("Location: /login?register=success");
