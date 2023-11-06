@@ -21,9 +21,7 @@ class App
     {
         $container = new Container();
 
-        $container->bind(Captcha::class, function () {
-            return new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY);
-        });
+        $container->bind(Captcha::class, fn() => new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY));
 
         static::$container = $container;
 

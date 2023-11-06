@@ -4,23 +4,37 @@ declare(strict_types=1);
 
 namespace App;
 
+use Closure;
+
 class Container
 {
-    public array $bindings = [];
+    public array $services = [];
 
-    public function bind($key, callable $resolver)
+    // accept callable instead of classes so there is only one instance of registered service
+    public function bind(string $key, callable $value): self
     {
-        $this->bindings[$key] = $resolver;
+        $this->services[$key] = $value;
+
+        return $this;
     }
 
-    public function resolve($key)
+    public function resolve($id)
     {
-        if (! array_key_exists($key, $this->bindings)) {
+        if (! $this->has($id)) {
             throw new \Exception("Binding not found.");
         }
 
-        $resolver = $this->bindings[$key];
+        $service = $this->services[$id];
 
-        return call_user_func($resolver);
+        if ($service instanceof Closure) {
+            return call_user_func($service);
+        }
+
+        return $service;
+    }
+
+    public function has($id): bool
+    {
+        return array_key_exists($id, $this->services);
     }
 }
