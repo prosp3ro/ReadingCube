@@ -31,8 +31,7 @@ class RegisterController
 
         // TODO it should be done differently
         $email = $_GET["email"] ?? "";
-        $validator = new Validator();
-        $validator->isEmailAvailableJson($email);
+        (new Validator())->isEmailAvailableJson($email);
 
         return View::create("auth/register", [
             "header" => "Register | " . APP_NAME,

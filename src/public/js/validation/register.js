@@ -18,20 +18,20 @@ validation
         {
             rule: "email"
         },
-        // {
-        //     validator: function (value) {
-        //         return function () {
-        //             return fetch("http://127.0.0.3/register?email=" + encodeURIComponent(value))
-        //                 .then(function(response) {
-        //                     return response.json();
-        //                 })
-        //                 .then(function(json) {
-        //                     return json.available;
-        //                 })
-        //         }
-        //     },
-        //     errorMessage: "Email is already taken"
-        // }
+        {
+            validator: function (value) {
+                return function () {
+                    return fetch("http://127.0.0.3/register?email=" + encodeURIComponent(value))
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(json) {
+                            return json.available;
+                        })
+                }
+            },
+            errorMessage: "Email is already taken"
+        }
     ])
     .addField("#password", [
         {
