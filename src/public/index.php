@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\App;
+use App\Container;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Auth\RegisterController;
 use Dotenv\Dotenv;
@@ -11,6 +12,7 @@ use App\Controllers\IndexController;
 use App\Controllers\ItemController;
 use App\Controllers\UserController;
 use App\Exceptions\RouteException;
+use App\Helpers\Captcha;
 use App\Router;
 use App\View;
 
@@ -117,7 +119,9 @@ $capsule->addConnection(
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-$router = new Router();
+$container = new Container();
+$container->bind(Captcha::class, fn() => new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY));
+$router = new Router($container);
 
 // TODO inject captcha object
 $router

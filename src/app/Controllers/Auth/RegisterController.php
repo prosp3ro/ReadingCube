@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
-use App\App;
 use App\Helpers\Captcha;
 use App\Helpers\CsrfTokenManager;
 use App\Models\User;
@@ -13,11 +12,8 @@ use App\View;
 
 class RegisterController
 {
-    private $captcha;
-
-    public function __construct()
+    public function __construct(private Captcha $captcha)
     {
-        $this->captcha = App::resolve(Captcha::class);
     }
 
     public function index()

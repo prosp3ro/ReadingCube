@@ -55,19 +55,21 @@ class Validator
 
     public function isEmailAvailableJson(string $email)
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo $this->isUnique("email", $email);
-            exit();
-        } else {
-            header("Content-Type: application/json");
+        if (! empty($email)) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo $this->isUnique("email", $email);
+                exit();
+            } else {
+                header("Content-Type: application/json");
 
-            echo json_encode(
-                [
-                "error" => "Email has invalid format."
-                ]
-            );
+                echo json_encode(
+                    [
+                    "error" => "Email has invalid format."
+                    ]
+                );
 
-            exit();
+                exit();
+            }
         }
     }
 
