@@ -14,7 +14,7 @@ class UserController
 {
     private ?object $user = null;
 
-    public function __construct(private $captcha = new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY))
+    public function __construct(private Captcha $captcha)
     {
         $userId = (int) $_SESSION["user_id"] ?? null;
 

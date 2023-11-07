@@ -16,7 +16,7 @@ editDataValidation
         {
             validator: function (value) {
                 return function () {
-                    return fetch("http://127.0.0.3/register?email=" + encodeURIComponent(value))
+                    return fetch("http://127.0.0.1/register?email=" + encodeURIComponent(value))
                         .then(function(response) {
                             return response.json();
                         })
