@@ -8,6 +8,7 @@ use App\App;
 use App\Helpers\Captcha;
 use App\Models\User;
 use App\View;
+use ReflectionClass;
 
 class LoginController
 {
@@ -16,6 +17,12 @@ class LoginController
     public function __construct()
     {
         $this->captcha = App::resolve(Captcha::class);
+
+        $reflect = new ReflectionClass($this->captcha);
+        $con = $reflect->getConstructor();
+        $par = $con->getParameters();
+
+        dd($par);
     }
 
     public function index()

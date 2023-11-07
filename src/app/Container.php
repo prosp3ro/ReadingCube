@@ -21,16 +21,17 @@ class Container
     public function resolve($id)
     {
         if (! $this->has($id)) {
-            throw new \Exception("Binding not found.");
+            throw new \Exception("Class {$id} has no binding.");
         }
 
         $service = $this->services[$id];
 
         if ($service instanceof Closure) {
-            return call_user_func($service);
+            return call_user_func($service, $this);
         }
 
-        return $service;
+        // return $service;
+        // throw new \Exception("");
     }
 
     public function has($id): bool

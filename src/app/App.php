@@ -6,6 +6,7 @@ namespace App;
 
 use App\Exceptions\RouteException;
 use App\Helpers\Captcha;
+use ReflectionClass;
 
 class App
 {
