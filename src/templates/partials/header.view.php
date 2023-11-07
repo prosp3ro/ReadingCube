@@ -34,12 +34,8 @@
                     </ul>
                 </div>
             <?php else : ?>
-                <form action="/login" method="get">
-                    <button type="submit" class="btn btn-outline-light me-2" id="loginButton">Login</button>
-                </form>
-                <form action="/register" method="get">
-                    <button type="submit" class="btn btn-warning">Register</button>
-                </form>
+                <a class="btn btn-outline-light me-2" href="/login">Login</a>
+                <a class="btn btn-warning" href="/register">Register</a>
             <?php endif; ?>
         </div>
     </div>
