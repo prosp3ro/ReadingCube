@@ -1,6 +1,10 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
+<?php
+$csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
+?>
+
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-6 line-break">

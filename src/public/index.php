@@ -147,6 +147,8 @@ $router
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
 
+// phpinfo();
+
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
     'method' => $_SERVER["REQUEST_METHOD"]

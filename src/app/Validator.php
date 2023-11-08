@@ -8,7 +8,10 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class Validator
 {
+    // max 20 characters
     private string $usernameRegex = "/^[a-zA-Z0-9]{5,}$/";
+    // max 100 characters
+    // these extra characters can be used too: `~!@#$%^&*()-_=+[{]};:'",<.>/?\|
     private string $passwordRegex = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/m";
 
     public function validate(array $args)
@@ -64,7 +67,7 @@ class Validator
 
                 echo json_encode(
                     [
-                    "error" => "Email has invalid format."
+                        "error" => "Email has invalid format."
                     ]
                 );
 
@@ -99,7 +102,7 @@ class Validator
 
         $jsonData = json_encode(
             [
-            "available" => (bool) !$isAvailable
+                "available" => (bool) !$isAvailable
             ]
         );
 

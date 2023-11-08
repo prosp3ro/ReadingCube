@@ -66,6 +66,7 @@ class Container
                 throw new \Exception("Failed to resolve class {$id} because param {$name} is missing a type hint.");
             }
 
+            // ex. string|object
             if ($type instanceof ReflectionUnionType) {
                 throw new \Exception("Failed to resolve class {$id} because of union type for param {$name}.");
             }

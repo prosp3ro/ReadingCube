@@ -23,17 +23,16 @@ class RegisterController
             exit();
         }
 
-        $csrfToken = CsrfTokenManager::generateToken();
-
         // TODO it should be done differently
         $email = $_GET["email"] ?? "";
         (new Validator())->isEmailAvailableJson($email);
 
-        return View::create("auth/register", [
-            "header" => "Register | " . APP_NAME,
-            "captcha" => $this->captcha,
-            "csrfToken" => $csrfToken
-        ])->render();
+        return View::create(
+            "auth/register", [
+                "header" => "Register | " . APP_NAME,
+                "captcha" => $this->captcha,
+            ]
+        )->render();
     }
 
     public function register(): void
@@ -59,12 +58,14 @@ class RegisterController
             exit("Username, email, password and password confirmation fields are required.");
         }
 
-        $validator->validate([
+        $validator->validate(
+            [
             "username" => $username,
             "email" => $email,
             "password" => $password,
             "password_confirmation" => $passwordConfirmation
-        ]);
+            ]
+        );
 
         (new User)->register($username, $email, $password);
 

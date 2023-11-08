@@ -33,9 +33,9 @@ class ContainerTest extends TestCase
         $this->container->bind('Service', fn() => new TestService());
 
         $this->assertTrue($this->container->has('Service'));
-        $this->assertInstanceOf(TestService::class, $this->container->resolve('Service'));
+        $this->assertInstanceOf(TestService::class, $this->container->get('Service'));
         // it should return single instance
-        $this->assertNotSame($this->container->resolve('Service'), $this->container->resolve('Service'));
+        $this->assertNotSame($this->container->get('Service'), $this->container->get('Service'));
     }
 
     /**

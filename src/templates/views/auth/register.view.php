@@ -1,5 +1,9 @@
-<?php require_once(PARTIALS . "/head.view.php"); ?>
-<?php require_once(PARTIALS . "/header.view.php"); ?>
+<?php require_once PARTIALS . "/head.view.php"; ?>
+<?php require_once PARTIALS . "/header.view.php"; ?>
+
+<?php
+$csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
+?>
 
 <div class="container">
     <div class="mt-5">
@@ -28,8 +32,8 @@
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
-            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
-            <?= $captcha->renderCaptcha() ?>
+            <input type="hidden" name="csrf_token" value="<?php echo $csrfToken ?>">
+            <?php echo $captcha->renderCaptcha() ?>
             <div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
@@ -37,9 +41,9 @@
     </div>
 </div>
 
-<?php require_once(PARTIALS . "/scripts.view.php"); ?>
+<?php require_once PARTIALS . "/scripts.view.php"; ?>
 
 <script src="js/validation/register.js"></script>
 
-<?php require_once(PARTIALS . "/footer.view.php"); ?>
-<?php require_once(PARTIALS . "/pageend.view.php"); ?>
+<?php require_once PARTIALS . "/footer.view.php"; ?>
+<?php require_once PARTIALS . "/pageend.view.php"; ?>

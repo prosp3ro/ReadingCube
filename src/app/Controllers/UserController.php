@@ -30,14 +30,11 @@ class UserController
             exit();
         }
 
-        $csrfToken = CsrfTokenManager::generateToken();
-
         $updateMessage = $_GET["update"] ?? "";
 
         return View::create("edit-profile", [
             "user" => $this->user,
             "captcha" => $this->captcha,
-            "csrfToken" => $csrfToken,
             "updateMessage" => $updateMessage
         ])->render();
     }
