@@ -9,15 +9,9 @@ use App\Controllers\Auth\RegisterController;
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Controllers\IndexController;
-use App\Controllers\ItemController;
 use App\Controllers\UserController;
-use App\Enums\ExampleEnum;
-use App\Etc\ReadOnlyPropertyExample;
-use App\ExampleForEnumTests;
-use App\Exceptions\RouteException;
 use App\Helpers\Captcha;
 use App\Router;
-use App\View;
 
 define('ROOT', dirname(__DIR__));
 define('PARTIALS', ROOT . "/templates/partials");
