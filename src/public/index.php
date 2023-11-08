@@ -12,6 +12,7 @@ use App\Controllers\IndexController;
 use App\Controllers\ItemController;
 use App\Controllers\UserController;
 use App\Enums\ExampleEnum;
+use App\Etc\ReadOnlyPropertyExample;
 use App\ExampleForEnumTests;
 use App\Exceptions\RouteException;
 use App\Helpers\Captcha;
@@ -150,8 +151,6 @@ $router
     // ->get("/item/{id}", [ItemController::class, "index"])
 
 // phpinfo();
-
-(new ExampleForEnumTests)->asd(ExampleEnum::PAID);
 
 (new App($router, [
     'uri' => $_SERVER["REQUEST_URI"],
