@@ -1,10 +1,6 @@
 <?php require_once(PARTIALS . "/head.view.php"); ?>
 <?php require_once(PARTIALS . "/header.view.php"); ?>
 
-<?php
-$csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
-?>
-
 <div class="container">
     <div class="row mt-5">
         <div class="col-lg-6 line-break">
@@ -34,7 +30,7 @@ $csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
                         <input type="password" class="form-control" name="password" id="password">
                     </div>
                     <?= $captcha->renderCaptcha(); ?>
-                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                    <input type="hidden" name="csrf_token" value="<?= \App\Helpers\CsrfTokenManager::generateToken() ?>">
                     <button type="submit" class="mt-2 btn btn-primary">Submit</button>
                 </form>
             </div>
@@ -61,7 +57,7 @@ $csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
                         <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" autocomplete="off">
                     </div>
                     <?= $captcha->renderCaptcha(); ?>
-                    <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
+                    <input type="hidden" name="csrf_token" value="<?= \App\Helpers\CsrfTokenManager::generateToken() ?>">
                     <button type="submit" class="mt-2 btn btn-primary">Submit</button>
                 </form>
             </div>

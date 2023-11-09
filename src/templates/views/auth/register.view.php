@@ -1,10 +1,6 @@
 <?php require_once PARTIALS . "/head.view.php"; ?>
 <?php require_once PARTIALS . "/header.view.php"; ?>
 
-<?php
-$csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
-?>
-
 <div class="container">
     <div class="mt-5">
         <h1>Register</h1>
@@ -32,8 +28,8 @@ $csrfToken = \App\Helpers\CsrfTokenManager::generateToken();
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
             </div>
-            <input type="hidden" name="csrf_token" value="<?php echo $csrfToken ?>">
-            <?php echo $captcha->renderCaptcha() ?>
+            <input type="hidden" name="csrf_token" value="<?= \App\Helpers\CsrfTokenManager::generateToken() ?>">
+            <?= $captcha->renderCaptcha() ?>
             <div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
