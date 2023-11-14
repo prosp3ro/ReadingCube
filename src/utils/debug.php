@@ -10,7 +10,7 @@ if (! function_exists('dump')) {
     {
         foreach ($args as $arg) {
             echo "<br/>";
-            echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black;">';
+            echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black; color: white;">';
             echo "<pre>";
             print_r($arg);
             echo "</pre>";
@@ -25,7 +25,7 @@ if (! function_exists('dd')) {
     {
         foreach ($args as $arg) {
             echo "<br/>";
-            echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black;">';
+            echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black; color: white;">';
             echo "<pre>";
             print_r($arg);
             echo "</pre>";
@@ -41,7 +41,7 @@ if (! function_exists('showException')) {
     function showException(Throwable $exception)
     {
         echo "<br/>";
-        echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black;">';
+        echo '<div style="display: inline-block; padding: 0 10px; border: 1px solid gray; background: black; color: white;">';
         echo "<b>" . $exception->getMessage() . "</b><br>";
         echo "<b>File:</b> " . $exception->getFile() . "<br>";
         echo "<b>Line:</b> " . $exception->getLine() . "<br>";
