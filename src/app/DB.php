@@ -13,6 +13,7 @@ use PDOException;
 class DB
 {
     private PDO $pdo;
+
     private array $defaultConfig = [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

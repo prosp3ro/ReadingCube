@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exceptions\RouteException;
+use App\Helpers\Captcha;
+use Illuminate\Database\Capsule\Manager;
 
 class App
 {
-    public static Container $container;
+    private Config $config;
 
     public function __construct(
-        protected Router $router,
-        protected array $request
+        protected Container $container,
+        protected ?Router $router = null,
+        protected array $request = [],
     ) {
     }
 
@@ -30,6 +33,24 @@ class App
                 "header" => "Not Found | " . APP_NAME
             ])->render();
         }
+    }
 
+    public function boot(): static
+    {
+        $this->config = new Config($_ENV);
+        $this->initEloquent($this->config->eloquent);
+
+        $this->container->bind(Captcha::class, fn() => new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY));
+
+        return $this;
+    }
+
+    public function initEloquent(array $config)
+    {
+        $capsule = new Manager();
+
+        $capsule->addConnection($config);
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
     }
 }

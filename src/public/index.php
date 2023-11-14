@@ -98,29 +98,9 @@ if (! isset($_SESSION["last_regeneration"])) {
     }
 }
 
-$capsule = new Capsule();
-
-$capsule->addConnection(
-    [
-        "driver" => $_ENV["DB_DRIVER"] ?? "mysql",
-        "host" => $_ENV["DB_HOST"],
-        "database" => $_ENV["DB_SCHEMA"],
-        "username" => $_ENV["DB_USERNAME"],
-        "password" => $_ENV["DB_PASSWORD"],
-        "charset" => "utf8",
-        "collation" => "utf8_unicode_ci",
-        "prefix" => ""
-    ]
-);
-
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
-
 $container = new Container();
-$container->bind(Captcha::class, fn() => new Captcha(GOOGLE_RECAPTCHA_SITE_KEY, GOOGLE_RECAPTCHA_SECRET_KEY));
 $router = new Router($container);
 
-// TODO inject captcha object
 $router
     ->get("/", [IndexController::class, "index"])
     ->get("/about-us", [IndexController::class, "showAboutUsPage"])
@@ -144,17 +124,7 @@ $router
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
 
-// phpinfo();
-
-(new App($router, [
+(new App($container, $router, [
     'uri' => $_SERVER["REQUEST_URI"],
-    'method' => $_SERVER["REQUEST_METHOD"]
-]))->run();
-
-// setcookie(
-//     "username",
-//     "prospero",
-//     time() + 10, // expiration time
-// );
-
-// require_once ROOT . "/routes/web.php";
+    'method' => $_SERVER["REQUEST_METHOD"],
+]))->boot()->run();

@@ -38,7 +38,6 @@ class User
         $passwordVerified = password_verify($password, $user->password);
 
         return $user && $passwordVerified;
-        
     }
 
     public function updateData(int $userId = null, array $dataToUpdate)
