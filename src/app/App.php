@@ -7,7 +7,7 @@ namespace App;
 use App\Controllers\Auth\LoginController;
 use App\Controllers\Auth\RegisterController;
 use App\Controllers\IndexController;
-use App\Controllers\ResetPasswordController;
+use App\Controllers\Auth\ResetPasswordController;
 use App\Controllers\UserController;
 use App\Exceptions\RouteException;
 use App\Helpers\Captcha;
