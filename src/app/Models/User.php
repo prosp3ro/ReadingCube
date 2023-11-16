@@ -62,10 +62,10 @@ class User
     public function login(string $email): object|null
     {
         try {
-           return QueryBuilder::table("users")
+            return QueryBuilder::table("users")
                 ->select("id", "email", "password")
                 ->where("email", "=", $email)
-                ->first(); 
+                ->first();
         } catch (\Throwable $exception) {
             throw new DatabaseQueryException($exception->getMessage());
         }
@@ -73,7 +73,7 @@ class User
 
     public function register(string $username, string $email, string $password)
     {
-        
+
         QueryBuilder::beginTransaction();
 
         try {

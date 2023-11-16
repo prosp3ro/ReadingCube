@@ -3,15 +3,14 @@
 declare(strict_types=1);
 
 use App\App;
-use App\Container;
-use App\Controllers\Auth\LoginController;
-use App\Controllers\Auth\RegisterController;
 use Dotenv\Dotenv;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Container;
+use App\Router;
 use App\Controllers\IndexController;
 use App\Controllers\UserController;
-use App\Helpers\Captcha;
-use App\Router;
+use App\Controllers\Auth\LoginController;
+use App\Controllers\Auth\RegisterController;
+use App\Controllers\ResetPasswordController;
 
 define('ROOT', dirname(__DIR__));
 define('PARTIALS', ROOT . "/templates/partials");
@@ -115,11 +114,13 @@ $router
     ->post("/login", [LoginController::class, "login"])
     ->get("/logout", [LoginController::class, "logout"])
 
-    // TODO method should be `index`
+    // TODO method should be `index` and ProfileController
     ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
     // updateProfileData
     ->post("/edit-profile", [UserController::class, "updateProfile"])
-    ->post("/update-password", [UserController::class, "updatePassword"]);
+    ->post("/update-password", [UserController::class, "updatePassword"])
+    ->get("/forgot-password", [ResetPasswordController::class, "index"])
+    ->post("/forgot-password", [ResetPasswordController::class, "resetPassword"]);
 
     // TODO
     // ->get("/item/{id}", [ItemController::class, "index"])
