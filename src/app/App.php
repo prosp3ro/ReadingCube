@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Controllers\Auth\LoginController;
+use App\Controllers\Auth\RegisterController;
+use App\Controllers\IndexController;
+use App\Controllers\ResetPasswordController;
+use App\Controllers\UserController;
 use App\Exceptions\RouteException;
 use App\Helpers\Captcha;
 use Illuminate\Database\Capsule\Manager;
@@ -21,6 +26,8 @@ class App
 
     public function run(): void
     {
+        $this->addRoutes();
+
         try {
             $this->router->resolve(
                 $this->request["uri"],
@@ -52,5 +59,31 @@ class App
         $capsule->addConnection($config);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
+    }
+
+    // TODO keep routes in routes/web.php
+    public function addRoutes(): void
+    {
+        $this->router
+            ->get("/", [IndexController::class, "index"])
+            ->get("/about-us", [IndexController::class, "showAboutUsPage"])
+            ->get("/contact", [IndexController::class, "showContactPage"])
+            ->get("/faq", [IndexController::class, "showFAQPage"])
+            ->post("/upload", [IndexController::class, "upload"])
+
+            ->get("/register", [RegisterController::class, "index"])
+            ->post("/register", [RegisterController::class, "register"])
+
+            ->get("/login", [LoginController::class, "index"])
+            ->post("/login", [LoginController::class, "login"])
+            ->get("/logout", [LoginController::class, "logout"])
+
+            // TODO method should be `index` and ProfileController
+            ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
+            // updateProfileData
+            ->post("/edit-profile", [UserController::class, "updateProfile"])
+            ->post("/update-password", [UserController::class, "updatePassword"])
+            ->get("/forgot-password", [ResetPasswordController::class, "index"])
+            ->post("/forgot-password", [ResetPasswordController::class, "resetPassword"]);
     }
 }

@@ -6,11 +6,6 @@ use App\App;
 use Dotenv\Dotenv;
 use App\Container;
 use App\Router;
-use App\Controllers\IndexController;
-use App\Controllers\UserController;
-use App\Controllers\Auth\LoginController;
-use App\Controllers\Auth\RegisterController;
-use App\Controllers\ResetPasswordController;
 
 define('ROOT', dirname(__DIR__));
 define('PARTIALS', ROOT . "/templates/partials");
@@ -99,31 +94,6 @@ if (! isset($_SESSION["last_regeneration"])) {
 
 $container = new Container();
 $router = new Router($container);
-
-$router
-    ->get("/", [IndexController::class, "index"])
-    ->get("/about-us", [IndexController::class, "showAboutUsPage"])
-    ->get("/contact", [IndexController::class, "showContactPage"])
-    ->get("/faq", [IndexController::class, "showFAQPage"])
-    ->post("/upload", [IndexController::class, "upload"])
-
-    ->get("/register", [RegisterController::class, "index"])
-    ->post("/register", [RegisterController::class, "register"])
-
-    ->get("/login", [LoginController::class, "index"])
-    ->post("/login", [LoginController::class, "login"])
-    ->get("/logout", [LoginController::class, "logout"])
-
-    // TODO method should be `index` and ProfileController
-    ->get("/edit-profile", [UserController::class, "showEditProfilePage"])
-    // updateProfileData
-    ->post("/edit-profile", [UserController::class, "updateProfile"])
-    ->post("/update-password", [UserController::class, "updatePassword"])
-    ->get("/forgot-password", [ResetPasswordController::class, "index"])
-    ->post("/forgot-password", [ResetPasswordController::class, "resetPassword"]);
-
-    // TODO
-    // ->get("/item/{id}", [ItemController::class, "index"])
 
 (new App($container, $router, [
     'uri' => $_SERVER["REQUEST_URI"],
