@@ -3,18 +3,14 @@
 
 <div class="container">
     <div class="mt-5">
-        <h1>Reset Your Password</h1>
+        <h1>Reset your password</h1>
     </div>
 
     <div class="w-25 mt-4">
         <form action="/forgot-password" method="post" class="row g-3" id="register">
             <div>
-                <label for="new_password" class="form-label">New Password</label>
-                <input type="new_password" class="form-control" name="new_password" id="new_password" required>
-            </div>
-            <div>
-                <label for="password_confirmation" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required>
+                <label for="email" class="form-label">Enter your email to search for your account.</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
             </div>
             <div>
                 <button type="submit" class="btn btn-primary">Submit</button>
