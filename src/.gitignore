@@ -1,5 +1,0 @@
-/vendor/
-/config/config.ini
-/.env
-/logs/error.log
-/.phpunit.result.cache
